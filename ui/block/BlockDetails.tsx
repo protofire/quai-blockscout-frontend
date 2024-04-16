@@ -140,6 +140,21 @@ const BlockDetails = ({ query }: Props) => {
     );
   })();
 
+  const extTxsNum = (() => {
+    const blockExtTxsNum = (
+      <LinkInternal href={ route({ pathname: '/block/[height_or_hash]', query: { height_or_hash: heightOrHash, tab: 'ext_txs' } }) }>
+        { data.ext_tx_count } txn{ data.ext_tx_count === 1 ? '' : 's' }
+      </LinkInternal>
+    );
+
+    return (
+      <>
+        { blockExtTxsNum }
+        <span> in this block</span>
+      </>
+    );
+  })();
+
   const blockTypeLabel = (() => {
     switch (data.type) {
       case 'reorg':
@@ -177,6 +192,15 @@ const BlockDetails = ({ query }: Props) => {
         />
       </DetailsInfoItem>
       <DetailsInfoItem
+        title="Location"
+        hint="Location at which block was produced"
+        isLoading={ isPlaceholderData }
+      >
+        <Skeleton isLoaded={ !isPlaceholderData }>
+          { data.location }
+        </Skeleton>
+      </DetailsInfoItem>
+      <DetailsInfoItem
         title="Size"
         hint="Size of the block in bytes"
         isLoading={ isPlaceholderData }
@@ -199,6 +223,15 @@ const BlockDetails = ({ query }: Props) => {
       >
         <Skeleton isLoaded={ !isPlaceholderData }>
           { txsNum }
+        </Skeleton>
+      </DetailsInfoItem>
+      <DetailsInfoItem
+        title="External Transactions"
+        hint="The number of external transactions in the block"
+        isLoading={ isPlaceholderData }
+      >
+        <Skeleton isLoaded={ !isPlaceholderData }>
+          { extTxsNum }
         </Skeleton>
       </DetailsInfoItem>
       { config.features.beaconChain.isEnabled && Boolean(data.withdrawals_count) && (
@@ -505,6 +538,37 @@ const BlockDetails = ({ query }: Props) => {
               hint="Block nonce is a value used during mining to demonstrate proof of work for a block"
             >
               { data.nonce }
+            </DetailsInfoItem>
+          ) }
+
+          { !config.UI.views.block.hiddenFields?.totalEntropy && (
+            <DetailsInfoItem
+              title="Total Entropy"
+              hint="Total entropy reduced by the chain until this block"
+            >
+              { data.total_entropy }
+            </DetailsInfoItem>
+          ) }
+
+          { !config.UI.views.block.hiddenFields?.manifestHash && (
+            <DetailsInfoItem
+              title="Manifest Hash"
+              hint="Manifest Hash when block was produced"
+            >
+              { data.manifest_hash_full.map((hash, index) => (
+                <Box key={ index }>
+                  <HashStringShortenDynamic hash={ hash }/>
+                </Box>
+              )) }
+            </DetailsInfoItem>
+          ) }
+
+          { !config.UI.views.block.hiddenFields?.extRollupRootHash && (
+            <DetailsInfoItem
+              title="Ext Rollup Root Hash"
+              hint="Ext Rollup Root Hash when block was produced"
+            >
+              { data.ext_rollup_root }
             </DetailsInfoItem>
           ) }
         </>

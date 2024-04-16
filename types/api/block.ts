@@ -42,6 +42,21 @@ export interface Block {
   burnt_blob_fees?: string;
   excess_blob_gas?: string;
   blob_tx_count?: number;
+  // QUAI FIELDS
+  manifest_hash_full: Array<string>;
+  number_full: Array<string>;
+  parent_hash_full: Array<string>;
+  ext_rollup_root: string;
+  transactions_root: string;
+  ext_transactions_root: string;
+  sub_manifest: string;
+  location: string;
+  total_entropy: string;
+  parent_entropy: string;
+  parent_delta_s: string;
+  parent_entropy_full: Array<string>;
+  parent_delta_s_full: Array<string>;
+  ext_tx_count: number;
 }
 
 export interface BlocksResponse {

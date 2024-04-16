@@ -5,6 +5,9 @@ export const BLOCK_FIELDS_IDS = [
   'total_reward',
   'nonce',
   'miner',
+  'totalEntropy',
+  'manifestHash',
+  'extRollupRootHash',
 ] as const;
 
 export type BlockFieldId = ArrayElement<typeof BLOCK_FIELDS_IDS>;
