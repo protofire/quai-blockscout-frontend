@@ -68,8 +68,9 @@ export interface SearchResultUserOp {
   url?: string; // not used by the frontend, we build the url ourselves
 }
 
-export type SearchResultItem = SearchResultToken | SearchResultAddressOrContract | SearchResultBlock | SearchResultTx | SearchResultLabel | SearchResultUserOp |
-SearchResultBlob & {shard_id?: string};
+export type SearchResultItem = (
+  SearchResultToken | SearchResultAddressOrContract | SearchResultBlock | SearchResultTx | SearchResultLabel | SearchResultUserOp | SearchResultBlob
+) & {shard_id?: string};
 
 export interface SearchResult {
   items: Array<SearchResultItem>;
