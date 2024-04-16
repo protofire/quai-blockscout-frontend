@@ -11,6 +11,7 @@ Please be aware that all environment variables prefixed with `NEXT_PUBLIC_` will
 &nbsp;
 
 ## Table of contents
+
 - [App configuration](ENVS.md#app-configuration)
 - [Blockchain parameters](ENVS.md#blockchain-parameters)
 - [API configuration](ENVS.md#api-configuration)
@@ -118,9 +119,9 @@ Please be aware that all environment variables prefixed with `NEXT_PUBLIC_` will
 
 | Variable | Type| Description | Compulsoriness  | Default value | Example value |
 | --- | --- | --- | --- | --- | --- |
-| NEXT_PUBLIC_NETWORK_LOGO | `string` | Network logo; if not provided, placeholder will be shown; *Note* the logo height should be 24px and width less than 120px | - | - | `https://placekitten.com/240/40` |
+| NEXT_PUBLIC_NETWORK_LOGO | `string` | Network logo; if not provided, placeholder will be shown; _Note_ the logo height should be 24px and width less than 120px | - | - | `https://placekitten.com/240/40` |
 | NEXT_PUBLIC_NETWORK_LOGO_DARK | `string` | Network logo for dark color mode; if not provided, **inverted** regular logo will be used instead | - | - | `https://placekitten.com/240/40` |
-| NEXT_PUBLIC_NETWORK_ICON | `string` | Network icon; used as a replacement for regular network logo when nav bar is collapsed; if not provided, placeholder will be shown; *Note* the icon size should be at least 60px by 60px | - | - | `https://placekitten.com/60/60` |
+| NEXT_PUBLIC_NETWORK_ICON | `string` | Network icon; used as a replacement for regular network logo when nav bar is collapsed; if not provided, placeholder will be shown; _Note_ the icon size should be at least 60px by 60px | - | - | `https://placekitten.com/60/60` |
 | NEXT_PUBLIC_NETWORK_ICON_DARK | `string` | Network icon for dark color mode; if not provided, **inverted** regular icon will be used instead | - | - | `https://placekitten.com/60/60` |
 | NEXT_PUBLIC_FEATURED_NETWORKS | `string` | URL of configuration file (`.json` format only) which contains list of featured networks that will be shown in the network menu. See [below](#featured-network-configuration-properties) list of available properties for particular network | - | - | `https://example.com/featured_networks_config.json` |
 | NEXT_PUBLIC_OTHER_LINKS | `Array<{url: string; text: string}>` | List of links for the "Other" navigation menu | - | - | `[{'url':'https://blockscout.com','text':'Blockscout'}]` |
@@ -133,7 +134,7 @@ Please be aware that all environment variables prefixed with `NEXT_PUBLIC_` will
 | title | `string` | Displayed name of the network | Required | - | `Gnosis Chain` |
 | url | `string` | Network explorer main page url | Required | - | `https://blockscout.com/xdai/mainnet` |
 | group | `Mainnets \| Testnets \| Other` | Indicates in which tab network appears in the menu | Required | - | `Mainnets` |
-| icon | `string` | Network icon; if not provided, the common placeholder will be shown; *Note* that icon size should be at least 60px by 60px | - | - | `https://placekitten.com/60/60` |
+| icon | `string` | Network icon; if not provided, the common placeholder will be shown; _Note_ that icon size should be at least 60px by 60px | - | - | `https://placekitten.com/60/60` |
 | isActive | `boolean` | Pass `true` if item should be shown as active in the menu | - | - | `true` |
 | invertIconInDarkMode | `boolean` | Pass `true` if icon colors should be inverted in dark mode | - | - | `true` |
 
@@ -187,8 +188,8 @@ Settings for meta tags and OG tags
 | --- | --- | --- | --- | --- | --- |
 | NEXT_PUBLIC_VIEWS_BLOCK_HIDDEN_FIELDS | `Array<BlockFieldId>` | Array of the block fields ids that should be hidden. See below the list of the possible id values. | - | - | `'["burnt_fees","total_reward"]'` |
 
-
 ##### Block fields list
+
 | Id | Description |
 | --- | --- |
 | `burnt_fees` | Burnt fees |
@@ -207,6 +208,7 @@ Settings for meta tags and OG tags
 | NEXT_PUBLIC_VIEWS_CONTRACT_SOLIDITYSCAN_ENABLED | `boolean` | Set to `true` if SolidityScan reports are supported | - | - | `true` |
 
 ##### Address views list
+
 | Id | Description |
 | --- | --- |
 | `top_accounts` | Top accounts |
@@ -222,6 +224,7 @@ Settings for meta tags and OG tags
 | NEXT_PUBLIC_VIEWS_TX_HIDDEN_VIEWS | `Array<TxViewId>` | Transaction views that should be hidden. See below the list of the possible id values. | - | - | `'["blob_txs"]'` |
 
 ##### Transaction fields list
+
 | Id | Description |
 | --- | --- |
 | `value` | Sent value |
@@ -232,11 +235,13 @@ Settings for meta tags and OG tags
 | `burnt_fees` | Amount of native coin burnt for transaction |
 
 ##### Transaction additional fields list
+
 | Id | Description |
 | --- | --- |
 | `fee_per_gas` | Amount of total fee divided by total amount of gas used by transaction |
 
 ##### Transaction view list
+
 | Id | Description |
 | --- | --- |
 | `blob_txs` | List of all transactions that contain blob data |
@@ -249,8 +254,8 @@ Settings for meta tags and OG tags
 | --- | --- | --- | --- | --- | --- |
 | NEXT_PUBLIC_VIEWS_NFT_MARKETPLACES | `Array<NftMarketplace>` where `NftMarketplace` can have following [properties](#nft-marketplace-properties) | Used to build up links to NFT collections and NFT instances in external marketplaces. | - | - | `[{'name':'OpenSea','collection_url':'https://opensea.io/assets/ethereum/{hash}','instance_url':'https://opensea.io/assets/ethereum/{hash}/{id}','logo_url':'https://opensea.io/static/images/logos/opensea-logo.svg'}]` |
 
-
 ##### NFT marketplace properties
+
 | Variable | Type| Description | Compulsoriness  | Default value | Example value |
 | --- | --- | --- | --- | --- | --- |
 | name | `string` | Displayed name of the marketplace | Required | - | `OpenSea` |
@@ -272,6 +277,8 @@ Settings for meta tags and OG tags
 | NEXT_PUBLIC_HIDE_INDEXING_ALERT_BLOCKS | `boolean` | Set to `true` to hide indexing alert in the page header about indexing chain's blocks | - | `false` | `true` |
 | NEXT_PUBLIC_HIDE_INDEXING_ALERT_INT_TXS | `boolean` | Set to `true` to hide indexing alert in the page footer about indexing block's internal transactions | - | `false` | `true` |
 | NEXT_PUBLIC_MAINTENANCE_ALERT_MESSAGE | `string` | Used for displaying custom announcements or alerts in the header of the site. Could be a regular string or a HTML code. | - | - | `Hello world! 🤪` |
+| NEXT_PUBLIC_MULTI_SHARDS_PROXY_URL | `string` | Url to multishard proxy | - | `` | `https://multishard-proxy-example.com` |
+| NEXT_PUBLIC_SHARDS | `string` | Used for set shards instances that will used for show shard specific data | - | - | `[{'id': 's0', 'title': 'Shard 0', 'apiHost': 's0.example.io'}, {'id': 's1', 'title': 'Shard 1', 'apiHost': 's1.example.io'}]` |
 
 #### Network explorer configuration properties
 
@@ -388,7 +395,7 @@ This feature is **enabled by default** with the `coinzilla` ads provider. To swi
 
 | Variable | Type| Description | Compulsoriness  | Default value | Example value |
 | --- | --- | --- | --- | --- | --- |
-| NEXT_PUBLIC_ROLLUP_TYPE | `'optimistic' \| 'shibarium' \| 'zkEvm' ` | Rollup chain type | Required | - | `'optimistic'` |
+| NEXT_PUBLIC_ROLLUP_TYPE | `'optimistic' \| 'shibarium' \| 'zkEvm'` | Rollup chain type | Required | - | `'optimistic'` |
 | NEXT_PUBLIC_ROLLUP_L1_BASE_URL | `string` | Blockscout base URL for L1 network | Required | - | `'http://eth-goerli.blockscout.com'` |
 | NEXT_PUBLIC_ROLLUP_L2_WITHDRAWAL_URL | `string` | URL for L2 -> L1 withdrawals | - | - | `https://app.optimism.io/bridge/withdraw` |
 

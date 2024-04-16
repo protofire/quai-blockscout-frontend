@@ -57,6 +57,8 @@ export interface Block {
   parent_entropy_full?: Array<string>;
   parent_delta_s_full?: Array<string>;
   ext_tx_count?: number;
+  // Shard ID
+  shard_id?: string;
 }
 
 export interface BlocksResponse {

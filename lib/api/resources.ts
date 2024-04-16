@@ -111,6 +111,9 @@ export interface ApiResource {
   pathParams?: Array<string>;
   needAuth?: boolean; // for external APIs which require authentication
   headers?: RequestInit['headers'];
+  // for resources that can be fetched from multiple shards. TODO: This feature required refactoring
+  shardable?: string;
+  merge?: boolean;
 }
 
 export const SORTING_FIELDS = [ 'sort', 'order' ];
@@ -192,17 +195,20 @@ export const RESOURCES = {
     path: '/api/v1/counters',
     endpoint: getFeaturePayload(config.features.stats)?.api.endpoint,
     basePath: getFeaturePayload(config.features.stats)?.api.basePath,
+    shardable: 'stats',
   },
   stats_lines: {
     path: '/api/v1/lines',
     endpoint: getFeaturePayload(config.features.stats)?.api.endpoint,
     basePath: getFeaturePayload(config.features.stats)?.api.basePath,
+    shardable: 'stats',
   },
   stats_line: {
     path: '/api/v1/lines/:id',
     pathParams: [ 'id' as const ],
     endpoint: getFeaturePayload(config.features.stats)?.api.endpoint,
     basePath: getFeaturePayload(config.features.stats)?.api.basePath,
+    shardable: 'stats',
   },
 
   // NAME SERVICE
@@ -258,32 +264,39 @@ export const RESOURCES = {
   blocks: {
     path: '/api/v2/blocks',
     filterFields: [ 'type' as const ],
+    shardable: 'api',
   },
   block: {
     path: '/api/v2/blocks/:height_or_hash',
     pathParams: [ 'height_or_hash' as const ],
+    shardable: 'api',
   },
   block_txs: {
     path: '/api/v2/blocks/:height_or_hash/transactions',
     pathParams: [ 'height_or_hash' as const ],
     filterFields: [ 'type' as const ],
+    shardable: 'api',
   },
   block_withdrawals: {
     path: '/api/v2/blocks/:height_or_hash/withdrawals',
     pathParams: [ 'height_or_hash' as const ],
     filterFields: [],
+    shardable: 'api',
   },
   txs_validated: {
     path: '/api/v2/transactions',
     filterFields: [ 'filter' as const, 'type' as const, 'method' as const ],
+    shardable: 'api',
   },
   txs_pending: {
     path: '/api/v2/transactions',
     filterFields: [ 'filter' as const, 'type' as const, 'method' as const ],
+    shardable: 'api',
   },
   txs_with_blobs: {
     path: '/api/v2/transactions',
     filterFields: [ 'type' as const ],
+    shardable: 'api',
   },
   txs_watchlist: {
     path: '/api/v2/transactions/watchlist',
@@ -293,42 +306,51 @@ export const RESOURCES = {
     path: '/api/v2/transactions/execution-node/:hash',
     pathParams: [ 'hash' as const ],
     filterFields: [ ],
+    shardable: 'api',
   },
   tx: {
     path: '/api/v2/transactions/:hash',
     pathParams: [ 'hash' as const ],
+    shardable: 'api',
   },
   tx_internal_txs: {
     path: '/api/v2/transactions/:hash/internal-transactions',
     pathParams: [ 'hash' as const ],
     filterFields: [ ],
+    shardable: 'api',
   },
   tx_logs: {
     path: '/api/v2/transactions/:hash/logs',
     pathParams: [ 'hash' as const ],
     filterFields: [ ],
+    shardable: 'api',
   },
   tx_token_transfers: {
     path: '/api/v2/transactions/:hash/token-transfers',
     pathParams: [ 'hash' as const ],
     filterFields: [ 'type' as const ],
+    shardable: 'api',
   },
   tx_raw_trace: {
     path: '/api/v2/transactions/:hash/raw-trace',
     pathParams: [ 'hash' as const ],
+    shardable: 'api',
   },
   tx_state_changes: {
     path: '/api/v2/transactions/:hash/state-changes',
     pathParams: [ 'hash' as const ],
     filterFields: [],
+    shardable: 'api',
   },
   tx_blobs: {
     path: '/api/v2/transactions/:hash/blobs',
     pathParams: [ 'hash' as const ],
+    shardable: 'api',
   },
   tx_interpretation: {
     path: '/api/v2/transactions/:hash/summary',
     pathParams: [ 'hash' as const ],
+    shardable: 'api',
   },
   withdrawals: {
     path: '/api/v2/withdrawals',
@@ -342,20 +364,24 @@ export const RESOURCES = {
   addresses: {
     path: '/api/v2/addresses/',
     filterFields: [ ],
+    shardable: 'api',
   },
 
   // ADDRESS
   address: {
     path: '/api/v2/addresses/:hash',
     pathParams: [ 'hash' as const ],
+    shardable: 'api',
   },
   address_counters: {
     path: '/api/v2/addresses/:hash/counters',
     pathParams: [ 'hash' as const ],
+    shardable: 'api',
   },
   address_tabs_counters: {
     path: '/api/v2/addresses/:hash/tabs-counters',
     pathParams: [ 'hash' as const ],
+    shardable: 'api',
   },
   // this resource doesn't have pagination, so causing huge problems on some addresses page
   // address_token_balances: {
@@ -365,163 +391,198 @@ export const RESOURCES = {
     path: '/api/v2/addresses/:hash/transactions',
     pathParams: [ 'hash' as const ],
     filterFields: [ 'filter' as const ],
+    shardable: 'api',
   },
   address_internal_txs: {
     path: '/api/v2/addresses/:hash/internal-transactions',
     pathParams: [ 'hash' as const ],
     filterFields: [ 'filter' as const ],
+    shardable: 'api',
   },
   address_token_transfers: {
     path: '/api/v2/addresses/:hash/token-transfers',
     pathParams: [ 'hash' as const ],
     filterFields: [ 'filter' as const, 'type' as const, 'token' as const ],
+    shardable: 'api',
   },
   address_blocks_validated: {
     path: '/api/v2/addresses/:hash/blocks-validated',
     pathParams: [ 'hash' as const ],
     filterFields: [ ],
+    shardable: 'api',
   },
   address_coin_balance: {
     path: '/api/v2/addresses/:hash/coin-balance-history',
     pathParams: [ 'hash' as const ],
     filterFields: [ ],
+    shardable: 'api',
   },
   address_coin_balance_chart: {
     path: '/api/v2/addresses/:hash/coin-balance-history-by-day',
     pathParams: [ 'hash' as const ],
+    shardable: 'api',
   },
   address_logs: {
     path: '/api/v2/addresses/:hash/logs',
     pathParams: [ 'hash' as const ],
     filterFields: [ ],
+    shardable: 'api',
   },
   address_tokens: {
     path: '/api/v2/addresses/:hash/tokens',
     pathParams: [ 'hash' as const ],
     filterFields: [ 'type' as const ],
+    shardable: 'api',
   },
   address_nfts: {
     path: '/api/v2/addresses/:hash/nft',
     pathParams: [ 'hash' as const ],
     filterFields: [ 'type' as const ],
+    shardable: 'api',
   },
   address_collections: {
     path: '/api/v2/addresses/:hash/nft/collections',
     pathParams: [ 'hash' as const ],
     filterFields: [ 'type' as const ],
+    shardable: 'api',
   },
   address_withdrawals: {
     path: '/api/v2/addresses/:hash/withdrawals',
     pathParams: [ 'hash' as const ],
     filterFields: [],
+    shardable: 'api',
   },
 
   // CONTRACT
   contract: {
     path: '/api/v2/smart-contracts/:hash',
     pathParams: [ 'hash' as const ],
+    shardable: 'api',
   },
   contract_methods_read: {
     path: '/api/v2/smart-contracts/:hash/methods-read',
     pathParams: [ 'hash' as const ],
+    shardable: 'api',
   },
   contract_methods_read_proxy: {
     path: '/api/v2/smart-contracts/:hash/methods-read-proxy',
     pathParams: [ 'hash' as const ],
+    shardable: 'api',
   },
   contract_method_query: {
     path: '/api/v2/smart-contracts/:hash/query-read-method',
     pathParams: [ 'hash' as const ],
+    shardable: 'api',
   },
   contract_methods_write: {
     path: '/api/v2/smart-contracts/:hash/methods-write',
     pathParams: [ 'hash' as const ],
+    shardable: 'api',
   },
   contract_methods_write_proxy: {
     path: '/api/v2/smart-contracts/:hash/methods-write-proxy',
     pathParams: [ 'hash' as const ],
+    shardable: 'api',
   },
   contract_verification_config: {
     path: '/api/v2/smart-contracts/verification/config',
+    shardable: 'api',
   },
   contract_verification_via: {
     path: '/api/v2/smart-contracts/:hash/verification/via/:method',
     pathParams: [ 'hash' as const, 'method' as const ],
+    shardable: 'api',
   },
   contract_solidityscan_report: {
     path: '/api/v2/smart-contracts/:hash/solidityscan-report',
     pathParams: [ 'hash' as const ],
+    shardable: 'api',
   },
   contract_security_audits: {
     path: '/api/v2/smart-contracts/:hash/audit-reports',
     pathParams: [ 'hash' as const ],
+    shardable: 'api',
   },
 
   verified_contracts: {
     path: '/api/v2/smart-contracts',
     filterFields: [ 'q' as const, 'filter' as const ],
+    shardable: 'api',
   },
   verified_contracts_counters: {
     path: '/api/v2/smart-contracts/counters',
+    shardable: 'api',
   },
 
   // TOKEN
   token: {
     path: '/api/v2/tokens/:hash',
     pathParams: [ 'hash' as const ],
+    shardable: 'api',
   },
   token_verified_info: {
     path: '/api/v1/chains/:chainId/token-infos/:hash',
     pathParams: [ 'chainId' as const, 'hash' as const ],
     endpoint: getFeaturePayload(config.features.verifiedTokens)?.api.endpoint,
     basePath: getFeaturePayload(config.features.verifiedTokens)?.api.basePath,
+    shardable: 'api',
   },
   token_counters: {
     path: '/api/v2/tokens/:hash/counters',
     pathParams: [ 'hash' as const ],
+    shardable: 'api',
   },
   token_holders: {
     path: '/api/v2/tokens/:hash/holders',
     pathParams: [ 'hash' as const ],
     filterFields: [],
+    shardable: 'api',
   },
   token_transfers: {
     path: '/api/v2/tokens/:hash/transfers',
     pathParams: [ 'hash' as const ],
     filterFields: [],
+    shardable: 'api',
   },
   token_inventory: {
     path: '/api/v2/tokens/:hash/instances',
     pathParams: [ 'hash' as const ],
     filterFields: [ 'holder_address_hash' as const ],
+    shardable: 'api',
   },
   tokens: {
     path: '/api/v2/tokens',
     filterFields: [ 'q' as const, 'type' as const ],
+    shardable: 'api',
   },
   tokens_bridged: {
     path: '/api/v2/tokens/bridged',
     filterFields: [ 'q' as const, 'chain_ids' as const ],
+    shardable: 'api',
   },
 
   // TOKEN INSTANCE
   token_instance: {
     path: '/api/v2/tokens/:hash/instances/:id',
     pathParams: [ 'hash' as const, 'id' as const ],
+    shardable: 'api',
   },
   token_instance_transfers_count: {
     path: '/api/v2/tokens/:hash/instances/:id/transfers-count',
     pathParams: [ 'hash' as const, 'id' as const ],
+    shardable: 'api',
   },
   token_instance_transfers: {
     path: '/api/v2/tokens/:hash/instances/:id/transfers',
     pathParams: [ 'hash' as const, 'id' as const ],
     filterFields: [],
+    shardable: 'api',
   },
   token_instance_holders: {
     path: '/api/v2/tokens/:hash/instances/:id/holders',
     pathParams: [ 'hash' as const, 'id' as const ],
     filterFields: [],
+    shardable: 'api',
   },
 
   // APP STATS
@@ -530,23 +591,30 @@ export const RESOURCES = {
     headers: {
       'updated-gas-oracle': 'true',
     },
+    shardable: 'api',
   },
   stats_charts_txs: {
     path: '/api/v2/stats/charts/transactions',
+    shardable: 'api',
   },
   stats_charts_market: {
     path: '/api/v2/stats/charts/market',
+    shardable: 'api',
   },
 
   // HOMEPAGE
   homepage_blocks: {
     path: '/api/v2/main-page/blocks',
+    shardable: 'api',
+    merge: true,
   },
   homepage_deposits: {
     path: '/api/v2/main-page/optimism-deposits',
   },
   homepage_txs: {
     path: '/api/v2/main-page/transactions',
+    shardable: 'api',
+    merge: true,
   },
   homepage_zkevm_l2_batches: {
     path: '/api/v2/main-page/zkevm/batches/confirmed',
@@ -565,6 +633,8 @@ export const RESOURCES = {
   quick_search: {
     path: '/api/v2/search/quick',
     filterFields: [ 'q' ],
+    shardable: 'api',
+    merge: true,
   },
   search: {
     path: '/api/v2/search',

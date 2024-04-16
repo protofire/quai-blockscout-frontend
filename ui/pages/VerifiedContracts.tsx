@@ -1,4 +1,4 @@
-import { Box, Hide, HStack, Show } from '@chakra-ui/react';
+import { Box, Hide, HStack, Show, Flex } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -7,6 +7,7 @@ import type { VerifiedContractsSorting, VerifiedContractsSortingField, VerifiedC
 
 import useDebounce from 'lib/hooks/useDebounce';
 import useIsMobile from 'lib/hooks/useIsMobile';
+import useShards from 'lib/hooks/useShards';
 import { apos } from 'lib/html-entities';
 import getQueryParamString from 'lib/router/getQueryParamString';
 import { VERIFIED_CONTRACT_INFO } from 'stubs/contract';
@@ -17,6 +18,7 @@ import FilterInput from 'ui/shared/filters/FilterInput';
 import PageTitle from 'ui/shared/Page/PageTitle';
 import Pagination from 'ui/shared/pagination/Pagination';
 import useQueryWithPages from 'ui/shared/pagination/useQueryWithPages';
+import ShardSwitcher from 'ui/shared/shardSwitcher/ShardSwitcher';
 import getSortParamsFromValue from 'ui/shared/sort/getSortParamsFromValue';
 import getSortValueFromQuery from 'ui/shared/sort/getSortValueFromQuery';
 import Sort from 'ui/shared/sort/Sort';
@@ -28,6 +30,8 @@ import VerifiedContractsTable from 'ui/verifiedContracts/VerifiedContractsTable'
 
 const VerifiedContracts = () => {
   const router = useRouter();
+  const { shardId, shards } = useShards();
+
   const [ searchTerm, setSearchTerm ] = React.useState(getQueryParamString(router.query.q) || undefined);
   const [ type, setType ] = React.useState(getQueryParamString(router.query.filter) as VerifiedContractsFilters['filter'] || undefined);
   const [ sort, setSort ] =
@@ -128,8 +132,12 @@ const VerifiedContracts = () => {
 
   return (
     <Box>
-      <PageTitle title="Verified contracts" withTextAd/>
-      <VerifiedContractsCounters/>
+      <Flex>
+        <Box flex={ 1 }><PageTitle title="Verified contracts" withTextAd/></Box>
+        <ShardSwitcher shardId={ shardId } shards={ shards }/>
+      </Flex>
+
+      <VerifiedContractsCounters key={ shardId }/>
       <DataListDisplay
         isError={ isError }
         items={ data?.items }
