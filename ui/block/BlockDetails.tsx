@@ -555,7 +555,7 @@ const BlockDetails = ({ query }: Props) => {
               title="Manifest Hash"
               hint="Manifest Hash when block was produced"
             >
-              { data.manifest_hash_full.map((hash, index) => (
+              { data.manifest_hash_full && data.manifest_hash_full.map((hash, index) => (
                 <Box key={ index }>
                   <HashStringShortenDynamic hash={ hash }/>
                 </Box>
