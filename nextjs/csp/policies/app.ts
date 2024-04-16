@@ -35,6 +35,7 @@ export function app(): CspDev.DirectiveDescriptor {
   const shardsFeaturePayload = getFeaturePayload(config.features.shards);
   const shardsApiHosts = Object.values(shardsFeaturePayload?.shards || {}).map((shard) => `${ config.app.protocol }://${ shard.apiHost }`);
   const shardsWebsocketHosts = shardsApiHosts.map((apiHost) => apiHost.replace(/^http/, 'ws'));
+  const proxyUrl = shardsFeaturePayload?.proxyUrl;
 
   return {
     'default-src': [
@@ -62,6 +63,7 @@ export function app(): CspDev.DirectiveDescriptor {
       marketplaceFeaturePayload && 'api' in marketplaceFeaturePayload ? marketplaceFeaturePayload.api.endpoint : '',
 
       // Shards
+      proxyUrl,
       ...shardsApiHosts,
       ...shardsWebsocketHosts,
 
