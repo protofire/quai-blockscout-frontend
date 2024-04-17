@@ -350,6 +350,12 @@ const bridgedTokensSchema = yup
       }),
   });
 
+const shardsSchema = yup.object().shape({
+  id: yup.string().required(),
+  title: yup.string().required(),
+  apiHost: yup.string().required(),
+});
+
 const schema = yup
   .object()
   .noUnknown(true, (params) => {
@@ -508,6 +514,12 @@ const schema = yup
     NEXT_PUBLIC_VALIDATORS_CHAIN_TYPE: yup.string<ValidatorsChainType>().oneOf(VALIDATORS_CHAIN_TYPE),
     NEXT_PUBLIC_GAS_TRACKER_ENABLED: yup.boolean(),
     NEXT_PUBLIC_GAS_TRACKER_UNITS: yup.array().transform(replaceQuotes).json().of(yup.string<GasUnit>().oneOf(GAS_UNITS)),
+    NEXT_PUBLIC_MULTI_SHARDS_PROXY_URL: yup.string().optional(),
+    NEXT_PUBLIC_SHARDS: yup
+      .array()
+      .transform(replaceQuotes)
+      .json()
+      .of(shardsSchema),
 
     // 6. External services envs
     NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: yup.string(),

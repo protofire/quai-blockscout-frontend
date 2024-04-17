@@ -1,9 +1,11 @@
+import { Box, Flex } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React from 'react';
 
 import type { RoutedTab } from 'ui/shared/Tabs/types';
 
 import useIsMobile from 'lib/hooks/useIsMobile';
+import useShards from 'lib/hooks/useShards';
 import getQueryParamString from 'lib/router/getQueryParamString';
 import { BLOCK } from 'stubs/block';
 import { generateListStub } from 'stubs/utils';
@@ -11,6 +13,7 @@ import BlocksContent from 'ui/blocks/BlocksContent';
 import BlocksTabSlot from 'ui/blocks/BlocksTabSlot';
 import PageTitle from 'ui/shared/Page/PageTitle';
 import useQueryWithPages from 'ui/shared/pagination/useQueryWithPages';
+import ShardSwitcher from 'ui/shared/shardSwitcher/ShardSwitcher';
 import RoutedTabs from 'ui/shared/Tabs/RoutedTabs';
 
 const TAB_LIST_PROPS = {
@@ -23,6 +26,7 @@ const BlocksPageContent = () => {
   const router = useRouter();
   const isMobile = useIsMobile();
   const tab = getQueryParamString(router.query.tab);
+  const { shardId, shards } = useShards();
 
   const blocksQuery = useQueryWithPages({
     resourceName: 'blocks',
@@ -76,7 +80,11 @@ const BlocksPageContent = () => {
 
   return (
     <>
-      <PageTitle title="Blocks" withTextAd/>
+      <Flex>
+        <Box flex={ 1 }><PageTitle title="Blocks" withTextAd/></Box>
+        <ShardSwitcher shardId={ shardId } shards={ shards }/>
+      </Flex>
+
       <RoutedTabs
         tabs={ tabs }
         tabListProps={ isMobile ? undefined : TAB_LIST_PROPS }

@@ -32,6 +32,13 @@ const getCspReportUrl = () => {
 
 export function app(): CspDev.DirectiveDescriptor {
   const marketplaceFeaturePayload = getFeaturePayload(config.features.marketplace);
+  const shardsFeaturePayload = getFeaturePayload(config.features.shards);
+  const shardsApiHosts = Object.values(shardsFeaturePayload?.shards || {}).map((shard) => `${ config.app.protocol }://${ shard.apiHost }`);
+  const shardsStatsApiHosts = Array.from(
+    new Set(Object.values(shardsFeaturePayload?.shards || {}).map((shard) => `${ config.app.protocol }://${ shard.statsHost }`)),
+  );
+  const shardsWebsocketHosts = shardsApiHosts.map((apiHost) => apiHost.replace(/^http/, 'ws'));
+  const proxyUrl = shardsFeaturePayload?.proxyUrl;
 
   return {
     'default-src': [
@@ -57,6 +64,12 @@ export function app(): CspDev.DirectiveDescriptor {
       getFeaturePayload(config.features.addressVerification)?.api.endpoint,
       getFeaturePayload(config.features.nameService)?.api.endpoint,
       marketplaceFeaturePayload && 'api' in marketplaceFeaturePayload ? marketplaceFeaturePayload.api.endpoint : '',
+
+      // Shards
+      proxyUrl,
+      ...shardsStatsApiHosts,
+      ...shardsApiHosts,
+      ...shardsWebsocketHosts,
 
       // chain RPC server
       config.chain.rpcUrl,
