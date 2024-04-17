@@ -116,7 +116,7 @@ const LatestBlocks = () => {
           <AnimatePresence initial={ false } >
             { dataToShow.map(((block, index) => (
               <LatestBlocksItem
-                key={ block.height + (isPlaceholderData ? String(index) : '') }
+                key={ (block.shard_id || '') + block.height + (isPlaceholderData ? String(index) : '') }
                 block={ block }
                 isLoading={ isPlaceholderData }
               />
