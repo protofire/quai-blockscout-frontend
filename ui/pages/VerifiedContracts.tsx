@@ -18,7 +18,6 @@ import FilterInput from 'ui/shared/filters/FilterInput';
 import PageTitle from 'ui/shared/Page/PageTitle';
 import Pagination from 'ui/shared/pagination/Pagination';
 import useQueryWithPages from 'ui/shared/pagination/useQueryWithPages';
-import ShardSwitcher from 'ui/shared/shardSwitcher/ShardSwitcher';
 import getSortParamsFromValue from 'ui/shared/sort/getSortParamsFromValue';
 import getSortValueFromQuery from 'ui/shared/sort/getSortValueFromQuery';
 import Sort from 'ui/shared/sort/Sort';
@@ -30,7 +29,7 @@ import VerifiedContractsTable from 'ui/verifiedContracts/VerifiedContractsTable'
 
 const VerifiedContracts = () => {
   const router = useRouter();
-  const { shardId, shards } = useShards();
+  const { shardId } = useShards();
 
   const [ searchTerm, setSearchTerm ] = React.useState(getQueryParamString(router.query.q) || undefined);
   const [ type, setType ] = React.useState(getQueryParamString(router.query.filter) as VerifiedContractsFilters['filter'] || undefined);
@@ -134,7 +133,6 @@ const VerifiedContracts = () => {
     <Box>
       <Flex>
         <Box flex={ 1 }><PageTitle title="Verified contracts" withTextAd/></Box>
-        <ShardSwitcher shardId={ shardId } shards={ shards }/>
       </Flex>
 
       <VerifiedContractsCounters key={ shardId }/>

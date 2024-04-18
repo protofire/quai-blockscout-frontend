@@ -9,6 +9,7 @@ export type ShardInfo = {
   apiHost: string;
   statsHost: string;
   chain: Chain;
+  region: string;
 };
 
 export type ShardableResponse = Record<string, {

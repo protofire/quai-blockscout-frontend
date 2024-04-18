@@ -3,6 +3,7 @@ import React from 'react';
 
 import config from 'configs/app';
 
+import ShardsMenu from '../shardsMenu/ShardsMenu';
 import ColorModeSwitch from './ColorModeSwitch';
 import SwapButton from './SwapButton';
 import TopBarStats from './TopBarStats';
@@ -28,7 +29,11 @@ const TopBar = () => {
             <Divider mr={ 3 } ml={{ base: 2, sm: 3 }} height={ 4 } orientation="vertical"/>
           </>
         ) }
+
+        { /* <ShardSwitch/> */ }
         <ColorModeSwitch/>
+        <Divider mr={ 3 } ml={{ base: 2, sm: 3 }} height={ 4 } orientation="vertical"/>
+        <ShardsMenu/>
       </Flex>
     </Flex>
   );

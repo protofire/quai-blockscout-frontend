@@ -14,6 +14,7 @@ type SubscriptionParams = {channelTopic: string; event: string; params?: Record<
 type UseShardsResult = {
   shardId?: ShardId;
   shard?: ShardInfo;
+  regionsShards: Record<string, Array<ShardInfo>>;
   defaultShardId?: ShardId;
   shards: Record<ShardId, ShardInfo>;
   getUrlWithShardId: (url: string) => string;
@@ -27,7 +28,8 @@ export default function useShards(): UseShardsResult {
 
   const queryStringParams = useSearchParams();
   const router = useRouter();
-  const shards = React.useMemo(() => getFeaturePayload(config.features.shards)?.shards || {}, [ ]);
+  const shardsConfig = getFeaturePayload(config.features.shards);
+  const shards = React.useMemo(() => shardsConfig?.shards || {}, [ shardsConfig ]);
   const defaultShardId = Object.keys(shards)[0];
 
   const shardId = queryStringParams.get('shard') as ShardId || defaultShardId;
@@ -112,6 +114,7 @@ export default function useShards(): UseShardsResult {
   return {
     shardId,
     shard: shards[shardId],
+    regionsShards: shardsConfig?.regionsShards || {},
     defaultShardId,
     shards,
     getUrlWithShardId,

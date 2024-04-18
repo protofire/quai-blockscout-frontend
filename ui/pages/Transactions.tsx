@@ -8,14 +8,12 @@ import config from 'configs/app';
 import useHasAccount from 'lib/hooks/useHasAccount';
 import useIsMobile from 'lib/hooks/useIsMobile';
 import useNewTxsSocket from 'lib/hooks/useNewTxsSocket';
-import useShards from 'lib/hooks/useShards';
 import getQueryParamString from 'lib/router/getQueryParamString';
 import { TX } from 'stubs/tx';
 import { generateListStub } from 'stubs/utils';
 import PageTitle from 'ui/shared/Page/PageTitle';
 import Pagination from 'ui/shared/pagination/Pagination';
 import useQueryWithPages from 'ui/shared/pagination/useQueryWithPages';
-import ShardSwitcher from 'ui/shared/shardSwitcher/ShardSwitcher';
 import RoutedTabs from 'ui/shared/Tabs/RoutedTabs';
 import TxsWatchlist from 'ui/txs/TxsWatchlist';
 import TxsWithFrontendSorting from 'ui/txs/TxsWithFrontendSorting';
@@ -31,7 +29,6 @@ const Transactions = () => {
   const router = useRouter();
   const isMobile = useIsMobile();
   const tab = getQueryParamString(router.query.tab);
-  const { shardId, shards } = useShards();
 
   React.useEffect(() => {
     if (tab === 'blob_txs' && config.UI.views.tx.hiddenViews?.blob_txs) {
@@ -151,7 +148,6 @@ const Transactions = () => {
     <>
       <Flex>
         <Box flex={ 1 }><PageTitle title="Transactions" withTextAd/></Box>
-        <ShardSwitcher shardId={ shardId } shards={ shards }/>
       </Flex>
 
       <RoutedTabs

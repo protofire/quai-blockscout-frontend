@@ -2,7 +2,6 @@ import { Hide, Show, Box, Flex } from '@chakra-ui/react';
 import BigNumber from 'bignumber.js';
 import React from 'react';
 
-import useShards from 'lib/hooks/useShards';
 import { TOP_ADDRESS } from 'stubs/address';
 import { generateListStub } from 'stubs/utils';
 import AddressesListItem from 'ui/addresses/AddressesListItem';
@@ -12,13 +11,10 @@ import DataListDisplay from 'ui/shared/DataListDisplay';
 import PageTitle from 'ui/shared/Page/PageTitle';
 import Pagination from 'ui/shared/pagination/Pagination';
 import useQueryWithPages from 'ui/shared/pagination/useQueryWithPages';
-import ShardSwitcher from 'ui/shared/shardSwitcher/ShardSwitcher';
 
 const PAGE_SIZE = 50;
 
 const Accounts = () => {
-  const { shardId, shards } = useShards();
-
   const { isError, isPlaceholderData, data, pagination } = useQueryWithPages({
     resourceName: 'addresses',
     options: {
@@ -79,7 +75,6 @@ const Accounts = () => {
     <>
       <Flex>
         <Box flex={ 1 }><PageTitle title="Top accounts" withTextAd/></Box>
-        <ShardSwitcher shardId={ shardId } shards={ shards }/>
       </Flex>
 
       <DataListDisplay

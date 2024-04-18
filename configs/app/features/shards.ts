@@ -6,6 +6,7 @@ import { getEnvValue, parseEnvJson } from '../utils';
 export type ShardConfig = {
   proxyUrl: string;
   shards: Record<ShardId, ShardInfo>;
+  regionsShards: Record<string, Array<ShardInfo>>;
   pages: Array<string>;
 };
 
@@ -20,11 +21,21 @@ const config: Feature<ShardConfig> = (() => {
     return acc;
   }, {});
 
+  const regionsShards = shardsConfig.reduce((acc: Record<string, Array<ShardInfo>>, shard) => {
+    if (!acc[shard.region]) {
+      acc[shard.region] = [];
+    }
+
+    acc[shard.region].push(shard);
+    return acc;
+  }, {});
+
   return Object.freeze({
     title,
     isEnabled,
     proxyUrl,
     shards,
+    regionsShards,
     pages: [
       '/accounts',
       '/address',
