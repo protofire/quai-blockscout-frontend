@@ -28,6 +28,7 @@ async function headers() {
           key: 'Referrer-Policy',
           value: 'origin-when-cross-origin',
         },
+        { key: 'Access-Control-Allow-Origin', value: '*' },
       ],
     },
   ];
