@@ -20,6 +20,7 @@ type UseShardsResult = {
   getUrlWithShardId: (url: string) => string;
   setActiveShardId: (shardId: ShardId) => Promise<void>;
   subscribeOnTopicMessage: (params: SubscriptionParams) => void;
+  extractShardIdFromAddress: (address: string) => ShardId | undefined;
 };
 
 export default function useShards(): UseShardsResult {
@@ -66,6 +67,21 @@ export default function useShards(): UseShardsResult {
 
     return url;
   }, [ shardId ]);
+
+  const extractShardIdFromAddress = useCallback((address: string) => {
+
+    // For understand what shard actually related to address we need take 2 first symbols from address
+    const marker = address.slice(0, 4).toLowerCase();
+    const allShardsIds = Object.keys(shards);
+
+    // Then we can check marker with shards addressesFrom
+    const shardId = allShardsIds.sort().reverse().find((shardId) => {
+      const addressesFrom = shards[shardId].addressesFrom;
+      return marker >= addressesFrom;
+    });
+
+    return shardId || defaultShardId;
+  }, [ shards, defaultShardId ]);
 
   const subscribeOnTopicMessage = useCallback(({ channelTopic, event, params, onMessage }: SubscriptionParams) => {
     // Init sockets if they are not initialized
@@ -120,5 +136,6 @@ export default function useShards(): UseShardsResult {
     getUrlWithShardId,
     setActiveShardId,
     subscribeOnTopicMessage,
+    extractShardIdFromAddress,
   };
 }

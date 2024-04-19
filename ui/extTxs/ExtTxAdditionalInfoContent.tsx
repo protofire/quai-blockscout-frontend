@@ -1,22 +1,26 @@
 import { Box, Heading, Text, Flex } from '@chakra-ui/react';
 import BigNumber from 'bignumber.js';
-import React from 'react';
+import React, { useMemo } from 'react';
 
-import type { Transaction } from 'types/api/transaction';
+import type { ExternalTransaction } from 'types/api/transaction';
 
 import { route } from 'nextjs-routes';
 
 import config from 'configs/app';
 import getValueWithUnit from 'lib/getValueWithUnit';
+import useShards from 'lib/hooks/useShards';
 import { currencyUnits } from 'lib/units';
-import CurrencyValue from 'ui/shared/CurrencyValue';
 import BlobEntity from 'ui/shared/entities/blob/BlobEntity';
 import LinkInternal from 'ui/shared/LinkInternal';
 import TextSeparator from 'ui/shared/TextSeparator';
-import TxFeeStability from 'ui/shared/tx/TxFeeStability';
 import Utilization from 'ui/shared/Utilization/Utilization';
 
-const TxAdditionalInfoContent = ({ tx }: { tx: Transaction }) => {
+const ExtTxAdditionalInfoContent = ({ tx }: { tx: ExternalTransaction }) => {
+  const { extractShardIdFromAddress } = useShards();
+  const dataTo = tx.to ? tx.to : tx.created_contract;
+
+  const shardId = useMemo(() => dataTo?.hash && extractShardIdFromAddress(dataTo?.hash), [ dataTo?.hash, extractShardIdFromAddress ]);
+
   const sectionProps = {
     borderBottom: '1px solid',
     borderColor: 'divider',
@@ -53,29 +57,6 @@ const TxAdditionalInfoContent = ({ tx }: { tx: Transaction }) => {
               </Flex>
             )) }
           </Flex>
-        </Box>
-      ) }
-      { !config.UI.views.tx.hiddenFields?.tx_fee && (
-        <Box { ...sectionProps } mb={ 4 }>
-          { (tx.stability_fee !== undefined || (tx.fee && tx.fee.value !== null)) && (
-            <>
-              <Text { ...sectionTitleProps }>Transaction fee</Text>
-              { tx.stability_fee ? (
-                <TxFeeStability data={ tx.stability_fee }/>
-              ) : (
-                <Flex>
-                  <CurrencyValue
-                    value={ tx.fee.value }
-                    currency={ config.UI.views.tx.hiddenFields?.fee_currency ? '' : currencyUnits.ether }
-                    exchangeRate={ tx.exchange_rate }
-                    accuracyUsd={ 2 }
-                    flexWrap="wrap"
-                    rowGap={ 0 }
-                  />
-                </Flex>
-              ) }
-            </>
-          ) }
         </Box>
       ) }
       { tx.gas_used !== null && (
@@ -131,9 +112,9 @@ const TxAdditionalInfoContent = ({ tx }: { tx: Transaction }) => {
           </Box>
         </Box>
       ) }
-      <LinkInternal href={ route({ pathname: '/tx/[hash]', query: { hash: tx.hash } }) }>More details</LinkInternal>
+      <LinkInternal href={ route({ pathname: '/tx/[hash]', query: { hash: tx.hash, shard: shardId } }) }>More details</LinkInternal>
     </>
   );
 };
 
-export default React.memo(TxAdditionalInfoContent);
+export default React.memo(ExtTxAdditionalInfoContent);

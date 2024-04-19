@@ -1,5 +1,5 @@
 import type { AddressParam } from './addressParams';
-import type { BlockTransactionsResponse } from './block';
+import type { BlockTransactionsResponse, BlockExternalTransactionsResponse } from './block';
 import type { DecodedInput } from './decodedInput';
 import type { Fee } from './fee';
 import type { OptimisticL2WithdrawalStatus } from './optimisticL2';
@@ -89,9 +89,84 @@ export type Transaction = {
   shard_id?: string;
 }
 
+export type ExternalTransaction = {
+  to: AddressParam | null;
+  created_contract: AddressParam | null;
+  hash: string;
+  result: string;
+  confirmations: number;
+  status: 'ok' | 'error' | null | undefined;
+  block: number | null;
+  timestamp: string | null;
+  confirmation_duration: Array<number> | null;
+  from: AddressParam;
+  value: string;
+  gas_price: string | null;
+  type: number | null;
+  gas_used: string | null;
+  gas_limit: string;
+  max_fee_per_gas: string | null;
+  max_priority_fee_per_gas: string | null;
+  priority_fee: string | null;
+  base_fee_per_gas: string | null;
+  tx_burnt_fee: string | null;
+  nonce: number;
+  position: number | null;
+  revert_reason: TransactionRevertReason | null;
+  raw_input: string;
+  decoded_input: DecodedInput | null;
+  token_transfers: Array<TokenTransfer> | null;
+  token_transfers_overflow: boolean;
+  exchange_rate: string | null;
+  method: string | null;
+  tx_types: Array<TransactionType>;
+  tx_tag: string | null;
+  actions: Array<TxAction>;
+  l1_fee?: string;
+  l1_fee_scalar?: string;
+  l1_gas_price?: string;
+  l1_gas_used?: string;
+  has_error_in_internal_txs: boolean | null;
+  // optimism fields
+  op_withdrawals?: Array<OpWithdrawal>;
+  // SUAVE fields
+  execution_node?: AddressParam | null;
+  allowed_peekers?: Array<string>;
+  wrapped?: Pick<Transaction, WrappedTransactionFields>;
+  // Stability fields
+  stability_fee?: {
+    dapp_address: AddressParam;
+    dapp_fee: string;
+    token: TokenInfo;
+    total_fee: string;
+    validator_address: AddressParam;
+    validator_fee: string;
+  };
+  // zkEvm fields
+  zkevm_verify_hash?: string;
+  zkevm_batch_number?: number;
+  zkevm_status?: typeof ZKEVM_L2_TX_STATUSES[number];
+  zkevm_sequence_hash?: string;
+  // blob tx fields
+  blob_versioned_hashes?: Array<string>;
+  blob_gas_used?: string;
+  blob_gas_price?: string;
+  burnt_blob_fee?: string;
+  max_fee_per_blob_gas?: string;
+}
+
 export const ZKEVM_L2_TX_STATUSES = [ 'Confirmed by Sequencer', 'L1 Confirmed' ];
 
 export type TransactionsResponse = TransactionsResponseValidated | TransactionsResponsePending;
+
+export interface ExternalTransactionsResponse {
+  items: Array<ExternalTransaction>;
+  next_page_params: {
+    block_number: number;
+    index: number;
+    items_count: number;
+  } | null;
+}
 
 export interface TransactionsResponseValidated {
   items: Array<Transaction>;
@@ -137,9 +212,11 @@ export type TransactionType = 'rootstock_remasc' |
 'contract_call' |
 'token_creation' |
 'coin_transfer' |
-'blob_transaction'
+'blob_transaction' |
+'internal_to_external_transaction';
 
 export type TxsResponse = TransactionsResponseValidated | TransactionsResponsePending | BlockTransactionsResponse;
+export type ExtTxsResponse = ExternalTransactionsResponse | BlockExternalTransactionsResponse;
 
 export interface TransactionsSorting {
   sort: 'value' | 'fee';

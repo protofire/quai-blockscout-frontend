@@ -32,7 +32,13 @@ import type {
 } from 'types/api/address';
 import type { AddressesResponse } from 'types/api/addresses';
 import type { TxBlobs, Blob } from 'types/api/blobs';
-import type { BlocksResponse, BlockTransactionsResponse, Block, BlockFilters, BlockWithdrawalsResponse } from 'types/api/block';
+import type {
+  BlocksResponse,
+  BlockTransactionsResponse,
+  Block, BlockFilters,
+  BlockWithdrawalsResponse,
+  BlockExternalTransactionsResponse,
+} from 'types/api/block';
 import type { ChartMarketResponse, ChartTransactionResponse } from 'types/api/charts';
 import type { BackendVersionConfig } from 'types/api/configs';
 import type {
@@ -273,6 +279,12 @@ export const RESOURCES = {
   },
   block_txs: {
     path: '/api/v2/blocks/:height_or_hash/transactions',
+    pathParams: [ 'height_or_hash' as const ],
+    filterFields: [ 'type' as const ],
+    shardable: 'api',
+  },
+  block_ext_txs: {
+    path: '/api/v2/blocks/:height_or_hash/external-transactions',
     pathParams: [ 'height_or_hash' as const ],
     filterFields: [ 'type' as const ],
     shardable: 'api',
@@ -812,7 +824,7 @@ export interface ResourceError<T = unknown> {
 
 export type ResourceErrorAccount<T> = ResourceError<{ errors: T }>
 
-export type PaginatedResources = 'blocks' | 'block_txs' |
+export type PaginatedResources = 'blocks' | 'block_txs' | 'block_ext_txs' |
 'txs_validated' | 'txs_pending' | 'txs_with_blobs' | 'txs_watchlist' | 'txs_execution_node' |
 'tx_internal_txs' | 'tx_logs' | 'tx_token_transfers' | 'tx_state_changes' | 'tx_blobs' |
 'addresses' |
@@ -862,6 +874,7 @@ Q extends 'stats_line' ? StatsChart :
 Q extends 'blocks' ? BlocksResponse :
 Q extends 'block' ? Block :
 Q extends 'block_txs' ? BlockTransactionsResponse :
+Q extends 'block_ext_txs' ? BlockExternalTransactionsResponse :
 Q extends 'block_withdrawals' ? BlockWithdrawalsResponse :
 Q extends 'txs_validated' ? TransactionsResponseValidated :
 Q extends 'txs_pending' ? TransactionsResponsePending :
@@ -969,6 +982,7 @@ export type PaginatedResponseNextPageParams<Q extends ResourceName> = Q extends 
 export type PaginationFilters<Q extends PaginatedResources> =
 Q extends 'blocks' ? BlockFilters :
 Q extends 'block_txs' ? TTxsWithBlobsFilters :
+Q extends 'block_ext_txs' ? TTxsWithBlobsFilters :
 Q extends 'txs_validated' | 'txs_pending' ? TTxsFilters :
 Q extends 'txs_with_blobs' ? TTxsWithBlobsFilters :
 Q extends 'tx_token_transfers' ? TokenTransferFilters :

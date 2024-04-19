@@ -8,6 +8,7 @@ import type { AddressParam } from 'types/api/addressParams';
 import { route } from 'nextjs-routes';
 
 import { useAddressHighlightContext } from 'lib/contexts/addressHighlight';
+import useShards from 'lib/hooks/useShards';
 import * as EntityBase from 'ui/shared/entities/base/components';
 
 import { getIconProps } from '../base/utils';
@@ -16,7 +17,10 @@ import AddressIdenticon from './AddressIdenticon';
 type LinkProps = EntityBase.LinkBaseProps & Pick<EntityProps, 'address'>;
 
 const Link = chakra((props: LinkProps) => {
-  const defaultHref = route({ pathname: '/address/[hash]', query: { ...props.query, hash: props.address.hash } });
+  const { extractShardIdFromAddress } = useShards();
+  const defaultHref = route({
+    pathname: '/address/[hash]', query: { ...props.query, hash: props.address.hash, shard: extractShardIdFromAddress(props.address.hash) },
+  });
 
   return (
     <EntityBase.Link

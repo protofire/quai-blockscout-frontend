@@ -65,8 +65,8 @@ const NetworkLogo = ({ isCollapsed, onClick, imageProps }: Props) => {
     >
       { /* big logo */ }
       <Image
-        w="auto"
-        h="100%"
+        w="140px"
+        h="22px"
         src={ logoSrc }
         alt={ `${ config.chain.name } network logo` }
         fallback={ <LogoFallback isCollapsed={ isCollapsed } imageProps={ imageProps }/> }

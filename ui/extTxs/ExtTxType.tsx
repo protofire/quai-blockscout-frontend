@@ -16,12 +16,11 @@ const TYPES_ORDER: Array<TransactionType> = [
   'token_creation',
   'contract_creation',
   'token_transfer',
-  'internal_to_external_transaction',
   'contract_call',
   'coin_transfer',
 ];
 
-const TxType = ({ types, isLoading }: Props) => {
+const ExtTxType = ({ types, isLoading }: Props) => {
   const typeToShow = types.sort((t1, t2) => TYPES_ORDER.indexOf(t1) - TYPES_ORDER.indexOf(t2))[0];
 
   let label;
@@ -60,20 +59,17 @@ const TxType = ({ types, isLoading }: Props) => {
       label = 'Bridge';
       colorScheme = 'blue';
       break;
-    case 'internal_to_external_transaction':
-      label = 'Internal to external transaction';
-      colorScheme = 'red';
-      break;
     default:
-      label = 'Transaction';
+      label = 'External Transaction';
       colorScheme = 'purple';
+
   }
 
   return (
-    <Tag maxWidth="250" colorScheme={ colorScheme } isLoading={ isLoading }>
+    <Tag colorScheme={ colorScheme } isLoading={ isLoading }>
       { label }
     </Tag>
   );
 };
 
-export default TxType;
+export default ExtTxType;

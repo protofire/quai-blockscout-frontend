@@ -1,6 +1,6 @@
 import type { AddressParam } from 'types/api/addressParams';
 import type { Reward } from 'types/api/reward';
-import type { Transaction } from 'types/api/transaction';
+import type { ExternalTransaction, Transaction } from 'types/api/transaction';
 
 export type BlockType = 'block' | 'reorg' | 'uncle';
 
@@ -71,6 +71,15 @@ export interface BlocksResponse {
 
 export interface BlockTransactionsResponse {
   items: Array<Transaction>;
+  next_page_params: {
+    block_number: number;
+    items_count: number;
+    index: number;
+  } | null;
+}
+
+export interface BlockExternalTransactionsResponse {
+  items: Array<ExternalTransaction>;
   next_page_params: {
     block_number: number;
     items_count: number;

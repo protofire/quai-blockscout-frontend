@@ -14,9 +14,11 @@ import getQueryParamString from 'lib/router/getQueryParamString';
 import BlockDetails from 'ui/block/BlockDetails';
 import BlockWithdrawals from 'ui/block/BlockWithdrawals';
 import useBlockBlobTxsQuery from 'ui/block/useBlockBlobTxsQuery';
+import useBlockExtTxsQuery from 'ui/block/useBlockExtTxsQuery';
 import useBlockQuery from 'ui/block/useBlockQuery';
 import useBlockTxsQuery from 'ui/block/useBlockTxsQuery';
 import useBlockWithdrawalsQuery from 'ui/block/useBlockWithdrawalsQuery';
+import ExtTxsWithFrontendSorting from 'ui/extTxs/ExtTxsWithFrontendSorting';
 import TextAd from 'ui/shared/ad/TextAd';
 import ServiceDegradationWarning from 'ui/shared/alerts/ServiceDegradationWarning';
 import AddressEntity from 'ui/shared/entities/address/AddressEntity';
@@ -42,6 +44,7 @@ const BlockPageContent = () => {
 
   const blockQuery = useBlockQuery({ heightOrHash });
   const blockTxsQuery = useBlockTxsQuery({ heightOrHash, blockQuery, tab });
+  const blockExtTxsQuery = useBlockExtTxsQuery({ heightOrHash, blockQuery, tab });
   const blockWithdrawalsQuery = useBlockWithdrawalsQuery({ heightOrHash, blockQuery, tab });
   const blockBlobTxsQuery = useBlockBlobTxsQuery({ heightOrHash, blockQuery, tab });
 
@@ -74,6 +77,16 @@ const BlockPageContent = () => {
           <TxsWithFrontendSorting query={ blockBlobTxsQuery } showBlockInfo={ false } showSocketInfo={ false }/>
         ),
       } : null,
+    {
+      id: 'ext_txs',
+      title: 'External Transactions',
+      component: (
+        <>
+          { blockTxsQuery.isDegradedData && <ServiceDegradationWarning isLoading={ blockTxsQuery.isPlaceholderData } mb={ 6 }/> }
+          <ExtTxsWithFrontendSorting query={ blockExtTxsQuery } showBlockInfo={ false } showSocketInfo={ false }/>
+        </>
+      ),
+    },
     config.features.beaconChain.isEnabled && Boolean(blockQuery.data?.withdrawals_count) ?
       {
         id: 'withdrawals',
@@ -85,7 +98,7 @@ const BlockPageContent = () => {
           </>
         ),
       } : null,
-  ].filter(Boolean)), [ blockBlobTxsQuery, blockQuery, blockTxsQuery, blockWithdrawalsQuery ]);
+  ].filter(Boolean)), [ blockBlobTxsQuery, blockExtTxsQuery, blockQuery, blockTxsQuery, blockWithdrawalsQuery ]);
 
   const hasPagination = !isMobile && (
     (tab === 'txs' && blockTxsQuery.pagination.isVisible) ||
