@@ -33,8 +33,12 @@ const TopBar = () => {
         ) }
 
         <ColorModeSwitch/>
-        <Divider mr={ 3 } ml={{ base: 2, sm: 3 }} height={ 4 } orientation="vertical"/>
-        { isSwitcherUseful && <ShardsMenu/> }
+        { isSwitcherUseful && (
+          <>
+            <Divider mr={ 3 } ml={{ base: 2, sm: 3 }} height={ 4 } orientation="vertical"/>
+            <ShardsMenu/>
+          </>
+        ) }
       </Flex>
     </Flex>
   );
