@@ -7,6 +7,8 @@ import config from 'configs/app';
 import { rightLineArrow } from 'lib/html-entities';
 import UserAvatar from 'ui/shared/UserAvatar';
 
+import useShards from './useShards';
+
 interface ReturnType {
   mainNavItems: Array<NavItem | NavGroupItem>;
   accountNavItems: Array<NavItem>;
@@ -24,31 +26,32 @@ export function isInternalItem(item: NavItem): item is NavItemInternal {
 export default function useNavItems(): ReturnType {
   const router = useRouter();
   const pathname = router.pathname;
+  const { shardId } = useShards();
 
   return React.useMemo(() => {
     let blockchainNavItems: Array<NavItem> | Array<Array<NavItem>> = [];
 
     const topAccounts: NavItem | null = !config.UI.views.address.hiddenViews?.top_accounts ? {
       text: 'Top accounts',
-      nextRoute: { pathname: '/accounts' as const },
+      nextRoute: { pathname: '/accounts' as const, query: { shard: shardId } },
       icon: 'top-accounts',
       isActive: pathname === '/accounts',
     } : null;
     const blocks: NavItem | null = {
       text: 'Blocks',
-      nextRoute: { pathname: '/blocks' as const },
+      nextRoute: { pathname: '/blocks' as const, query: { shard: shardId } },
       icon: 'block',
       isActive: pathname === '/blocks' || pathname === '/block/[height_or_hash]',
     };
     const txs: NavItem | null = {
       text: 'Transactions',
-      nextRoute: { pathname: '/txs' as const },
+      nextRoute: { pathname: '/txs' as const, query: { shard: shardId } },
       icon: 'transactions',
       isActive: pathname === '/txs' || pathname === '/tx/[hash]',
     };
     const userOps: NavItem | null = config.features.userOps.isEnabled ? {
       text: 'User operations',
-      nextRoute: { pathname: '/ops' as const },
+      nextRoute: { pathname: '/ops' as const, query: { shard: shardId } },
       icon: 'user_op',
       isActive: pathname === '/ops' || pathname === '/op/[hash]',
     } : null;
@@ -56,19 +59,19 @@ export default function useNavItems(): ReturnType {
     const verifiedContracts: NavItem | null =
      {
        text: 'Verified contracts',
-       nextRoute: { pathname: '/verified-contracts' as const },
+       nextRoute: { pathname: '/verified-contracts' as const, query: { shard: shardId } },
        icon: 'verified',
        isActive: pathname === '/verified-contracts',
      };
     const ensLookup = config.features.nameService.isEnabled ? {
       text: 'Name services lookup',
-      nextRoute: { pathname: '/name-domains' as const },
+      nextRoute: { pathname: '/name-domains' as const, query: { shard: shardId } },
       icon: 'ENS',
       isActive: pathname === '/name-domains' || pathname === '/name-domains/[name]',
     } : null;
     const validators = config.features.validators.isEnabled ? {
       text: 'Top validators',
-      nextRoute: { pathname: '/validators' as const },
+      nextRoute: { pathname: '/validators' as const, query: { shard: shardId } },
       icon: 'validator',
       isActive: pathname === '/validators',
     } : null;
@@ -188,7 +191,7 @@ export default function useNavItems(): ReturnType {
       },
       {
         text: 'Tokens',
-        nextRoute: { pathname: '/tokens' as const },
+        nextRoute: { pathname: '/tokens' as const, query: { shard: shardId } },
         icon: 'token',
         isActive: pathname.startsWith('/token'),
       },
@@ -200,7 +203,7 @@ export default function useNavItems(): ReturnType {
       } : null,
       config.features.stats.isEnabled ? {
         text: 'Charts & stats',
-        nextRoute: { pathname: '/stats' as const },
+        nextRoute: { pathname: '/stats' as const, query: { shard: shardId } },
         icon: 'stats',
         isActive: pathname === '/stats',
       } : null,
@@ -216,12 +219,12 @@ export default function useNavItems(): ReturnType {
         subItems: [
           {
             text: 'Verify contract',
-            nextRoute: { pathname: '/contract-verification' as const },
+            nextRoute: { pathname: '/contract-verification' as const, query: { shard: shardId } },
             isActive: pathname.startsWith('/contract-verification'),
           },
           config.features.gasTracker.isEnabled && {
             text: 'Gas tracker',
-            nextRoute: { pathname: '/gas-tracker' as const },
+            nextRoute: { pathname: '/gas-tracker' as const, query: { shard: shardId } },
             isActive: pathname.startsWith('/gas-tracker'),
           },
           ...config.UI.sidebar.otherLinks,
@@ -276,5 +279,5 @@ export default function useNavItems(): ReturnType {
     };
 
     return { mainNavItems, accountNavItems, profileItem };
-  }, [ pathname ]);
+  }, [ pathname, shardId ]);
 }

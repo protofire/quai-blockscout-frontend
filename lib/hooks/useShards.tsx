@@ -2,7 +2,7 @@ import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import type { Channel } from 'phoenix';
 import { Socket } from 'phoenix';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { getFeaturePayload } from 'configs/app/features/types';
 import type { ShardId, ShardInfo } from 'types/shards';
@@ -22,6 +22,7 @@ type UseShardsResult = {
   regionsShards: Record<string, Array<ShardInfo>>;
   defaultShardId?: ShardId;
   shards: Record<ShardId, ShardInfo>;
+  isSwitcherUseful: boolean;
   getUrlWithShardId: (url: string) => string;
   setActiveShardId: (shardId: ShardId) => Promise<void>;
   subscribeOnTopicMessage: (params: SubscriptionParams) => void;
@@ -156,6 +157,12 @@ export default function useShards(): UseShardsResult {
     [ shards, sockets ],
   );
 
+  // Return true in case if switcher is useful on page
+  const isSwitcherUseful = useMemo(() => {
+    const shardablePages = getFeaturePayload(config.features.shards)?.pages;
+    return shardablePages?.find((page) => router.pathname.startsWith(page)) !== undefined;
+  }, [ router.pathname ]);
+
   useEffect(() => {
     return () => {
       channels.forEach((channel) => channel.leave());
@@ -174,5 +181,6 @@ export default function useShards(): UseShardsResult {
     setActiveShardId,
     subscribeOnTopicMessage,
     extractShardIdFromAddress,
+    isSwitcherUseful,
   };
 }

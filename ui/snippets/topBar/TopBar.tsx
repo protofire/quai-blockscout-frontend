@@ -2,6 +2,7 @@ import { Flex, Divider, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 
 import config from 'configs/app';
+import useShards from 'lib/hooks/useShards';
 
 import ShardsMenu from '../shardsMenu/ShardsMenu';
 import ColorModeSwitch from './ColorModeSwitch';
@@ -11,6 +12,7 @@ import TopBarStats from './TopBarStats';
 const feature = config.features.swapButton;
 
 const TopBar = () => {
+  const { isSwitcherUseful } = useShards();
   const bgColor = useColorModeValue('gray.50', 'whiteAlpha.100');
 
   return (
@@ -30,10 +32,9 @@ const TopBar = () => {
           </>
         ) }
 
-        { /* <ShardSwitch/> */ }
         <ColorModeSwitch/>
         <Divider mr={ 3 } ml={{ base: 2, sm: 3 }} height={ 4 } orientation="vertical"/>
-        <ShardsMenu/>
+        { isSwitcherUseful && <ShardsMenu/> }
       </Flex>
     </Flex>
   );
