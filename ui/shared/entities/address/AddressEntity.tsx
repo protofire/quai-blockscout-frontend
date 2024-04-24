@@ -1,5 +1,5 @@
 import type { As } from '@chakra-ui/react';
-import { Box, Flex, Skeleton, Tooltip, chakra, VStack } from '@chakra-ui/react';
+import { Box, Flex, Skeleton, Tooltip, chakra, VStack, Tag, TagLabel } from '@chakra-ui/react';
 import _omit from 'lodash/omit';
 import React from 'react';
 
@@ -18,8 +18,10 @@ type LinkProps = EntityBase.LinkBaseProps & Pick<EntityProps, 'address'>;
 
 const Link = chakra((props: LinkProps) => {
   const { extractShardIdFromAddress } = useShards();
+  const shardId = extractShardIdFromAddress(props.address.hash);
+
   const defaultHref = route({
-    pathname: '/address/[hash]', query: { ...props.query, hash: props.address.hash, shard: extractShardIdFromAddress(props.address.hash) },
+    pathname: '/address/[hash]', query: { ...props.query, hash: props.address.hash, shard: shardId },
   });
 
   return (
@@ -150,6 +152,9 @@ export interface EntityProps extends EntityBase.EntityBaseProps {
 const AddressEntry = (props: EntityProps) => {
   const linkProps = _omit(props, [ 'className' ]);
   const partsProps = _omit(props, [ 'className', 'onClick' ]);
+  const { extractShardIdFromAddress, shards } = useShards();
+  const shardId = extractShardIdFromAddress(props.address.hash);
+  const shard = shards[shardId];
 
   const context = useAddressHighlightContext();
 
@@ -167,6 +172,11 @@ const AddressEntry = (props: EntityProps) => {
       <Link { ...linkProps }>
         <Content { ...partsProps }/>
       </Link>
+      { shard && (
+        <Tag ml={ 2 } whiteSpace="nowrap" size="sm" variant="outline" colorScheme="blue">
+          <TagLabel lineHeight={ 2 }>{ shard.title }</TagLabel>
+        </Tag>
+      ) }
       <Copy { ...partsProps }/>
     </Container>
   );

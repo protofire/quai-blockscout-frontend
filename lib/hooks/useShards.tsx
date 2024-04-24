@@ -25,7 +25,7 @@ type UseShardsResult = {
   getUrlWithShardId: (url: string) => string;
   setActiveShardId: (shardId: ShardId) => Promise<void>;
   subscribeOnTopicMessage: (params: SubscriptionParams) => void;
-  extractShardIdFromAddress: (address: string) => ShardId | undefined;
+  extractShardIdFromAddress: (address: string) => ShardId;
 };
 
 export default function useShards(): UseShardsResult {
@@ -96,23 +96,15 @@ export default function useShards(): UseShardsResult {
       // For understand what shard actually related to address we need take 2 first symbols from address
       const marker = address.slice(0, 4).toLowerCase();
 
-      // Sort shards by addressesFrom field desc
-      const sortFn = (a: ShardInfo, b: ShardInfo) => {
-        const aAddressesFrom = parseInt(a.addressesFrom, 16);
-        const bAddressesFrom = parseInt(b.addressesFrom, 16);
-        return aAddressesFrom - bAddressesFrom;
-      };
-      const allShards = Object.values(shards).sort(sortFn);
-
       // Then we can check marker with shards addressesFrom
-      const shard = allShards.find((shard) => {
+      const shard = shardsConfig?.shardsList.find((shard) => {
         const addressesFrom = shard.addressesFrom;
         return marker >= addressesFrom;
       });
 
       return shard?.id || defaultShardId;
     },
-    [ shards, defaultShardId ],
+    [ shardsConfig?.shardsList, defaultShardId ],
   );
 
   const subscribeOnTopicMessage = useCallback(

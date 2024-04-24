@@ -14,7 +14,6 @@ import useShards from 'lib/hooks/useShards';
 import useTimeAgoIncrement from 'lib/hooks/useTimeAgoIncrement';
 import ExtTxAdditionalInfo from 'ui/extTxs/ExtTxAdditionalInfo';
 import AddressFromTo from 'ui/shared/address/AddressFromTo';
-import Tag from 'ui/shared/chakra/Tag';
 import CurrencyValue from 'ui/shared/CurrencyValue';
 import BlockEntity from 'ui/shared/entities/block/BlockEntity';
 import TxEntity from 'ui/shared/entities/tx/TxEntity';
@@ -56,20 +55,6 @@ const ExtTxsTableItem = ({ tx, showBlockInfo, currentAddress, enableTimeIncremen
           />
           { tx.timestamp && <Skeleton color="text_secondary" fontWeight="400" isLoaded={ !isLoading }><span>{ timeAgo }</span></Skeleton> }
         </VStack>
-      </Td>
-      <Td>
-        <VStack alignItems="start">
-          <Tag colorScheme="red" isLoading={ isLoading }>
-            External transaction
-          </Tag>
-        </VStack>
-      </Td>
-      <Td whiteSpace="nowrap">
-        { tx.method && (
-          <Tag colorScheme={ tx.method === 'Multicall' ? 'teal' : 'gray' } isLoading={ isLoading } isTruncated>
-            { tx.method }
-          </Tag>
-        ) }
       </Td>
       { showBlockInfo && (
         <Td>

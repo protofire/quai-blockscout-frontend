@@ -7,7 +7,15 @@ export type ShardConfig = {
   proxyUrl: string;
   shards: Record<ShardId, ShardInfo>;
   regionsShards: Record<string, Array<ShardInfo>>;
+  shardsList: Array<ShardInfo>;
   pages: Array<string>;
+};
+
+// Sort shards by addressesFrom field desc
+const regionShardsSortFn = (a: ShardInfo, b: ShardInfo) => {
+  const aAddressesFrom = parseInt(a.addressesFrom, 16);
+  const bAddressesFrom = parseInt(b.addressesFrom, 16);
+  return bAddressesFrom - aAddressesFrom;
 };
 
 const title = 'Shards';
@@ -35,6 +43,7 @@ const config: Feature<ShardConfig> = (() => {
     isEnabled,
     proxyUrl,
     shards,
+    shardsList: Object.values(shards).sort(regionShardsSortFn),
     regionsShards,
     pages: [
       '/accounts',
