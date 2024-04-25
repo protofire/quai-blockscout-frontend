@@ -54,6 +54,7 @@ const config: Feature<ShardConfig> = (() => {
       '/txs',
       '/ext_txs',
       '/verified-contracts',
+      '/contract-verification',
       '/tokens',
     ],
   });
