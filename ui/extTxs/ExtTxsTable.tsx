@@ -51,7 +51,7 @@ const ExtTxsTable = ({
             <Th width="54px"></Th>
             <Th width="180px">Txn hash</Th>
             { showBlockInfo && <Th width="18%">Block</Th> }
-            <Th width="274px">From/To</Th>
+            <Th>From/To</Th>
             { !config.UI.views.tx.hiddenFields?.value && (
               <Th width="20%" isNumeric>
                 <Link onClick={ sort('value') } display="flex" justifyContent="end">
