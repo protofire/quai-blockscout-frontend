@@ -7,6 +7,7 @@ import type { TokenInfo } from 'types/api/token';
 
 import { route } from 'nextjs-routes';
 
+import useShards from 'lib/hooks/useShards';
 import * as EntityBase from 'ui/shared/entities/base/components';
 import TokenLogoPlaceholder from 'ui/shared/TokenLogoPlaceholder';
 import TruncatedTextTooltip from 'ui/shared/TruncatedTextTooltip';
@@ -16,7 +17,9 @@ import { getIconProps } from '../base/utils';
 type LinkProps = EntityBase.LinkBaseProps & Pick<EntityProps, 'token'>;
 
 const Link = chakra((props: LinkProps) => {
-  const defaultHref = route({ pathname: '/token/[hash]', query: { ...props.query, hash: props.token.address } });
+  const { shardId } = useShards();
+
+  const defaultHref = route({ pathname: '/token/[hash]', query: { ...props.query, hash: props.token.address, shard: shardId } });
 
   return (
     <EntityBase.Link
