@@ -5,6 +5,7 @@ import type { AddressNFT } from 'types/api/address';
 
 import { route } from 'nextjs-routes';
 
+import useShards from 'lib/hooks/useShards';
 import NftEntity from 'ui/shared/entities/nft/NftEntity';
 import TokenEntity from 'ui/shared/entities/token/TokenEntity';
 import NftMedia from 'ui/shared/nft/NftMedia';
@@ -14,8 +15,9 @@ import NFTItemContainer from './NFTItemContainer';
 type Props = AddressNFT & { isLoading: boolean; withTokenLink?: boolean };
 
 const NFTItem = ({ token, value, isLoading, withTokenLink, ...tokenInstance }: Props) => {
+  const { shardId } = useShards();
   const tokenInstanceLink = tokenInstance.id ?
-    route({ pathname: '/token/[hash]/instance/[id]', query: { hash: token.address, id: tokenInstance.id } }) :
+    route({ pathname: '/token/[hash]/instance/[id]', query: { hash: token.address, id: tokenInstance.id, shard: shardId } }) :
     undefined;
 
   return (

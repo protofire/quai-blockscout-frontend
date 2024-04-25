@@ -4,6 +4,7 @@ import React from 'react';
 import { route } from 'nextjs-routes';
 
 import useApiQuery from 'lib/api/useApiQuery';
+import useShards from 'lib/hooks/useShards';
 import DetailsInfoItem from 'ui/shared/DetailsInfoItem';
 import LinkInternal from 'ui/shared/LinkInternal';
 
@@ -14,6 +15,7 @@ interface Props {
 }
 
 const TokenInstanceTransfersCount = ({ hash, id, onClick }: Props) => {
+  const { shardId } = useShards();
   const transfersCountQuery = useApiQuery('token_instance_transfers_count', {
     pathParams: { hash, id },
     queryOptions: {
@@ -33,7 +35,7 @@ const TokenInstanceTransfersCount = ({ hash, id, onClick }: Props) => {
   }
 
   const url = transfersCountQuery.data.transfers_count > 0 ?
-    route({ pathname: '/token/[hash]/instance/[id]', query: { hash, id, tab: 'token_transfers' } }) :
+    route({ pathname: '/token/[hash]/instance/[id]', query: { hash, id, tab: 'token_transfers', shard: shardId } }) :
     undefined;
 
   return (

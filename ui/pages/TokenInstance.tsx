@@ -9,6 +9,7 @@ import useApiQuery from 'lib/api/useApiQuery';
 import { useAppContext } from 'lib/contexts/app';
 import throwOnResourceLoadError from 'lib/errors/throwOnResourceLoadError';
 import useIsMobile from 'lib/hooks/useIsMobile';
+import useShards from 'lib/hooks/useShards';
 import * as metadata from 'lib/metadata';
 import * as regexp from 'lib/regexp';
 import { TOKEN_INSTANCE, TOKEN_INFO_ERC_1155 } from 'stubs/token';
@@ -37,6 +38,7 @@ const TokenInstanceContent = () => {
   const router = useRouter();
   const isMobile = useIsMobile();
   const appProps = useAppContext();
+  const { shardId } = useShards();
 
   const hash = router.query.hash?.toString();
   const id = router.query.id?.toString();
@@ -94,11 +96,11 @@ const TokenInstanceContent = () => {
   React.useEffect(() => {
     if (tokenInstanceQuery.data && !tokenInstanceQuery.isPlaceholderData && tokenQuery.data && !tokenQuery.isPlaceholderData) {
       metadata.update(
-        { pathname: '/token/[hash]/instance/[id]', query: { hash: tokenQuery.data.address, id: tokenInstanceQuery.data.id } },
+        { pathname: '/token/[hash]/instance/[id]', query: { hash: tokenQuery.data.address, id: tokenInstanceQuery.data.id, shard: shardId } },
         { symbol: tokenQuery.data.symbol ?? '' },
       );
     }
-  }, [ tokenInstanceQuery.data, tokenInstanceQuery.isPlaceholderData, tokenQuery.data, tokenQuery.isPlaceholderData ]);
+  }, [ shardId, tokenInstanceQuery.data, tokenInstanceQuery.isPlaceholderData, tokenQuery.data, tokenQuery.isPlaceholderData ]);
 
   const backLink = React.useMemo(() => {
     const hasGoBackLink = appProps.referrer && appProps.referrer.includes(`/token/${ hash }`) && !appProps.referrer.includes('instance');

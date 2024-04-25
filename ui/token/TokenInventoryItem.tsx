@@ -6,6 +6,7 @@ import type { TokenInfo, TokenInstance } from 'types/api/token';
 import { route } from 'nextjs-routes';
 
 import useIsMobile from 'lib/hooks/useIsMobile';
+import useShards from 'lib/hooks/useShards';
 import AddressEntity from 'ui/shared/entities/address/AddressEntity';
 import LinkInternal from 'ui/shared/LinkInternal';
 import NftMedia from 'ui/shared/nft/NftMedia';
@@ -14,7 +15,7 @@ import TruncatedTextTooltip from 'ui/shared/TruncatedTextTooltip';
 type Props = { item: TokenInstance; token: TokenInfo; isLoading: boolean };
 
 const TokenInventoryItem = ({ item, token, isLoading }: Props) => {
-
+  const { shardId } = useShards();
   const isMobile = useIsMobile();
 
   const mediaElement = (
@@ -26,7 +27,7 @@ const TokenInventoryItem = ({ item, token, isLoading }: Props) => {
     />
   );
 
-  const url = route({ pathname: '/token/[hash]/instance/[id]', query: { hash: token.address, id: item.id } });
+  const url = route({ pathname: '/token/[hash]/instance/[id]', query: { hash: token.address, id: item.id, shard: shardId } });
 
   return (
     <Box

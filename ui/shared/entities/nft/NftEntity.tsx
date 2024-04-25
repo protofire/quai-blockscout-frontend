@@ -4,6 +4,7 @@ import React from 'react';
 
 import { route } from 'nextjs-routes';
 
+import useShards from 'lib/hooks/useShards';
 import * as EntityBase from 'ui/shared/entities/base/components';
 import TruncatedValue from 'ui/shared/TruncatedValue';
 
@@ -30,7 +31,8 @@ const Icon = (props: IconProps) => {
 type LinkProps = EntityBase.LinkBaseProps & Pick<EntityProps, 'hash' | 'id'>;
 
 const Link = chakra((props: LinkProps) => {
-  const defaultHref = route({ pathname: '/token/[hash]/instance/[id]', query: { hash: props.hash, id: props.id } });
+  const { shardId } = useShards();
+  const defaultHref = route({ pathname: '/token/[hash]/instance/[id]', query: { hash: props.hash, id: props.id, shard: shardId } });
 
   return (
     <EntityBase.Link
