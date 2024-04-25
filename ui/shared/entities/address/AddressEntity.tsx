@@ -8,6 +8,7 @@ import type { AddressParam } from 'types/api/addressParams';
 import { route } from 'nextjs-routes';
 
 import { useAddressHighlightContext } from 'lib/contexts/addressHighlight';
+import useResizeObserver from 'lib/hooks/useResizeObserver';
 import useShards from 'lib/hooks/useShards';
 import * as EntityBase from 'ui/shared/entities/base/components';
 
@@ -155,7 +156,7 @@ const AddressEntry = (props: EntityProps) => {
   const { extractShardIdFromAddress, shards } = useShards();
   const shardId = extractShardIdFromAddress(props.address.hash);
   const shard = shards[shardId];
-
+  const [ parentRef, size ] = useResizeObserver();
   const context = useAddressHighlightContext();
 
   return (
@@ -169,14 +170,16 @@ const AddressEntry = (props: EntityProps) => {
       position="relative"
     >
       <Icon { ...partsProps }/>
-      <Link { ...linkProps }>
-        <Content { ...partsProps }/>
-      </Link>
-      { shard && (
-        <Tag ml={ 2 } whiteSpace="nowrap" size="sm" variant="outline" colorScheme="blue">
-          <TagLabel lineHeight={ 2 }>{ shard.title }</TagLabel>
-        </Tag>
-      ) }
+      <div ref={ parentRef } className="inline-block">
+        <Link { ...linkProps }>
+          <Content { ...partsProps }/>
+        </Link>
+        { (size?.width && size?.width > 150 && shard) && (
+          <Tag ml={ 2 } whiteSpace="nowrap" size="sm" variant="outline" colorScheme="blue">
+            <TagLabel lineHeight={ 2 }>{ shard.title }</TagLabel>
+          </Tag>
+        ) }
+      </div>
       <Copy { ...partsProps }/>
     </Container>
   );
