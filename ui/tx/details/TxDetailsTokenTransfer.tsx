@@ -16,7 +16,7 @@ const TxDetailsTokenTransfer = ({ data }: Props) => {
 
   const content = (() => {
     switch (data.token.type) {
-      case 'ERC-20': {
+      case 'QRC-20': {
         const total = data.total as Erc20TotalPayload;
         const { valueStr, usd } = getCurrencyValue({
           value: total.value,
@@ -40,7 +40,7 @@ const TxDetailsTokenTransfer = ({ data }: Props) => {
         );
       }
 
-      case 'ERC-721': {
+      case 'QRC-721': {
         const total = data.total as Erc721TotalPayload;
         return (
           <NftTokenTransferSnippet
@@ -51,7 +51,7 @@ const TxDetailsTokenTransfer = ({ data }: Props) => {
         );
       }
 
-      case 'ERC-1155': {
+      case 'QRC-1155': {
         const total = data.total as Erc1155TotalPayload;
         return (
           <NftTokenTransferSnippet

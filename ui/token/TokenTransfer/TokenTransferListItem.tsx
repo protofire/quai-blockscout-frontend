@@ -60,7 +60,7 @@ const TokenTransferListItem = ({
         w="100%"
         fontWeight="500"
       />
-      { valueStr && (token.type === 'ERC-20' || token.type === 'ERC-1155') && (
+      { valueStr && (token.type === 'QRC-20' || token.type === 'QRC-1155') && (
         <Grid gap={ 2 } templateColumns={ `1fr auto auto${ usd ? ' auto' : '' }` }>
           <Skeleton isLoaded={ !isLoading } flexShrink={ 0 } fontWeight={ 500 }>
             Value
@@ -87,7 +87,7 @@ const TokenTransferListItem = ({
           ) }
         </Grid>
       ) }
-      { 'token_id' in total && (token.type === 'ERC-721' || token.type === 'ERC-1155') && total.token_id !== null && (
+      { 'token_id' in total && (token.type === 'QRC-721' || token.type === 'QRC-1155') && total.token_id !== null && (
         <NftEntity
           hash={ token.address }
           id={ total.token_id }

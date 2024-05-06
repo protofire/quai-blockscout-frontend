@@ -26,7 +26,7 @@ const TokenTransferTableItem = ({ holder, token, isLoading }: Props) => {
           fontWeight="700"
         />
       </Td>
-      { token.type === 'ERC-1155' && 'token_id' in holder && (
+      { token.type === 'QRC-1155' && 'token_id' in holder && (
         <Td verticalAlign="middle">
           <Skeleton isLoaded={ !isLoading } display="inline-block">
             { 'token_id' in holder && holder.token_id }

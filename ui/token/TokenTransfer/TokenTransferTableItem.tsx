@@ -69,7 +69,7 @@ const TokenTransferTableItem = ({
           tokenHash={ token.address }
         />
       </Td>
-      { (token.type === 'ERC-721' || token.type === 'ERC-1155') && (
+      { (token.type === 'QRC-721' || token.type === 'QRC-1155') && (
         <Td>
           { 'token_id' in total && total.token_id !== null ? (
             <NftEntity
@@ -82,7 +82,7 @@ const TokenTransferTableItem = ({
           }
         </Td>
       ) }
-      { (token.type === 'ERC-20' || token.type === 'ERC-1155') && (
+      { (token.type === 'QRC-20' || token.type === 'QRC-1155') && (
         <Td isNumeric verticalAlign="top">
           { valueStr && (
             <Skeleton isLoaded={ !isLoading } display="inline-block" mt="7px" wordBreak="break-all">

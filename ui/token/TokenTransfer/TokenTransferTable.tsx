@@ -32,11 +32,11 @@ const TokenTransferTable = ({ data, top, showSocketInfo, socketInfoAlert, socket
             <Th width="280px">Txn hash</Th>
             <Th width="200px">Method</Th>
             <Th width={{ lg: '224px', xl: '420px' }}>From/To</Th>
-            { (tokenType === 'ERC-721' || tokenType === 'ERC-1155') &&
-              <Th width={ tokenType === 'ERC-1155' ? '50%' : '100%' }>Token ID</Th>
+            { (tokenType === 'QRC-721' || tokenType === 'QRC-1155') &&
+              <Th width={ tokenType === 'QRC-1155' ? '50%' : '100%' }>Token ID</Th>
             }
-            { (tokenType === 'ERC-20' || tokenType === 'ERC-1155') && (
-              <Th width={ tokenType === 'ERC-1155' ? '50%' : '100%' } isNumeric>
+            { (tokenType === 'QRC-20' || tokenType === 'QRC-1155') && (
+              <Th width={ tokenType === 'QRC-1155' ? '50%' : '100%' } isNumeric>
                 <TruncatedValue value={ `Value ${ token?.symbol || '' }` } w="100%" verticalAlign="middle"/>
               </Th>
             ) }

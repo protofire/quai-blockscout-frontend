@@ -383,7 +383,7 @@ This feature is **enabled by default** with the `coinzilla` ads provider. To swi
 
 &nbsp;
 
-### User operations feature (ERC-4337)
+### User operations feature (QRC-4337)
 
 | Variable | Type| Description | Compulsoriness  | Default value | Example value |
 | --- | --- | --- | --- | --- | --- |

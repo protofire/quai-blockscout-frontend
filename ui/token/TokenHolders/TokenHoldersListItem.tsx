@@ -29,7 +29,7 @@ const TokenHoldersListItem = ({ holder, token, isLoading }: Props) => {
         />
       </ListItemMobileGrid.Value>
 
-      { token.type === 'ERC-1155' && 'token_id' in holder && (
+      { token.type === 'QRC-1155' && 'token_id' in holder && (
         <>
           <ListItemMobileGrid.Label isLoading={ isLoading }>ID#</ListItemMobileGrid.Label>
           <ListItemMobileGrid.Value>

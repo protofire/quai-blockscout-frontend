@@ -42,15 +42,15 @@ const test = base.extend({
       status: 200,
       body: JSON.stringify(addressMock.withName),
     }));
-    await page.route(API_URL_TOKENS + '?type=ERC-20', (route) => route.fulfill({
+    await page.route(API_URL_TOKENS + '?type=QRC-20', (route) => route.fulfill({
       status: 200,
       body: JSON.stringify(response20),
     }));
-    await page.route(API_URL_TOKENS + '?type=ERC-721', (route) => route.fulfill({
+    await page.route(API_URL_TOKENS + '?type=QRC-721', (route) => route.fulfill({
       status: 200,
       body: JSON.stringify(response721),
     }));
-    await page.route(API_URL_TOKENS + '?type=ERC-1155', (route) => route.fulfill({
+    await page.route(API_URL_TOKENS + '?type=QRC-1155', (route) => route.fulfill({
       status: 200,
       body: JSON.stringify(response1155),
     }));
@@ -222,15 +222,15 @@ base.describe('update balances via socket', () => {
       status: 200,
       body: JSON.stringify(addressMock.validator),
     }));
-    await page.route(API_URL_TOKENS + '?type=ERC-20', (route) => route.fulfill({
+    await page.route(API_URL_TOKENS + '?type=QRC-20', (route) => route.fulfill({
       status: 200,
       body: JSON.stringify(response20),
     }));
-    await page.route(API_URL_TOKENS + '?type=ERC-721', (route) => route.fulfill({
+    await page.route(API_URL_TOKENS + '?type=QRC-721', (route) => route.fulfill({
       status: 200,
       body: JSON.stringify(response721),
     }));
-    await page.route(API_URL_TOKENS + '?type=ERC-1155', (route) => route.fulfill({
+    await page.route(API_URL_TOKENS + '?type=QRC-1155', (route) => route.fulfill({
       status: 200,
       body: JSON.stringify(response1155),
     }));
@@ -245,9 +245,9 @@ base.describe('update balances via socket', () => {
       { hooksConfig },
     );
 
-    await page.waitForResponse(API_URL_TOKENS + '?type=ERC-20');
-    await page.waitForResponse(API_URL_TOKENS + '?type=ERC-721');
-    await page.waitForResponse(API_URL_TOKENS + '?type=ERC-1155');
+    await page.waitForResponse(API_URL_TOKENS + '?type=QRC-20');
+    await page.waitForResponse(API_URL_TOKENS + '?type=QRC-721');
+    await page.waitForResponse(API_URL_TOKENS + '?type=QRC-1155');
 
     await expect(component).toHaveScreenshot();
 

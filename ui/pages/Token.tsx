@@ -118,7 +118,7 @@ const TokenPageContent = () => {
   }, [ tokenQuery.data, tokenQuery.isPlaceholderData ]);
 
   const hasData = (tokenQuery.data && !tokenQuery.isPlaceholderData) && (contractQuery.data && !contractQuery.isPlaceholderData);
-  const hasInventoryTab = tokenQuery.data?.type === 'ERC-1155' || tokenQuery.data?.type === 'ERC-721';
+  const hasInventoryTab = tokenQuery.data?.type === 'QRC-1155' || tokenQuery.data?.type === 'QRC-721';
 
   const transfersQuery = useQueryWithPages({
     resourceName: 'token_transfers',
@@ -162,7 +162,7 @@ const TokenPageContent = () => {
     options: {
       enabled: Boolean(hashString && tab === 'holders' && hasData),
       placeholderData: generateListStub<'token_holders'>(
-        tokenQuery.data?.type === 'ERC-1155' ? tokenStubs.TOKEN_HOLDER_ERC_1155 : tokenStubs.TOKEN_HOLDER_ERC_20, 50, { next_page_params: null }),
+        tokenQuery.data?.type === 'QRC-1155' ? tokenStubs.TOKEN_HOLDER_ERC_1155 : tokenStubs.TOKEN_HOLDER_ERC_20, 50, { next_page_params: null }),
     },
   });
 
@@ -174,7 +174,7 @@ const TokenPageContent = () => {
   const contractTabs = useContractTabs(contractQuery.data);
 
   const tabs: Array<RoutedTab> = [
-    (tokenQuery.data?.type === 'ERC-1155' || tokenQuery.data?.type === 'ERC-721') ? {
+    (tokenQuery.data?.type === 'QRC-1155' || tokenQuery.data?.type === 'QRC-721') ? {
       id: 'inventory',
       title: 'Inventory',
       component: <TokenInventory inventoryQuery={ inventoryQuery } tokenQuery={ tokenQuery } ownerFilter={ ownerFilter }/>,
@@ -203,7 +203,7 @@ const TokenPageContent = () => {
   let pagination: PaginationParams | undefined;
 
   // default tab for erc-20 is token transfers
-  if ((tokenQuery.data?.type === 'ERC-20' && !tab) || tab === 'token_transfers') {
+  if ((tokenQuery.data?.type === 'QRC-20' && !tab) || tab === 'token_transfers') {
     pagination = transfersQuery.pagination;
   }
 
@@ -212,7 +212,7 @@ const TokenPageContent = () => {
   }
 
   // default tab for nfts is token inventory
-  if (((tokenQuery.data?.type === 'ERC-1155' || tokenQuery.data?.type === 'ERC-721') && !tab) || tab === 'inventory') {
+  if (((tokenQuery.data?.type === 'QRC-1155' || tokenQuery.data?.type === 'QRC-721') && !tab) || tab === 'inventory') {
     pagination = inventoryQuery.pagination;
   }
 

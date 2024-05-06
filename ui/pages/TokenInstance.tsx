@@ -69,7 +69,7 @@ const TokenInstanceContent = () => {
     options: {
       enabled: Boolean(hash && id && (!tab || tab === 'token_transfers') && !tokenInstanceQuery.isPlaceholderData && tokenInstanceQuery.data),
       placeholderData: generateListStub<'token_instance_transfers'>(
-        tokenQuery.data?.type === 'ERC-1155' ? tokenStubs.TOKEN_TRANSFER_ERC_1155 : tokenStubs.TOKEN_TRANSFER_ERC_721,
+        tokenQuery.data?.type === 'QRC-1155' ? tokenStubs.TOKEN_TRANSFER_ERC_1155 : tokenStubs.TOKEN_TRANSFER_ERC_721,
         10,
         { next_page_params: null },
       ),
@@ -89,7 +89,7 @@ const TokenInstanceContent = () => {
     options: {
       enabled: Boolean(hash && tab === 'holders' && shouldFetchHolders),
       placeholderData: generateListStub<'token_instance_holders'>(
-        tokenQuery.data?.type === 'ERC-1155' ? tokenStubs.TOKEN_HOLDER_ERC_1155 : tokenStubs.TOKEN_HOLDER_ERC_20, 10, { next_page_params: null }),
+        tokenQuery.data?.type === 'QRC-1155' ? tokenStubs.TOKEN_HOLDER_ERC_1155 : tokenStubs.TOKEN_HOLDER_ERC_20, 10, { next_page_params: null }),
     },
   });
 

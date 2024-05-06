@@ -40,11 +40,11 @@ export const WATCH_LIST_ITEM_WITH_TOKEN_INFO: WatchlistAddress = {
     email: false,
   },
   notification_settings: {
-    'ERC-20': {
+    'QRC-20': {
       incoming: true,
       outcoming: true,
     },
-    'ERC-721': {
+    'QRC-721': {
       incoming: true,
       outcoming: true,
     },

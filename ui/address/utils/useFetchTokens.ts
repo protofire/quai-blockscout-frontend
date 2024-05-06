@@ -23,17 +23,17 @@ const tokenBalanceItemIdentityFactory = (match: AddressTokenBalance) => (item: A
 export default function useFetchTokens({ hash }: Props) {
   const erc20query = useApiQuery('address_tokens', {
     pathParams: { hash },
-    queryParams: { type: 'ERC-20' },
+    queryParams: { type: 'QRC-20' },
     queryOptions: { enabled: Boolean(hash), refetchOnMount: false },
   });
   const erc721query = useApiQuery('address_tokens', {
     pathParams: { hash },
-    queryParams: { type: 'ERC-721' },
+    queryParams: { type: 'QRC-721' },
     queryOptions: { enabled: Boolean(hash), refetchOnMount: false },
   });
   const erc1155query = useApiQuery('address_tokens', {
     pathParams: { hash },
-    queryParams: { type: 'ERC-1155' },
+    queryParams: { type: 'QRC-1155' },
     queryOptions: { enabled: Boolean(hash), refetchOnMount: false },
   });
 
@@ -67,15 +67,15 @@ export default function useFetchTokens({ hash }: Props) {
   }, [ hash, queryClient ]);
 
   const handleTokenBalancesErc20Message: SocketMessage.AddressTokenBalancesErc20['handler'] = React.useCallback((payload) => {
-    updateTokensData('ERC-20', payload);
+    updateTokensData('QRC-20', payload);
   }, [ updateTokensData ]);
 
   const handleTokenBalancesErc721Message: SocketMessage.AddressTokenBalancesErc721['handler'] = React.useCallback((payload) => {
-    updateTokensData('ERC-721', payload);
+    updateTokensData('QRC-721', payload);
   }, [ updateTokensData ]);
 
   const handleTokenBalancesErc1155Message: SocketMessage.AddressTokenBalancesErc1155['handler'] = React.useCallback((payload) => {
-    updateTokensData('ERC-1155', payload);
+    updateTokensData('QRC-1155', payload);
   }, [ updateTokensData ]);
 
   const channel = useSocketChannel({
@@ -101,15 +101,15 @@ export default function useFetchTokens({ hash }: Props) {
 
   const data = React.useMemo(() => {
     return {
-      'ERC-20': {
+      'QRC-20': {
         items: erc20query.data?.items.map(calculateUsdValue) || [],
         isOverflow: Boolean(erc20query.data?.next_page_params),
       },
-      'ERC-721': {
+      'QRC-721': {
         items: erc721query.data?.items.map(calculateUsdValue) || [],
         isOverflow: Boolean(erc721query.data?.next_page_params),
       },
-      'ERC-1155': {
+      'QRC-1155': {
         items: erc1155query.data?.items.map(calculateUsdValue) || [],
         isOverflow: Boolean(erc1155query.data?.next_page_params),
       },

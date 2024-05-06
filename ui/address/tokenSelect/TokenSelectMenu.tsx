@@ -49,20 +49,20 @@ const TokenSelectMenu = ({ erc20sort, erc1155sort, filteredData, onInputChange, 
           }
 
           const type = tokenType as TokenType;
-          const arrowTransform = (type === 'ERC-1155' && erc1155sort === 'desc') || (type === 'ERC-20' && erc20sort === 'desc') ?
+          const arrowTransform = (type === 'QRC-1155' && erc1155sort === 'desc') || (type === 'QRC-20' && erc20sort === 'desc') ?
             'rotate(90deg)' :
             'rotate(-90deg)';
           const sortDirection: Sort = (() => {
             switch (type) {
-              case 'ERC-1155':
+              case 'QRC-1155':
                 return erc1155sort;
-              case 'ERC-20':
+              case 'QRC-20':
                 return erc20sort;
               default:
                 return 'desc';
             }
           })();
-          const hasSort = type === 'ERC-1155' || (type === 'ERC-20' && tokenInfo.items.some(({ usd }) => usd));
+          const hasSort = type === 'QRC-1155' || (type === 'QRC-20' && tokenInfo.items.some(({ usd }) => usd));
           const numPrefix = tokenInfo.isOverflow ? '>' : '';
 
           return (

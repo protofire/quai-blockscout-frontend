@@ -1,12 +1,12 @@
 import type { NFTTokenType, TokenType } from 'types/api/token';
 
 export const NFT_TOKEN_TYPES: Array<{ title: string; id: NFTTokenType }> = [
-  { title: 'ERC-721', id: 'ERC-721' },
-  { title: 'ERC-1155', id: 'ERC-1155' },
+  { title: 'QRC-721', id: 'QRC-721' },
+  { title: 'QRC-1155', id: 'QRC-1155' },
 ];
 
 export const TOKEN_TYPES: Array<{ title: string; id: TokenType }> = [
-  { title: 'ERC-20', id: 'ERC-20' },
+  { title: 'QRC-20', id: 'QRC-20' },
   ...NFT_TOKEN_TYPES,
 ];
 
