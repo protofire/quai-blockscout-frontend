@@ -8,6 +8,18 @@ export const BLOCK_FIELDS_IDS = [
   'totalEntropy',
   'manifestHash',
   'extRollupRootHash',
+  'evmRoot',
+  'utxoRoot',
+  'etxSetHash',
+  'parentUncledSubDeltaS',
+  'efficiencyScore',
+  'thresholdCount',
+  'expansionNumber',
+  'etxEligibleSlices',
+  'primeTerminus',
+  'interlinkRootHash',
+  'uncledS',
+  'interlinkHashes',
 ] as const;
 
 export type BlockFieldId = ArrayElement<typeof BLOCK_FIELDS_IDS>;

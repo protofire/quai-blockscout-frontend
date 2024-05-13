@@ -57,6 +57,19 @@ export interface Block {
   parent_entropy_full?: Array<string>;
   parent_delta_s_full?: Array<string>;
   ext_tx_count?: number;
+  evm_root?: Array<string>;
+  utxo_root?: Array<string>;
+  etx_set_hash?: Array<string>;
+  parent_uncled_sub_delta_s?: string;
+  efficiency_score?: string;
+  threshold_count?: string;
+  expansion_number?: string;
+  etx_eligible_slices?: string;
+  prime_terminus?: string;
+  interlink_root_hash?: Array<string>;
+  uncled_s?: string;
+  interlink_hashes?: string;
+
   // Shard ID
   shard_id?: string;
 }
@@ -102,11 +115,11 @@ export type BlockWithdrawalsResponse = {
     index: number;
     items_count: number;
   } | null;
-}
+};
 
 export type BlockWithdrawalsItem = {
   amount: string;
   index: number;
   receiver: AddressParam;
   validator_index: number;
-}
+};

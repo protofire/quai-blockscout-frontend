@@ -54,16 +54,19 @@ const BlockDetails = ({ query }: Props) => {
     });
   }, []);
 
-  const handlePrevNextClick = React.useCallback((direction: 'prev' | 'next') => {
-    if (!data) {
-      return;
-    }
+  const handlePrevNextClick = React.useCallback(
+    (direction: 'prev' | 'next') => {
+      if (!data) {
+        return;
+      }
 
-    const increment = direction === 'next' ? +1 : -1;
-    const nextId = String(data.height + increment);
+      const increment = direction === 'next' ? +1 : -1;
+      const nextId = String(data.height + increment);
 
-    router.push({ pathname: '/block/[height_or_hash]', query: { height_or_hash: nextId } }, undefined);
-  }, [ data, router ]);
+      router.push({ pathname: '/block/[height_or_hash]', query: { height_or_hash: nextId } }, undefined);
+    },
+    [ data, router ],
+  );
 
   if (!data) {
     return null;
@@ -117,7 +120,9 @@ const BlockDetails = ({ query }: Props) => {
 
   const txsNum = (() => {
     const blockTxsNum = (
-      <LinkInternal href={ route({ pathname: '/block/[height_or_hash]', query: { height_or_hash: heightOrHash, tab: 'txs' } }) }>
+      <LinkInternal
+        href={ route({ pathname: '/block/[height_or_hash]', query: { height_or_hash: heightOrHash, tab: 'txs' } }) }
+      >
         { data.tx_count } txn{ data.tx_count === 1 ? '' : 's' }
       </LinkInternal>
     );
@@ -125,7 +130,12 @@ const BlockDetails = ({ query }: Props) => {
     const blockBlobTxsNum = data.blob_tx_count ? (
       <>
         <span> and </span>
-        <LinkInternal href={ route({ pathname: '/block/[height_or_hash]', query: { height_or_hash: heightOrHash, tab: 'blob_txs' } }) }>
+        <LinkInternal
+          href={ route({
+            pathname: '/block/[height_or_hash]',
+            query: { height_or_hash: heightOrHash, tab: 'blob_txs' },
+          }) }
+        >
           { data.blob_tx_count } blob txn{ data.blob_tx_count === 1 ? '' : 's' }
         </LinkInternal>
       </>
@@ -142,7 +152,9 @@ const BlockDetails = ({ query }: Props) => {
 
   const extTxsNum = (() => {
     const blockExtTxsNum = (
-      <LinkInternal href={ route({ pathname: '/block/[height_or_hash]', query: { height_or_hash: heightOrHash, tab: 'ext_txs' } }) }>
+      <LinkInternal
+        href={ route({ pathname: '/block/[height_or_hash]', query: { height_or_hash: heightOrHash, tab: 'ext_txs' } }) }
+      >
         { data.ext_tx_count } txn{ data.ext_tx_count === 1 ? '' : 's' }
       </LinkInternal>
     );
@@ -178,9 +190,7 @@ const BlockDetails = ({ query }: Props) => {
         hint="The block height of a particular block is defined as the number of blocks preceding it in the blockchain"
         isLoading={ isPlaceholderData }
       >
-        <Skeleton isLoaded={ !isPlaceholderData }>
-          { data.height }
-        </Skeleton>
+        <Skeleton isLoaded={ !isPlaceholderData }>{ data.height }</Skeleton>
         { data.height === 0 && <Text whiteSpace="pre"> - Genesis Block</Text> }
         <PrevNext
           ml={ 6 }
@@ -191,29 +201,13 @@ const BlockDetails = ({ query }: Props) => {
           isLoading={ isPlaceholderData }
         />
       </DetailsInfoItem>
-      <DetailsInfoItem
-        title="Location"
-        hint="Location at which block was produced"
-        isLoading={ isPlaceholderData }
-      >
-        <Skeleton isLoaded={ !isPlaceholderData }>
-          { data.location }
-        </Skeleton>
+      { /* <DetailsInfoItem title='Location' hint='Location at which block was produced' isLoading={isPlaceholderData}>
+        <Skeleton isLoaded={!isPlaceholderData}>{data.location}</Skeleton>
+      </DetailsInfoItem> */ }
+      <DetailsInfoItem title="Size" hint="Size of the block in bytes" isLoading={ isPlaceholderData }>
+        <Skeleton isLoaded={ !isPlaceholderData }>{ data.size.toLocaleString() }</Skeleton>
       </DetailsInfoItem>
-      <DetailsInfoItem
-        title="Size"
-        hint="Size of the block in bytes"
-        isLoading={ isPlaceholderData }
-      >
-        <Skeleton isLoaded={ !isPlaceholderData }>
-          { data.size.toLocaleString() }
-        </Skeleton>
-      </DetailsInfoItem>
-      <DetailsInfoItem
-        title="Timestamp"
-        hint="Date & time at which block was produced."
-        isLoading={ isPlaceholderData }
-      >
+      <DetailsInfoItem title="Timestamp" hint="Date & time at which block was produced." isLoading={ isPlaceholderData }>
         <DetailsTimestamp timestamp={ data.timestamp } isLoading={ isPlaceholderData }/>
       </DetailsInfoItem>
       <DetailsInfoItem
@@ -221,18 +215,14 @@ const BlockDetails = ({ query }: Props) => {
         hint="The number of transactions in the block"
         isLoading={ isPlaceholderData }
       >
-        <Skeleton isLoaded={ !isPlaceholderData }>
-          { txsNum }
-        </Skeleton>
+        <Skeleton isLoaded={ !isPlaceholderData }>{ txsNum }</Skeleton>
       </DetailsInfoItem>
       <DetailsInfoItem
         title="External Transactions"
         hint="The number of external transactions in the block"
         isLoading={ isPlaceholderData }
       >
-        <Skeleton isLoaded={ !isPlaceholderData }>
-          { extTxsNum }
-        </Skeleton>
+        <Skeleton isLoaded={ !isPlaceholderData }>{ extTxsNum }</Skeleton>
       </DetailsInfoItem>
       { config.features.beaconChain.isEnabled && Boolean(data.withdrawals_count) && (
         <DetailsInfoItem
@@ -241,7 +231,12 @@ const BlockDetails = ({ query }: Props) => {
           isLoading={ isPlaceholderData }
         >
           <Skeleton isLoaded={ !isPlaceholderData }>
-            <LinkInternal href={ route({ pathname: '/block/[height_or_hash]', query: { height_or_hash: heightOrHash, tab: 'withdrawals' } }) }>
+            <LinkInternal
+              href={ route({
+                pathname: '/block/[height_or_hash]',
+                query: { height_or_hash: heightOrHash, tab: 'withdrawals' },
+              }) }
+            >
               { data.withdrawals_count } withdrawal{ data.withdrawals_count === 1 ? '' : 's' }
             </LinkInternal>
           </Skeleton>
@@ -254,21 +249,20 @@ const BlockDetails = ({ query }: Props) => {
           columnGap={ 1 }
           isLoading={ isPlaceholderData }
         >
-          <AddressEntity
-            address={ data.miner }
-            isLoading={ isPlaceholderData }
-          />
+          <AddressEntity address={ data.miner } isLoading={ isPlaceholderData }/>
           { /* api doesn't return the block processing time yet */ }
           { /* <Text>{ dayjs.duration(block.minedIn, 'second').humanize(true) }</Text> */ }
         </DetailsInfoItem>
       ) }
-      { !rollupFeature.isEnabled && !totalReward.isEqualTo(ZERO) && !config.UI.views.block.hiddenFields?.total_reward && (
+      { !rollupFeature.isEnabled &&
+        !totalReward.isEqualTo(ZERO) &&
+        !config.UI.views.block.hiddenFields?.total_reward && (
         <DetailsInfoItem
           title="Block reward"
-          hint={
-            `For each block, the ${ validatorTitle } is rewarded with a finite amount of ${ config.chain.currency.symbol || 'native token' } 
-          on top of the fees paid for all transactions in the block`
+          hint={ `For each block, the ${ validatorTitle } is rewarded with a finite amount of ${
+            config.chain.currency.symbol || 'native token'
           }
+          on top of the fees paid for all transactions in the block` }
           columnGap={ 1 }
           isLoading={ isPlaceholderData }
         >
@@ -285,12 +279,13 @@ const BlockDetails = ({ query }: Props) => {
             key={ type }
             title={ type }
             // is this text correct for validators?
-            hint={ `Amount of distributed reward. ${ capitalize(validatorTitle) }s receive a static block reward + Tx fees + uncle fees` }
+            hint={ `Amount of distributed reward. ${ capitalize(
+              validatorTitle,
+            ) }s receive a static block reward + Tx fees + uncle fees` }
           >
             { BigNumber(reward).dividedBy(WEI).toFixed() } { currencyUnits.ether }
           </DetailsInfoItem>
-        ))
-      }
+        )) }
 
       <DetailsInfoItemDivider/>
 
@@ -299,13 +294,13 @@ const BlockDetails = ({ query }: Props) => {
         hint="The total gas amount used in the block and its percentage of gas filled in the block"
         isLoading={ isPlaceholderData }
       >
-        <Skeleton isLoaded={ !isPlaceholderData }>
-          { BigNumber(data.gas_used || 0).toFormat() }
-        </Skeleton>
+        <Skeleton isLoaded={ !isPlaceholderData }>{ BigNumber(data.gas_used || 0).toFormat() }</Skeleton>
         <Utilization
           ml={ 4 }
           colorScheme="gray"
-          value={ BigNumber(data.gas_used || 0).dividedBy(BigNumber(data.gas_limit)).toNumber() }
+          value={ BigNumber(data.gas_used || 0)
+            .dividedBy(BigNumber(data.gas_limit))
+            .toNumber() }
           isLoading={ isPlaceholderData }
         />
         { data.gas_target_percentage && (
@@ -320,9 +315,7 @@ const BlockDetails = ({ query }: Props) => {
         hint="Total gas limit provided by all transactions in the block"
         isLoading={ isPlaceholderData }
       >
-        <Skeleton isLoaded={ !isPlaceholderData }>
-          { BigNumber(data.gas_limit).toFormat() }
-        </Skeleton>
+        <Skeleton isLoaded={ !isPlaceholderData }>{ BigNumber(data.gas_limit).toFormat() }</Skeleton>
       </DetailsInfoItem>
       { data.minimum_gas_price && (
         <DetailsInfoItem
@@ -345,7 +338,9 @@ const BlockDetails = ({ query }: Props) => {
             <Skeleton isLoaded={ !isPlaceholderData } h="20px" maxW="380px" w="100%"/>
           ) : (
             <>
-              <Text>{ BigNumber(data.base_fee_per_gas).dividedBy(WEI).toFixed() } { currencyUnits.ether } </Text>
+              <Text>
+                { BigNumber(data.base_fee_per_gas).dividedBy(WEI).toFixed() } { currencyUnits.ether }{ ' ' }
+              </Text>
               <Text variant="secondary" whiteSpace="pre">
                 { space }({ BigNumber(data.base_fee_per_gas).dividedBy(WEI_IN_GWEI).toFixed() } { currencyUnits.gwei })
               </Text>
@@ -356,11 +351,11 @@ const BlockDetails = ({ query }: Props) => {
       { !config.UI.views.block.hiddenFields?.burnt_fees && !burntFees.isEqualTo(ZERO) && (
         <DetailsInfoItem
           title="Burnt fees"
-          hint={
-            `Amount of ${ config.chain.currency.symbol || 'native token' } burned from transactions included in the block.
+          hint={ `Amount of ${
+            config.chain.currency.symbol || 'native token'
+          } burned from transactions included in the block.
 
-          Equals Block Base Fee per Gas * Gas Used`
-          }
+          Equals Block Base Fee per Gas * Gas Used` }
           isLoading={ isPlaceholderData }
         >
           <IconSvg name="flame" boxSize={ 5 } color="gray.500" isLoading={ isPlaceholderData }/>
@@ -370,11 +365,7 @@ const BlockDetails = ({ query }: Props) => {
           { !txFees.isEqualTo(ZERO) && (
             <Tooltip label="Burnt fees / Txn fees * 100%">
               <Box>
-                <Utilization
-                  ml={ 4 }
-                  value={ burntFees.dividedBy(txFees).toNumber() }
-                  isLoading={ isPlaceholderData }
-                />
+                <Utilization ml={ 4 } value={ burntFees.dividedBy(txFees).toNumber() } isLoading={ isPlaceholderData }/>
               </Box>
             </Tooltip>
           ) }
@@ -404,12 +395,7 @@ const BlockDetails = ({ query }: Props) => {
       <GridItem colSpan={{ base: undefined, lg: 2 }}>
         <Element name="BlockDetails__cutLink">
           <Skeleton isLoaded={ !isPlaceholderData } mt={ 6 } display="inline-block">
-            <Link
-              fontSize="sm"
-              textDecorationLine="underline"
-              textDecorationStyle="dashed"
-              onClick={ handleCutClick }
-            >
+            <Link fontSize="sm" textDecorationLine="underline" textDecorationStyle="dashed" onClick={ handleCutClick }>
               { isExpanded ? 'Hide details' : 'View details' }
             </Link>
           </Skeleton>
@@ -450,10 +436,7 @@ const BlockDetails = ({ query }: Props) => {
             </DetailsInfoItem>
           ) }
           { data.bitcoin_merged_mining_merkle_proof && (
-            <DetailsInfoItem
-              title="Bitcoin merged mining Merkle proof"
-              hint="Merged-mining field: Merkle proof"
-            >
+            <DetailsInfoItem title="Bitcoin merged mining Merkle proof" hint="Merged-mining field: Merkle proof">
               <RawDataSnippet
                 data={ data.bitcoin_merged_mining_merkle_proof }
                 isLoading={ isPlaceholderData }
@@ -485,10 +468,7 @@ const BlockDetails = ({ query }: Props) => {
             </Box>
           </DetailsInfoItem>
           { data.total_difficulty && (
-            <DetailsInfoItem
-              title="Total difficulty"
-              hint="Total difficulty of the chain until this block"
-            >
+            <DetailsInfoItem title="Total difficulty" hint="Total difficulty of the chain until this block">
               <Box whiteSpace="nowrap" overflow="hidden">
                 <HashStringShortenDynamic hash={ BigNumber(data.total_difficulty).toFormat() }/>
               </Box>
@@ -497,11 +477,7 @@ const BlockDetails = ({ query }: Props) => {
 
           <DetailsInfoItemDivider/>
 
-          <DetailsInfoItem
-            title="Hash"
-            hint="The SHA256 hash of the block"
-            flexWrap="nowrap"
-          >
+          <DetailsInfoItem title="Hash" hint="The SHA256 hash of the block" flexWrap="nowrap">
             <Box overflow="hidden">
               <HashStringShortenDynamic hash={ data.hash }/>
             </Box>
@@ -514,13 +490,14 @@ const BlockDetails = ({ query }: Props) => {
               flexWrap="nowrap"
             >
               <LinkInternal
-                href={ route({ pathname: '/block/[height_or_hash]', query: { height_or_hash: String(data.height - 1) } }) }
+                href={ route({
+                  pathname: '/block/[height_or_hash]',
+                  query: { height_or_hash: String(data.height - 1) },
+                }) }
                 overflow="hidden"
                 whiteSpace="nowrap"
               >
-                <HashStringShortenDynamic
-                  hash={ data.parent_hash }
-                />
+                <HashStringShortenDynamic hash={ data.parent_hash }/>
               </LinkInternal>
               <CopyToClipboard text={ data.parent_hash }/>
             </DetailsInfoItem>
@@ -542,33 +519,97 @@ const BlockDetails = ({ query }: Props) => {
           ) }
 
           { !config.UI.views.block.hiddenFields?.totalEntropy && (
-            <DetailsInfoItem
-              title="Total Entropy"
-              hint="Total entropy reduced by the chain until this block"
-            >
+            <DetailsInfoItem title="Total Entropy" hint="Total entropy reduced by the chain until this block">
               { data.total_entropy }
             </DetailsInfoItem>
           ) }
 
           { !config.UI.views.block.hiddenFields?.manifestHash && (
-            <DetailsInfoItem
-              title="Manifest Hash"
-              hint="Manifest Hash when block was produced"
-            >
-              { data.manifest_hash_full && data.manifest_hash_full.map((hash, index) => (
-                <Box key={ index } w="100%">
-                  <HashStringShortenDynamic hash={ hash }/>
-                </Box>
-              )) }
+            <DetailsInfoItem title="Manifest Hash" hint="Manifest Hash when block was produced">
+              { data.manifest_hash_full &&
+                data.manifest_hash_full.map((hash, index) => (
+                  <Box key={ index } w="100%">
+                    <HashStringShortenDynamic hash={ hash }/>
+                  </Box>
+                )) }
             </DetailsInfoItem>
           ) }
 
           { !config.UI.views.block.hiddenFields?.extRollupRootHash && (
-            <DetailsInfoItem
-              title="Ext Rollup Root Hash"
-              hint="Ext Rollup Root Hash when block was produced"
-            >
+            <DetailsInfoItem title="Ext Rollup Root Hash" hint="Ext Rollup Root Hash when block was produced">
               { data.ext_rollup_root }
+            </DetailsInfoItem>
+          ) }
+
+          { !config.UI.views.block.hiddenFields?.evmRoot && (
+            <DetailsInfoItem title="Evm Root" hint="Evm Root when block was produced">
+              { data.evm_root }
+            </DetailsInfoItem>
+          ) }
+
+          { !config.UI.views.block.hiddenFields?.utxoRoot && (
+            <DetailsInfoItem title="UTXO Root" hint="UTXO Root when block was produced">
+              { data.utxo_root }
+            </DetailsInfoItem>
+          ) }
+
+          { !config.UI.views.block.hiddenFields?.etxSetHash && (
+            <DetailsInfoItem title="Etx Set Hash" hint="Etx Set Hash when block was produced">
+              { data.etx_set_hash }
+            </DetailsInfoItem>
+          ) }
+
+          { !config.UI.views.block.hiddenFields?.etxEligibleSlices && (
+            <DetailsInfoItem title="Etx Eligible Slices" hint="Etx Eligible Slices when block was produced">
+              { data.etx_eligible_slices }
+            </DetailsInfoItem>
+          ) }
+
+          { !config.UI.views.block.hiddenFields?.parentUncledSubDeltaS && (
+            <DetailsInfoItem title="Parent Uncled Sub Delta S" hint="Parent Uncled Sub Delta S when block was produced">
+              { data.parent_uncled_sub_delta_s }
+            </DetailsInfoItem>
+          ) }
+
+          { !config.UI.views.block.hiddenFields?.efficiencyScore && (
+            <DetailsInfoItem title="Efficiency Score" hint="Efficiency Score when block was produced">
+              { data.efficiency_score }
+            </DetailsInfoItem>
+          ) }
+
+          { !config.UI.views.block.hiddenFields?.thresholdCount && (
+            <DetailsInfoItem title="Threshold Count" hint="Threshold Count when block was produced">
+              { data.threshold_count }
+            </DetailsInfoItem>
+          ) }
+
+          { !config.UI.views.block.hiddenFields?.expansionNumber && (
+            <DetailsInfoItem title="Expansion Number" hint="Expansion Number when block was produced">
+              { data.expansion_number }
+            </DetailsInfoItem>
+          ) }
+
+          { !config.UI.views.block.hiddenFields?.primeTerminus && (
+            <DetailsInfoItem title="Prime Terminus" hint="Prime Terminus when block was produced">
+              { data.prime_terminus }
+            </DetailsInfoItem>
+          ) }
+
+          { !config.UI.views.block.hiddenFields?.interlinkHashes && (
+            <DetailsInfoItem title="Interlink Hashes" hint="Interlink Hashes when block was produced">
+              { data.interlink_hashes }
+            </DetailsInfoItem>
+          ) }
+
+          { !config.UI.views.block.hiddenFields?.interlinkRootHash && (
+            <DetailsInfoItem title="Interlink Root Hash" hint="Interlink Root Hash when block was produced">
+              { data.interlink_root_hash }
+            </DetailsInfoItem>
+          ) }
+
+          { !config.UI.views.block.hiddenFields?.uncledS && (
+            <DetailsInfoItem title="Uncled S" hint="Uncled S when block was produced">
+              { data.uncled_s }
             </DetailsInfoItem>
           ) }
         </>
