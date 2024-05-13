@@ -5,7 +5,6 @@ import { createConfig, http } from 'wagmi';
 import type { Feature } from './types';
 
 import { pelagusWallet } from 'lib/web3/connectors/pelagus-connector';
-import currentChain from 'lib/web3/currentChain';
 
 import chain from '../chain';
 import { getEnvValue } from '../utils';
@@ -42,6 +41,25 @@ const config: Feature<{ walletConnect: { projectId: string }; config: {wagmiConf
             projectId: 'YOUR_PROJECT_ID',
           },
         );
+
+        const currentChain = {
+          id: Number(chain.id),
+          name: chain.name ?? '',
+          network: chain.name ?? '',
+          nativeCurrency: {
+            decimals: chain.currency.decimals,
+            name: chain.currency.name ?? '',
+            symbol: chain.currency.symbol ?? '',
+          },
+          rpcUrls: {
+            'public': {
+              http: [ chain.rpcUrl ?? '' ],
+            },
+            'default': {
+              http: [ chain.rpcUrl ?? '' ],
+            },
+          },
+        };
 
         const wagmiConfig = createConfig({
           ssr: false,
