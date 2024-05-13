@@ -1,14 +1,28 @@
-import { useColorMode } from '@chakra-ui/react';
-import { jsonRpcProvider } from '@wagmi/core/providers/jsonRpc';
-import { createWeb3Modal, useWeb3ModalTheme, defaultWagmiConfig } from '@web3modal/wagmi/react';
+import '@rainbow-me/rainbowkit/styles.css';
+
+import { Center, Text, useColorMode } from '@chakra-ui/react';
+import type {
+  DisclaimerComponent } from '@rainbow-me/rainbowkit';
+import {
+  RainbowKitProvider,
+  connectorsForWallets,
+  darkTheme,
+  lightTheme,
+} from '@rainbow-me/rainbowkit';
 import React from 'react';
-import { configureChains, WagmiConfig } from 'wagmi';
+import { WagmiProvider, createConfig, http } from 'wagmi';
 
 import config from 'configs/app';
+import { pelagusWallet } from 'lib/web3/connectors/pelagus-connector';
 import currentChain from 'lib/web3/currentChain';
-import colors from 'theme/foundations/colors';
-import { BODY_TYPEFACE } from 'theme/foundations/typography';
-import zIndices from 'theme/foundations/zIndices';
+
+const Disclaimer: DisclaimerComponent = () => {
+  return (
+    <Center>
+      <Text fontSize="xs">QUAI Network Explorer</Text>
+    </Center>
+  );
+};
 
 const feature = config.features.blockchainInteraction;
 
@@ -18,38 +32,31 @@ const getConfig = () => {
       throw new Error();
     }
 
-    const { chains } = configureChains(
-      [ currentChain ],
+    const connectors = connectorsForWallets(
       [
-        jsonRpcProvider({
-          rpc: () => ({
-            http: config.chain.rpcUrl || '',
-          }),
-        }),
+        {
+          groupName: 'Recommended',
+          wallets: [ pelagusWallet ],
+        },
       ],
+      {
+        appName: 'QUAI Explorer',
+        projectId: 'YOUR_PROJECT_ID',
+      },
     );
 
-    const wagmiConfig = defaultWagmiConfig({
-      chains,
-      projectId: feature.walletConnect.projectId,
-      enableEmail: true,
-    });
-
-    createWeb3Modal({
-      wagmiConfig,
-      projectId: feature.walletConnect.projectId,
-      chains,
-      themeVariables: {
-        '--w3m-font-family': `${ BODY_TYPEFACE }, sans-serif`,
-        '--w3m-accent': colors.blue[600],
-        '--w3m-border-radius-master': '2px',
-        '--w3m-z-index': zIndices.modal,
+    const wagmiConfig = createConfig({
+      ssr: false,
+      connectors,
+      chains: [ currentChain ],
+      transports: {
+        [currentChain.id]: http(config.chain.rpcUrl || ''),
       },
     });
 
     return { wagmiConfig };
   } catch (error) {
-    return { };
+    return {};
   }
 };
 
@@ -61,16 +68,18 @@ interface Props {
 }
 
 const Fallback = ({ children, fallback }: Props) => {
-  return typeof fallback === 'function' ? fallback() : (fallback || <>{ children }</>); // eslint-disable-line react/jsx-no-useless-fragment
+  return typeof fallback === 'function' ?
+    fallback() :
+    fallback || <>{ children }</>; // eslint-disable-line react/jsx-no-useless-fragment
 };
 
 const Provider = ({ children, fallback }: Props) => {
   const { colorMode } = useColorMode();
-  const { setThemeMode } = useWeb3ModalTheme();
+  const [ theme, setTheme ] = React.useState(lightTheme());
 
   React.useEffect(() => {
-    setThemeMode(colorMode);
-  }, [ colorMode, setThemeMode ]);
+    setTheme(colorMode === 'dark' ? darkTheme() : lightTheme());
+  }, [ colorMode, setTheme ]);
 
   // not really necessary, but we have to make typescript happy
   if (!wagmiConfig || !feature.isEnabled) {
@@ -78,12 +87,22 @@ const Provider = ({ children, fallback }: Props) => {
   }
 
   return (
-    <WagmiConfig config={ wagmiConfig }>
-      { children }
-    </WagmiConfig>
+    <WagmiProvider config={ wagmiConfig }>
+      <RainbowKitProvider
+        appInfo={{
+          appName: 'QUAI Blockscout',
+          disclaimer: Disclaimer,
+        }}
+        modalSize="compact"
+        theme={ theme }
+      >
+        { children }
+      </RainbowKitProvider>
+    </WagmiProvider>
   );
 };
 
-const Web3ModalProvider = wagmiConfig && feature.isEnabled ? Provider : Fallback;
+const Web3ModalProvider =
+  wagmiConfig && feature.isEnabled ? Provider : Fallback;
 
 export default Web3ModalProvider;

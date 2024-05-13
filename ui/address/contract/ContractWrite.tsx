@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useAccount, useWalletClient, useNetwork, useSwitchNetwork } from 'wagmi';
+import { useAccount, useWalletClient, useSwitchChain } from 'wagmi';
 
 import type { SmartContractWriteMethod } from 'types/api/contract';
 
@@ -21,9 +21,8 @@ import { getNativeCoinValue, prepareAbi } from './utils';
 
 const ContractWrite = () => {
   const { data: walletClient } = useWalletClient();
-  const { isConnected } = useAccount();
-  const { chain } = useNetwork();
-  const { switchNetworkAsync } = useSwitchNetwork();
+  const { isConnected, chain } = useAccount();
+  const { switchChainAsync } = useSwitchChain();
 
   const router = useRouter();
 
@@ -52,7 +51,9 @@ const ContractWrite = () => {
     }
 
     if (chain?.id && String(chain.id) !== config.chain.id) {
-      await switchNetworkAsync?.(Number(config.chain.id));
+      await switchChainAsync?.({
+        chainId: Number(config.chain.id),
+      });
     }
 
     if (!contractAbi) {
@@ -87,7 +88,7 @@ const ContractWrite = () => {
     });
 
     return { hash };
-  }, [ isConnected, chain, contractAbi, walletClient, addressHash, switchNetworkAsync ]);
+  }, [ isConnected, chain, contractAbi, walletClient, addressHash, switchChainAsync ]);
 
   const renderItemContent = React.useCallback((item: SmartContractWriteMethod, index: number, id: number) => {
     return (
