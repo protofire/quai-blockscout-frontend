@@ -37,7 +37,7 @@ const WalletMenuContent = ({ address, disconnect }: Props) => {
       <AddressEntity
         address={{ hash: address }}
         noTooltip
-        truncation="dynamic"
+        truncation="constant"
         fontSize="sm"
         fontWeight={ 700 }
         color="text"

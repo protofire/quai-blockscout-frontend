@@ -3,7 +3,7 @@ import { GrowthBookProvider } from '@growthbook/growthbook-react';
 import * as Sentry from '@sentry/react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import type { AppProps } from 'next/app';
+import type { AppProps } from 'next/dist/shared/lib/router/router';
 import React from 'react';
 
 import type { NextPageWithLayout } from 'nextjs/types';
@@ -29,7 +29,7 @@ import 'lib/setLocale';
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
-}
+};
 
 const ERROR_SCREEN_STYLES: ChakraProps = {
   h: '100vh',
@@ -44,7 +44,6 @@ const ERROR_SCREEN_STYLES: ChakraProps = {
 };
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
-
   useLoadFeatures();
   useNotifyOnNavigation();
 
@@ -70,13 +69,10 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <ChakraProvider theme={ theme } cookies={ pageProps.cookies }>
-      <AppErrorBoundary
-        { ...ERROR_SCREEN_STYLES }
-        onError={ handleError }
-      >
-        <Web3ModalProvider>
-          <AppContextProvider pageProps={ pageProps }>
-            <QueryClientProvider client={ queryClient }>
+      <AppErrorBoundary { ...ERROR_SCREEN_STYLES } onError={ handleError }>
+        <QueryClientProvider client={ queryClient }>
+          <Web3ModalProvider>
+            <AppContextProvider pageProps={ pageProps }>
               <GrowthBookProvider growthbook={ growthBook }>
                 <ScrollDirectionProvider>
                   <SocketProvider url={ wsUrl }>
@@ -84,11 +80,14 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                   </SocketProvider>
                 </ScrollDirectionProvider>
               </GrowthBookProvider>
-              <ReactQueryDevtools buttonPosition="bottom-left" position="left"/>
+              <ReactQueryDevtools
+                buttonPosition="bottom-left"
+                position="left"
+              />
               <GoogleAnalytics/>
-            </QueryClientProvider>
-          </AppContextProvider>
-        </Web3ModalProvider>
+            </AppContextProvider>
+          </Web3ModalProvider>
+        </QueryClientProvider>
       </AppErrorBoundary>
     </ChakraProvider>
   );

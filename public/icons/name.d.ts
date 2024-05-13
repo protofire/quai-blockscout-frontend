@@ -145,6 +145,7 @@
 	| "wallet"
 	| "wallets/coinbase"
 	| "wallets/metamask"
+	| "wallets/pelagus"
 	| "wallets/token-pocket"
 	| "watchlist";
   

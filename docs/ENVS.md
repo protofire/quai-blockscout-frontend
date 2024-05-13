@@ -263,7 +263,7 @@ Settings for meta tags and OG tags
 | instance_url | `string` | URL template for NFT instance | Required | - | `https://opensea.io/assets/ethereum/{hash}/{id}` |
 | logo_url | `string` | URL of marketplace logo | Required | - | `https://opensea.io/static/images/logos/opensea-logo.svg` |
 
-*Note* URL templates should contain placeholders of NFT hash (`{hash}`) and NFT id (`{id}`). This placeholders will be substituted with particular values for every collection or instance.
+_Note_ URL templates should contain placeholders of NFT hash (`{hash}`) and NFT id (`{id}`). This placeholders will be substituted with particular values for every collection or instance.
 
 &nbsp;
 
@@ -289,7 +289,7 @@ Settings for meta tags and OG tags
 | baseUrl | `string` | Base url of the explorer | Required | - | `https://explorer.anyblock.tools` |
 | paths | `Record<'tx' \| 'block' \| 'address' \| 'token', string>` | Map of explorer entities and their paths | Required | - | `{'tx':'/ethereum/poa/core/tx'}` |
 
-*Note* The url of an entity will be constructed as `<baseUrl><paths[<entity-type>]><entity-id>`, e.g `https://explorer.anyblock.tools/ethereum/poa/core/tx/<tx-id>`
+_Note_ The url of an entity will be constructed as `<baseUrl><paths[<entity-type>]><entity-id>`, e.g `https://explorer.anyblock.tools/ethereum/poa/core/tx/<tx-id>`
 
 #### Contract code IDE configuration properties
 
@@ -303,7 +303,7 @@ Settings for meta tags and OG tags
 
 ## App features
 
-*Note* The variables which are marked as required should be passed as described in order to enable the particular feature, but they are not required in the whole app context.
+_Note_ The variables which are marked as required should be passed as described in order to enable the particular feature, but they are not required in the whole app context.
 
 ### My account
 
@@ -329,7 +329,7 @@ This feature is **enabled by default**. To switch it off pass `NEXT_PUBLIC_GAS_T
 
 ### Address verification in "My account"
 
-*Note* all ENV variables required for [My account](ENVS.md#my-account) feature should be passed alongside the following ones:
+_Note_ all ENV variables required for [My account](ENVS.md#my-account) feature should be passed alongside the following ones:
 
 | Variable | Type| Description | Compulsoriness  | Default value | Example value |
 | --- | --- | --- | --- | --- | --- |
@@ -522,7 +522,7 @@ This feature is **enabled by default** with the `['metamask']` value. To switch 
 
 | Variable | Type| Description | Compulsoriness  | Default value | Example value |
 | --- | --- | --- | --- | --- | --- |
-| NEXT_PUBLIC_WEB3_WALLETS | `Array<'metamask' \| 'coinbase' \| 'token_pocket'>` | Array of Web3 wallets which will be used  to add tokens or chain to. The first wallet which is enabled in user's browser will be shown. | - | `[ 'metamask' ]` | `[ 'coinbase' ]` |
+| NEXT_PUBLIC_WEB3_WALLETS | `Array<'pelagus' \| 'metamask' \| 'coinbase' \| 'token_pocket'>` | Array of Web3 wallets which will be used  to add tokens or chain to. The first wallet which is enabled in user's browser will be shown. | - | `[ 'metamask' ]` | `[ 'coinbase' ]` |
 | NEXT_PUBLIC_WEB3_DISABLE_ADD_TOKEN_TO_WALLET | `boolean`| Set to `true` to hide icon "Add to your wallet" next to token addresses | - | - | `true` |
 
 &nbsp;
@@ -571,7 +571,7 @@ This feature allows users to view tokens that have been bridged from other EVM c
 | short_title | `string` | Used for displaying chain name in the list view as tag | Required | - | `ETH` |
 | base_url | `string` | Base url to original token in base chain explorer | Required | - | `https://eth.blockscout.com/token` |
 
-*Note* The url to original token will be constructed as `<base_url>/<token_hash>`, e.g `https://eth.blockscout.com/token/<token_hash>`
+_Note_ The url to original token will be constructed as `<base_url>/<token_hash>`, e.g `https://eth.blockscout.com/token/<token_hash>`
 
 #### Token bridge configuration properties
 

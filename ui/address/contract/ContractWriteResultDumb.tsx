@@ -11,7 +11,7 @@ interface Props {
   result: ContractMethodWriteResult;
   onSettle: () => void;
   txInfo: {
-    status: 'loading' | 'success' | 'error' | 'idle';
+    status: 'loading' | 'success' | 'error' | 'idle' | 'pending';
     error: Error | null;
   };
 }
@@ -32,7 +32,11 @@ const ContractWriteResultDumb = ({ result, onSettle, txInfo }: Props) => {
   const isErrorResult = 'message' in result;
 
   const txLink = txHash ? (
-    <LinkInternal href={ route({ pathname: '/tx/[hash]', query: { hash: txHash } }) }>View transaction details</LinkInternal>
+    <LinkInternal
+      href={ route({ pathname: '/tx/[hash]', query: { hash: txHash } }) }
+    >
+      View transaction details
+    </LinkInternal>
   ) : null;
 
   const content = (() => {
@@ -71,7 +75,9 @@ const ContractWriteResultDumb = ({ result, onSettle, txInfo }: Props) => {
         return (
           <>
             <span>Error: </span>
-            <span>{ txInfo.error ? txInfo.error.message : 'Something went wrong' } </span>
+            <span>
+              { txInfo.error ? txInfo.error.message : 'Something went wrong' }{ ' ' }
+            </span>
             { txLink }
           </>
         );

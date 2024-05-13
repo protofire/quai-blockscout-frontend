@@ -1,5 +1,5 @@
 import { Alert, Box, Button, chakra, Flex, Link, Radio, RadioGroup } from '@chakra-ui/react';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 import React from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
@@ -36,7 +36,7 @@ interface Props extends AddressVerificationFormFirstStepFields, AddressCheckStat
 const AddressVerificationStepSignature = ({ address, signingMessage, contractCreator, contractOwner, onContinue, noWeb3Provider }: Props) => {
   const [ signMethod, setSignMethod ] = React.useState<SignMethod>(noWeb3Provider ? 'manual' : 'wallet');
 
-  const { open: openWeb3Modal } = useWeb3Modal();
+  const { openConnectModal: openWeb3Modal } = useConnectModal();
   const { isConnected } = useAccount();
 
   const formApi = useForm<Fields>({
@@ -80,13 +80,15 @@ const AddressVerificationStepSignature = ({ address, signingMessage, contractCre
 
   const onSubmit = handleSubmit(onFormSubmit);
 
-  const { signMessage, isLoading: isSigning } = useSignMessage({
-    onSuccess: (data) => {
-      setValue('signature', data);
-      onSubmit();
-    },
-    onError: (error) => {
-      return setError('root', { type: 'SIGNING_FAIL', message: (error as Error)?.message || 'Oops! Something went wrong' });
+  const { signMessage, isPending: isSigning } = useSignMessage({
+    mutation: {
+      onSuccess: (data) => {
+        setValue('signature', data);
+        onSubmit();
+      },
+      onError: (error) => {
+        return setError('root', { type: 'SIGNING_FAIL', message: (error as Error)?.message || 'Oops! Something went wrong' });
+      },
     },
   });
 
@@ -97,7 +99,7 @@ const AddressVerificationStepSignature = ({ address, signingMessage, contractCre
 
   const handleOpenWeb3Modal = React.useCallback(() => {
     clearErrors('root');
-    openWeb3Modal();
+    openWeb3Modal!();
   }, [ clearErrors, openWeb3Modal ]);
 
   const handleWeb3SignClick = React.useCallback(() => {
