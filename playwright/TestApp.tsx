@@ -35,8 +35,6 @@ const defaultAppContext = {
 };
 
 // >>> Web3 stuff
-const chains = [ mainnet ];
-
 const connectors = connectorsForWallets(
   [
     {
@@ -53,7 +51,7 @@ const connectors = connectorsForWallets(
 const wagmiConfig = createConfig({
   ssr: false,
   connectors,
-  chains,
+  chains: [ mainnet ],
   transports: {
     [mainnet.id]: http(''),
   },
