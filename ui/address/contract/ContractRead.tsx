@@ -1,6 +1,7 @@
 import { Alert, Flex } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { useAccount } from 'wagmi';
 
 import type { SmartContractReadMethod, SmartContractQueryMethodRead } from 'types/api/contract';
 
@@ -17,11 +18,10 @@ import ContractImplementationAddress from './ContractImplementationAddress';
 import ContractMethodConstant from './ContractMethodConstant';
 import ContractReadResult from './ContractReadResult';
 import ContractMethodForm from './methodForm/ContractMethodForm';
-import useWatchAccount from './useWatchAccount';
 
 const ContractRead = () => {
   const apiFetch = useApiFetch();
-  const account = useWatchAccount();
+  const account = useAccount();
   const router = useRouter();
 
   const tab = getQueryParamString(router.query.tab);

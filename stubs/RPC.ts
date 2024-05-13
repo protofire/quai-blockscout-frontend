@@ -84,6 +84,8 @@ export const GET_BLOCK: GetBlockReturnType<Chain, false, 'latest'> = {
   withdrawals: Array(10).fill(WITHDRAWAL),
   withdrawalsRoot: TX_HASH,
   sealFields: [ '0x00' ],
+  blobGasUsed: 0n,
+  excessBlobGas: 0n,
 };
 
 export const GET_BLOCK_WITH_TRANSACTIONS: GetBlockReturnType<Chain, true, 'latest'> = {

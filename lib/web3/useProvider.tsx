@@ -6,7 +6,8 @@ import config from 'configs/app';
 
 const feature = config.features.web3Wallet;
 
-type WalletProvider = {
+export type WalletProvider = {
+  request: (args: { method: string; params?: unknown }) => Promise<unknown>;
   isMetaMask?: boolean;
   isCoinbaseWallet?: boolean;
   isTokenPocket?: boolean;
@@ -15,7 +16,7 @@ type WalletProvider = {
 };
 
 export default function useProvider() {
-  const [ provider, setProvider ] = React.useState();
+  const [ provider, setProvider ] = React.useState<WalletProvider>();
   const [ wallet, setWallet ] = React.useState<WalletType>();
 
   const initializeProvider = React.useMemo(

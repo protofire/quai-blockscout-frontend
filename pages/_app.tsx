@@ -3,7 +3,7 @@ import { GrowthBookProvider } from '@growthbook/growthbook-react';
 import * as Sentry from '@sentry/react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import type { AppProps } from 'next/app';
+import type { AppProps } from 'next/dist/shared/lib/router/router';
 import React from 'react';
 
 import type { NextPageWithLayout } from 'nextjs/types';

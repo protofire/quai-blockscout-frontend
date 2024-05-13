@@ -1,9 +1,9 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { GrowthBookProvider } from '@growthbook/growthbook-react';
+import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 import React from 'react';
-import { WagmiConfig } from 'wagmi';
+import { WagmiConfig, createConfig, http } from 'wagmi';
 import { mainnet } from 'wagmi/chains';
 
 import type { Props as PageProps } from 'nextjs/getServerSideProps';
@@ -36,18 +36,27 @@ const defaultAppContext = {
 
 // >>> Web3 stuff
 const chains = [ mainnet ];
-const WALLET_CONNECT_PROJECT_ID = 'PROJECT_ID';
 
-const wagmiConfig = defaultWagmiConfig({
-  chains,
-  projectId: WALLET_CONNECT_PROJECT_ID,
-  enableEmail: true,
-});
+const connectors = connectorsForWallets(
+  [
+    {
+      groupName: 'Recommended',
+      wallets: [ ],
+    },
+  ],
+  {
+    appName: 'QUAI Explorer',
+    projectId: 'YOUR_PROJECT_ID',
+  },
+);
 
-createWeb3Modal({
-  wagmiConfig,
-  projectId: WALLET_CONNECT_PROJECT_ID,
+const wagmiConfig = createConfig({
+  ssr: false,
+  connectors,
   chains,
+  transports: {
+    [mainnet.id]: http(''),
+  },
 });
 // <<<<
 
