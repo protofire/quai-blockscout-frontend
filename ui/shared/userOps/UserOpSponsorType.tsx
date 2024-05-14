@@ -1,10 +1,10 @@
 import { Tag } from '@chakra-ui/react';
 import React from 'react';
 
-import { UserOpSponsorType } from 'types/api/userOps';
+import type { UserOpSponsorType as ImportedUserOpSponsorType } from 'types/api/userOps';
 
 type Props = {
-  sponsorType: UserOpSponsorType;
+  sponsorType: ImportedUserOpSponsorType;
 }
 
 const UserOpSponsorType = ({ sponsorType }: Props) => {

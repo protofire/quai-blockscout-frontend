@@ -36,4 +36,9 @@ export const config = {
   // matcher: [
   //   '/((?!.*\\.|api\\/|node-api\\/).*)', // exclude all static + api + node-api routes
   // ],
+  unstable_allowDynamic: [
+    '/node_modules/@metamask/**',
+    '/node_modules/@walletconnect/**',
+    '/node_modules/lodash.isequal/**',
+  ],
 };

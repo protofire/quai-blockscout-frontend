@@ -1,5 +1,6 @@
 import { Box, Button, Flex, chakra } from '@chakra-ui/react';
 import _mapValues from 'lodash/mapValues';
+import type { ReactNode } from 'react';
 import React from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm, FormProvider } from 'react-hook-form';
@@ -21,7 +22,7 @@ import type { ContractMethodFormFields } from './utils';
 interface Props<T extends SmartContractMethod> {
   data: T;
   onSubmit: (data: T, args: Array<unknown>) => Promise<ContractMethodCallResult<T>>;
-  resultComponent: (props: ResultComponentProps<T>) => JSX.Element | null;
+  resultComponent: (props: ResultComponentProps<T>) => ReactNode | JSX.Element | null;
   methodType: 'read' | 'write';
 }
 

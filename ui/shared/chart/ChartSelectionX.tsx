@@ -57,7 +57,9 @@ const ChartSelectionX = ({ anchorEl, height, scale, data, onSelect }: Props) => 
     const endDate = scale.invert(x1);
 
     if (Math.abs(dayjs(startDate).diff(endDate, 'day')) > SELECTION_THRESHOLD) {
-      onSelect([ dayjs.min(dayjs(startDate), dayjs(endDate)).toDate(), dayjs.max(dayjs(startDate), dayjs(endDate)).toDate() ]);
+      const min = dayjs.min(dayjs(startDate), dayjs(endDate)) || dayjs();
+      const max = dayjs.max(dayjs(startDate), dayjs(endDate)) || dayjs();
+      onSelect([ min.toDate(), max.toDate() ]);
     }
   }, [ onSelect, scale ]);
 

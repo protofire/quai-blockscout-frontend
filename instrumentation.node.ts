@@ -9,7 +9,7 @@ import {
   ConsoleMetricExporter,
 } from '@opentelemetry/sdk-metrics';
 import { NodeSDK } from '@opentelemetry/sdk-node';
-import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-node';
+// import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-node';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 
 diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.INFO);
@@ -25,7 +25,8 @@ const sdk = new NodeSDK({
         process.env.NEXT_PUBLIC_APP_HOST?.replace('.blockscout.com', '').replaceAll('-', '_') ||
         'unknown_app',
   }),
-  spanProcessor: new SimpleSpanProcessor(traceExporter),
+  // Temporary workaround
+  spanProcessor: undefined, // new SimpleSpanProcessor(traceExporter),
   traceExporter,
   metricReader: new PeriodicExportingMetricReader({
     exporter:
