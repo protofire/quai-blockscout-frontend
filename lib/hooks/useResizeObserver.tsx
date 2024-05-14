@@ -1,4 +1,4 @@
-import { useRef, useState, useLayoutEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 // Define a type for the size state
 type Size = { width: number | undefined; height: number | undefined };
@@ -7,7 +7,7 @@ function useResizeObserver(): [React.RefObject<HTMLDivElement>, Size] {
   const ref = useRef<HTMLDivElement>(null);
   const [ size, setSize ] = useState<Size>({ width: undefined, height: undefined });
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const element = ref.current;
     if (!element) {
       return;
