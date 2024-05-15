@@ -201,9 +201,9 @@ const BlockDetails = ({ query }: Props) => {
           isLoading={ isPlaceholderData }
         />
       </DetailsInfoItem>
-      { /* <DetailsInfoItem title='Location' hint='Location at which block was produced' isLoading={isPlaceholderData}>
-        <Skeleton isLoaded={!isPlaceholderData}>{data.location}</Skeleton>
-      </DetailsInfoItem> */ }
+      <DetailsInfoItem title="Location" hint="Location at which block was produced" isLoading={ isPlaceholderData }>
+        <Skeleton isLoaded={ !isPlaceholderData }>{ data.location }</Skeleton>
+      </DetailsInfoItem>
       <DetailsInfoItem title="Size" hint="Size of the block in bytes" isLoading={ isPlaceholderData }>
         <Skeleton isLoaded={ !isPlaceholderData }>{ data.size.toLocaleString() }</Skeleton>
       </DetailsInfoItem>
