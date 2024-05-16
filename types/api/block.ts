@@ -69,6 +69,7 @@ export interface Block {
   interlink_root_hash?: Array<string>;
   uncled_s?: string;
   interlink_hashes?: string;
+  wo_header: WoHeader;
 
   // Shard ID
   shard_id?: string;
@@ -122,4 +123,16 @@ export type BlockWithdrawalsItem = {
   index: number;
   receiver: AddressParam;
   validator_index: number;
+};
+
+export type WoHeader = {
+  difficulty: number;
+  headerHash: string;
+  location: string;
+  mixHash: string;
+  nonce: number;
+  number: number;
+  parentHash: string;
+  time: string;
+  txHash: string;
 };

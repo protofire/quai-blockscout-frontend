@@ -514,7 +514,7 @@ const BlockDetails = ({ query }: Props) => {
               title="Nonce"
               hint="Block nonce is a value used during mining to demonstrate proof of work for a block"
             >
-              { data.nonce }
+              { data.wo_header.nonce }
             </DetailsInfoItem>
           ) }
 
