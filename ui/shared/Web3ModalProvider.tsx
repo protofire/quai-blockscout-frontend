@@ -24,7 +24,7 @@ const Disclaimer: DisclaimerComponent = () => {
 };
 
 const feature = config.features.blockchainInteraction;
-const wagmiConfig = getFeaturePayload(feature)?.config.wagmiConfig;
+const wagmiConfig = getFeaturePayload(feature)?.wagmiConfig;
 
 interface Props {
   children: React.ReactNode;
