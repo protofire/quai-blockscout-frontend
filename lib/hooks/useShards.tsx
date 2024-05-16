@@ -107,7 +107,7 @@ export default function useShards(): UseShardsResult {
       // We need to get name of zone
       const regionName = shardsConfig?.regions[region] || 'unknown';
 
-      return `${ regionName }${ zone }`;
+      return regionName + zone;
     },
     [ shardsConfig?.regions ],
   );
