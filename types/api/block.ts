@@ -69,7 +69,7 @@ export interface Block {
   interlink_root_hash?: Array<string>;
   uncled_s?: string;
   interlink_hashes?: string;
-  wo_header: WoHeader;
+  wo_header?: WoHeader;
 
   // Shard ID
   shard_id?: string;
