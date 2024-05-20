@@ -94,18 +94,22 @@ export default function useShards(): UseShardsResult {
 
   const extractShardIdFromAddress = useCallback(
     (address: string) => {
-      // For understand what shard actually related to address we need take 2 first symbols from address
-      const marker = address.slice(0, 4).toLowerCase();
+      // Remove the "0x" prefix if it exists
+      if (address.startsWith('0x')) {
+        address = address.slice(2);
+      }
 
-      // Then we can check marker with shards addressesFrom
-      const shard = shardsConfig?.shardsList.find((shard) => {
-        const addressesFrom = shard.addressesFrom;
-        return marker >= addressesFrom;
-      });
+      const byteArray = new Uint8Array(address.match(/.{1,2}/g)?.map(byte => parseInt(byte, 16)) || []);
 
-      return shard?.id || defaultShardId;
+      const region = (byteArray[0] & 0xF0) >> 4; // bits[0..3]
+      const zone = byteArray[0] & 0x0F; // bits[4..7]
+
+      // We need to get name of zone
+      const regionName = shardsConfig?.regions[region] || 'unknown';
+
+      return regionName + zone;
     },
-    [ shardsConfig?.shardsList, defaultShardId ],
+    [ shardsConfig?.regions ],
   );
 
   const subscribeOnTopicMessage = useCallback(
