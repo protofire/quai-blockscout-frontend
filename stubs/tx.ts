@@ -1,5 +1,5 @@
 import type { RawTracesResponse } from 'types/api/rawTrace';
-import type { Transaction } from 'types/api/transaction';
+import type { Transaction, UtxoTransaction } from 'types/api/transaction';
 
 import { ADDRESS_PARAMS } from './addressParams';
 
@@ -48,6 +48,25 @@ export const TX: Transaction = {
     14545,
   ],
   tx_tag: null,
+};
+
+export const UTXO_TX: UtxoTransaction = {
+  block_hash: '0x5621d9f0f18f0bcfad20ce6be0fa820cddd3bf5d1c4fe4f924b34f1dbca88eea',
+  block_number: 3667,
+  gas: '0',
+  hash: '0x00c600fa149150e51b1e5d1774a5327e7671a3f0d19f3e28c5211be4773b8d26',
+  index: 0,
+  input: '0x',
+  inputs: [
+    { PreviousOutPoint: { Index: 65535, TxHash: '0x0000c00c7a78992d4d072f77be40540bd0f860513c18324a5bbe998b43b1aad8' },
+      PubKey: 'BGg++w6KzDmQKENr61SavMrihpaxLk4s6DjobCO9+98/YIWKefH1PVTiAUVfaiT57YsU0RivOCfXdUKLtlkIuVk=' },
+  ],
+  nonce: 0,
+  outputs: [
+    { Address: 'AKPkWqFhY/JmMBW2aViU2RiGbRk=', Denomination: 7, Lock: 0 },
+  ],
+  type: 2,
+  utxoSignature: '0x20ad6123dbb8b8c96f04659933be4a36b162f8e47d630ee293095edb2e4ad2d8983cb41b7756f579ef162633d7efb4c7bfff11f51d3aaa31d25fafbf12fa86de',
 };
 
 export const TX_ZKEVM_L2: Transaction = {

@@ -155,6 +155,30 @@ export type ExternalTransaction = {
   max_fee_per_blob_gas?: string;
 }
 
+export type UtxoTransaction = {
+  hash: string;
+  block_hash: string;
+  block_number: number;
+  gas: string;
+  index: number;
+  input: string;
+  utxoSignature: string | null; // TODO: should be always provided
+  type: number | null;
+  nonce: number;
+  inputs: Array<{
+    PreviousOutPoint: {
+      Index: number;
+      TxHash: string;
+    };
+    PubKey: string;
+  }>;
+  outputs: Array<{
+    Address: string;
+    Denomination: number;
+    Lock: number;
+  }>;
+}
+
 export const ZKEVM_L2_TX_STATUSES = [ 'Confirmed by Sequencer', 'L1 Confirmed' ];
 
 export type TransactionsResponse = TransactionsResponseValidated | TransactionsResponsePending;
@@ -213,7 +237,8 @@ export type TransactionType = 'rootstock_remasc' |
 'token_creation' |
 'coin_transfer' |
 'blob_transaction' |
-'internal_to_external_transaction';
+'internal_to_external_transaction' |
+'utxo_transaction';
 
 export type TxsResponse = TransactionsResponseValidated | TransactionsResponsePending | BlockTransactionsResponse;
 export type ExtTxsResponse = ExternalTransactionsResponse | BlockExternalTransactionsResponse;

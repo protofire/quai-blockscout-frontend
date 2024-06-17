@@ -24,7 +24,6 @@ import HashStringShortenDynamic from 'ui/shared/HashStringShortenDynamic';
 import IconSvg from 'ui/shared/IconSvg';
 import LinkInternal from 'ui/shared/LinkInternal';
 import PrevNext from 'ui/shared/PrevNext';
-import RawDataSnippet from 'ui/shared/RawDataSnippet';
 import TextSeparator from 'ui/shared/TextSeparator';
 import Utilization from 'ui/shared/Utilization/Utilization';
 
@@ -409,56 +408,6 @@ const BlockDetails = ({ query }: Props) => {
 
           { !isPlaceholderData && <BlockDetailsBlobInfo data={ data }/> }
 
-          { data.bitcoin_merged_mining_header && (
-            <DetailsInfoItem
-              title="Bitcoin merged mining header"
-              hint="Merged-mining field: Bitcoin header"
-              flexWrap="nowrap"
-              alignSelf="flex-start"
-            >
-              <Box whiteSpace="nowrap" overflow="hidden">
-                <HashStringShortenDynamic hash={ data.bitcoin_merged_mining_header }/>
-              </Box>
-              <CopyToClipboard text={ data.bitcoin_merged_mining_header }/>
-            </DetailsInfoItem>
-          ) }
-          { data.bitcoin_merged_mining_coinbase_transaction && (
-            <DetailsInfoItem
-              title="Bitcoin merged mining coinbase transaction"
-              hint="Merged-mining field: Coinbase transaction"
-            >
-              <RawDataSnippet
-                data={ data.bitcoin_merged_mining_coinbase_transaction }
-                isLoading={ isPlaceholderData }
-                showCopy={ false }
-                textareaMaxHeight="100px"
-              />
-            </DetailsInfoItem>
-          ) }
-          { data.bitcoin_merged_mining_merkle_proof && (
-            <DetailsInfoItem title="Bitcoin merged mining Merkle proof" hint="Merged-mining field: Merkle proof">
-              <RawDataSnippet
-                data={ data.bitcoin_merged_mining_merkle_proof }
-                isLoading={ isPlaceholderData }
-                showCopy={ false }
-                textareaMaxHeight="100px"
-              />
-            </DetailsInfoItem>
-          ) }
-          { data.hash_for_merged_mining && (
-            <DetailsInfoItem
-              title="Hash for merged mining"
-              hint="Merged-mining field: Rootstock block header hash"
-              flexWrap="nowrap"
-              alignSelf="flex-start"
-            >
-              <Box whiteSpace="nowrap" overflow="hidden">
-                <HashStringShortenDynamic hash={ data.hash_for_merged_mining }/>
-              </Box>
-              <CopyToClipboard text={ data.hash_for_merged_mining }/>
-            </DetailsInfoItem>
-          ) }
-
           <DetailsInfoItem
             title="Difficulty"
             hint={ `Block difficulty for ${ validatorTitle }, used to calibrate block generation time` }
@@ -467,6 +416,7 @@ const BlockDetails = ({ query }: Props) => {
               <HashStringShortenDynamic hash={ BigNumber(data.difficulty).toFormat() }/>
             </Box>
           </DetailsInfoItem>
+
           { data.total_difficulty && (
             <DetailsInfoItem title="Total difficulty" hint="Total difficulty of the chain until this block">
               <Box whiteSpace="nowrap" overflow="hidden">
@@ -475,14 +425,13 @@ const BlockDetails = ({ query }: Props) => {
             </DetailsInfoItem>
           ) }
 
-          <DetailsInfoItemDivider/>
-
           <DetailsInfoItem title="Hash" hint="The SHA256 hash of the block" flexWrap="nowrap">
             <Box overflow="hidden">
               <HashStringShortenDynamic hash={ data.hash }/>
             </Box>
             <CopyToClipboard text={ data.hash }/>
           </DetailsInfoItem>
+
           { data.height > 0 && (
             <DetailsInfoItem
               title="Parent hash"
@@ -502,13 +451,7 @@ const BlockDetails = ({ query }: Props) => {
               <CopyToClipboard text={ data.parent_hash }/>
             </DetailsInfoItem>
           ) }
-          { /* api doesn't support state root yet */ }
-          { /* <DetailsInfoItem
-            title="State root"
-            hint="The root of the state trie"
-          >
-            <Text wordBreak="break-all" whiteSpace="break-spaces">{ data.state_root }</Text>
-          </DetailsInfoItem> */ }
+
           { !config.UI.views.block.hiddenFields?.nonce && (
             <DetailsInfoItem
               title="Nonce"
@@ -567,7 +510,12 @@ const BlockDetails = ({ query }: Props) => {
 
           { !config.UI.views.block.hiddenFields?.parentUncledSubDeltaS && (
             <DetailsInfoItem title="Parent Uncled Sub Delta S" hint="Parent Uncled Sub Delta S when block was produced">
-              { data.parent_uncled_sub_delta_s }
+              { data.parent_uncled_sub_delta_s &&
+                data.parent_uncled_sub_delta_s.map((hash, index) => (
+                  <Box key={ index } w="100%">
+                    <HashStringShortenDynamic hash={ hash }/>
+                  </Box>
+                )) }
             </DetailsInfoItem>
           ) }
 
@@ -612,6 +560,20 @@ const BlockDetails = ({ query }: Props) => {
               { data.uncled_s }
             </DetailsInfoItem>
           ) }
+          { /*
+          <DetailsInfoItem
+            title="Work object header"
+            hint="Work object header included with the block."
+          >
+            <RawDataSnippet data={ JSON.stringify(data.wo_header, null, 2) }/>
+          </DetailsInfoItem>
+
+          <DetailsInfoItem
+            title="Work object body"
+            hint="Work object body included with the block."
+          >
+            <RawDataSnippet data={ JSON.stringify(data.wo, null, 2) }/>
+          </DetailsInfoItem> */ }
         </>
       ) }
     </Grid>

@@ -1,12 +1,13 @@
-import { GridItem, chakra } from '@chakra-ui/react';
+import { GridItem, chakra, Text } from '@chakra-ui/react';
 import React from 'react';
 
 interface Props {
+  title?: string;
   className?: string;
   id?: string;
 }
 
-const DetailsInfoItemDivider = ({ className, id }: Props) => {
+const DetailsInfoItemDivider = ({ className, id, title }: Props) => {
   return (
     <GridItem
       id={ id }
@@ -16,7 +17,13 @@ const DetailsInfoItemDivider = ({ className, id }: Props) => {
       mb={{ base: 0, lg: 3 }}
       borderBottom="1px solid"
       borderColor="divider"
-    />
+    >
+      { title && (
+        <Text fontWeight={{ base: 700, lg: 500 }}>
+          { title }
+        </Text>
+      ) }
+    </GridItem>
   );
 };
 

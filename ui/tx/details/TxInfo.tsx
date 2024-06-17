@@ -80,9 +80,9 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
   }
 
   const addressFromTags = [
-    ...data.from.private_tags || [],
-    ...data.from.public_tags || [],
-    ...data.from.watchlist_names || [],
+    ...data.from?.private_tags || [],
+    ...data.from?.public_tags || [],
+    ...data.from?.watchlist_names || [],
   ].map((tag) => <Tag key={ tag.label }>{ tag.display_name }</Tag>);
 
   const toAddress = data.to ? data.to : data.created_contract;
@@ -260,35 +260,37 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
       ) }
       <DetailsSponsoredItem isLoading={ isLoading }/>
 
-      <DetailsInfoItemDivider/>
+      { (data.from && toAddress) && <DetailsInfoItemDivider/> }
 
       <TxDetailsActions hash={ data.hash } actions={ data.actions } isTxDataLoading={ isLoading }/>
 
-      <DetailsInfoItem
-        title="From"
-        hint="Address (external or contract) sending the transaction"
-        isLoading={ isLoading }
-        columnGap={ 3 }
-      >
-        <AddressEntity
-          address={ data.from }
+      { data.from && (
+        <DetailsInfoItem
+          title="From"
+          hint="Address (external or contract) sending the transaction"
           isLoading={ isLoading }
-        />
-        { data.from.name && <Text>{ data.from.name }</Text> }
-        { addressFromTags.length > 0 && (
-          <Flex columnGap={ 3 }>
-            { addressFromTags }
-          </Flex>
-        ) }
-      </DetailsInfoItem>
-      <DetailsInfoItem
-        title={ data.to?.is_contract ? 'Interacted with contract' : 'To' }
-        hint="Address (external or contract) receiving the transaction"
-        isLoading={ isLoading }
-        flexWrap={{ base: 'wrap', lg: 'nowrap' }}
-        columnGap={ 3 }
-      >
-        { toAddress ? (
+          columnGap={ 3 }
+        >
+          <AddressEntity
+            address={ data.from }
+            isLoading={ isLoading }
+          />
+          { data.from.name && <Text>{ data.from.name }</Text> }
+          { addressFromTags.length > 0 && (
+            <Flex columnGap={ 3 }>
+              { addressFromTags }
+            </Flex>
+          ) }
+        </DetailsInfoItem>
+      ) }
+      { toAddress && (
+        <DetailsInfoItem
+          title={ data.to?.is_contract ? 'Interacted with contract' : 'To' }
+          hint="Address (external or contract) receiving the transaction"
+          isLoading={ isLoading }
+          flexWrap={{ base: 'wrap', lg: 'nowrap' }}
+          columnGap={ 3 }
+        >
           <>
             { data.to && data.to.hash ? (
               <Flex flexWrap="nowrap" alignItems="center" maxW="100%">
@@ -318,10 +320,8 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
               </Flex>
             ) }
           </>
-        ) : (
-          <span>[ Contract creation ]</span>
-        ) }
-      </DetailsInfoItem>
+        </DetailsInfoItem>
+      ) }
       { data.token_transfers && <TxDetailsTokenTransfers data={ data.token_transfers } txHash={ data.hash } isOverflow={ data.token_transfers_overflow }/> }
 
       <DetailsInfoItemDivider/>
@@ -356,7 +356,7 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
 
       { (data.zkevm_batch_number || data.zkevm_verify_hash) && <DetailsInfoItemDivider/> }
 
-      { !config.UI.views.tx.hiddenFields?.value && (
+      { data.type !== 2 && !config.UI.views.tx.hiddenFields?.value && (
         <DetailsInfoItem
           title="Value"
           hint="Value sent in the native token (and USD) if applicable"
