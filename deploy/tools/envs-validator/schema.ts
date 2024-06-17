@@ -520,7 +520,10 @@ const schema = yup
       .transform(replaceQuotes)
       .json()
       .of(shardsSchema),
-    NEXT_PUBLIC_REGIONS: yup.array().string().optional(),
+    NEXT_PUBLIC_REGIONS: yup
+      .array()
+      .transform(replaceQuotes)
+      .string(),
 
     // 6. External services envs
     NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: yup.string(),
