@@ -523,7 +523,8 @@ const schema = yup
     NEXT_PUBLIC_REGIONS: yup
       .array()
       .transform(replaceQuotes)
-      .string(),
+      .json()
+      .of(yup.string()),
 
     // 6. External services envs
     NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: yup.string(),
