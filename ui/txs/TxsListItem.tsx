@@ -82,14 +82,16 @@ const TxsListItem = ({ tx, isLoading, showBlockInfo, currentAddress, enableTimeI
           />
         </Flex>
       ) }
-      <AddressFromTo
-        from={ tx.from }
-        to={ dataTo }
-        current={ currentAddress }
-        isLoading={ isLoading }
-        mt={ 6 }
-        fontWeight="500"
-      />
+      { (tx.from && dataTo) && ( // For UTXO transactions we cannot determine the direction of the transaction
+        <AddressFromTo
+          from={ tx.from }
+          to={ dataTo }
+          current={ currentAddress }
+          isLoading={ isLoading }
+          mt={ 6 }
+          fontWeight="500"
+        />
+      ) }
       { !config.UI.views.tx.hiddenFields?.value && (
         <Flex mt={ 2 } columnGap={ 2 }>
           <Skeleton isLoaded={ !isLoading } display="inline-block" whiteSpace="pre">Value</Skeleton>

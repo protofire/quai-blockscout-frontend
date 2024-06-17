@@ -40,23 +40,26 @@ const AddressFromTo = ({ from, to, current, mode: modeProp, className, isLoading
     return (
       <Flex className={ className } flexDir="column" rowGap={ 3 }>
         <Flex alignItems="center" columnGap={ 2 }>
-          <AddressFromToIcon
-            isLoading={ isLoading }
-            type={ getTxCourseType(from.hash, to?.hash, current) }
-            transform="rotate(90deg)"
-          />
-          <Entity
-            address={ from }
-            isLoading={ isLoading }
-            noLink={ current === from.hash }
-            noCopy={ current === from.hash }
-            noIcon={ noIcon }
-            tokenHash={ tokenHash }
-            truncation="constant"
-            maxW="calc(100% - 28px)"
-            w="min-content"
-
-          />
+          { (from && to) && (
+            <AddressFromToIcon
+              isLoading={ isLoading }
+              type={ getTxCourseType(from.hash, to?.hash, current) }
+              transform="rotate(90deg)"
+            />
+          ) }
+          { from && (
+            <Entity
+              address={ from }
+              isLoading={ isLoading }
+              noLink={ current === from.hash }
+              noCopy={ current === from.hash }
+              noIcon={ noIcon }
+              tokenHash={ tokenHash }
+              truncation="constant"
+              maxW="calc(100% - 28px)"
+              w="min-content"
+            />
+          ) }
         </Flex>
         { to && (
           <Entity
@@ -81,20 +84,24 @@ const AddressFromTo = ({ from, to, current, mode: modeProp, className, isLoading
 
   return (
     <Grid className={ className } alignItems="center" gridTemplateColumns={ `fit-content(100%) ${ iconSize }px fit-content(100%)` }>
-      <Entity
-        address={ from }
-        isLoading={ isLoading }
-        noLink={ isOutgoing }
-        noCopy={ isOutgoing }
-        noIcon={ noIcon }
-        tokenHash={ tokenHash }
-        truncation="constant"
-        mr={ isOutgoing ? 4 : 2 }
-      />
-      <AddressFromToIcon
-        isLoading={ isLoading }
-        type={ getTxCourseType(from.hash, to?.hash, current) }
-      />
+      { from && (
+        <Entity
+          address={ from }
+          isLoading={ isLoading }
+          noLink={ isOutgoing }
+          noCopy={ isOutgoing }
+          noIcon={ noIcon }
+          tokenHash={ tokenHash }
+          truncation="constant"
+          mr={ isOutgoing ? 4 : 2 }
+        />
+      ) }
+      { (from && to) && (
+        <AddressFromToIcon
+          isLoading={ isLoading }
+          type={ getTxCourseType(from.hash, to?.hash, current) }
+        />
+      ) }
       { to && (
         <Entity
           address={ to }

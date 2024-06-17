@@ -38,6 +38,7 @@ import type {
   Block, BlockFilters,
   BlockWithdrawalsResponse,
   BlockExternalTransactionsResponse,
+  BlockUtxoTransactionsResponse,
 } from 'types/api/block';
 import type { ChartMarketResponse, ChartTransactionResponse } from 'types/api/charts';
 import type { BackendVersionConfig } from 'types/api/configs';
@@ -285,6 +286,12 @@ export const RESOURCES = {
   },
   block_ext_txs: {
     path: '/api/v2/blocks/:height_or_hash/external-transactions',
+    pathParams: [ 'height_or_hash' as const ],
+    filterFields: [ 'type' as const ],
+    shardable: 'api',
+  },
+  block_utxo_txs: {
+    path: '/api/v2/blocks/:height_or_hash/utxo-transactions',
     pathParams: [ 'height_or_hash' as const ],
     filterFields: [ 'type' as const ],
     shardable: 'api',
@@ -824,7 +831,7 @@ export interface ResourceError<T = unknown> {
 
 export type ResourceErrorAccount<T> = ResourceError<{ errors: T }>
 
-export type PaginatedResources = 'blocks' | 'block_txs' | 'block_ext_txs' |
+export type PaginatedResources = 'blocks' | 'block_txs' | 'block_ext_txs' | 'block_utxo_txs' |
 'txs_validated' | 'txs_pending' | 'txs_with_blobs' | 'txs_watchlist' | 'txs_execution_node' |
 'tx_internal_txs' | 'tx_logs' | 'tx_token_transfers' | 'tx_state_changes' | 'tx_blobs' |
 'addresses' |
@@ -875,6 +882,7 @@ Q extends 'blocks' ? BlocksResponse :
 Q extends 'block' ? Block :
 Q extends 'block_txs' ? BlockTransactionsResponse :
 Q extends 'block_ext_txs' ? BlockExternalTransactionsResponse :
+Q extends 'block_utxo_txs' ? BlockUtxoTransactionsResponse :
 Q extends 'block_withdrawals' ? BlockWithdrawalsResponse :
 Q extends 'txs_validated' ? TransactionsResponseValidated :
 Q extends 'txs_pending' ? TransactionsResponsePending :
@@ -983,6 +991,7 @@ export type PaginationFilters<Q extends PaginatedResources> =
 Q extends 'blocks' ? BlockFilters :
 Q extends 'block_txs' ? TTxsWithBlobsFilters :
 Q extends 'block_ext_txs' ? TTxsWithBlobsFilters :
+Q extends 'block_utxo_txs' ? TTxsWithBlobsFilters :
 Q extends 'txs_validated' | 'txs_pending' ? TTxsFilters :
 Q extends 'txs_with_blobs' ? TTxsWithBlobsFilters :
 Q extends 'tx_token_transfers' ? TokenTransferFilters :

@@ -1,6 +1,6 @@
 import type { AddressParam } from 'types/api/addressParams';
 import type { Reward } from 'types/api/reward';
-import type { ExternalTransaction, Transaction } from 'types/api/transaction';
+import type { ExternalTransaction, Transaction, UtxoTransaction } from 'types/api/transaction';
 
 export type BlockType = 'block' | 'reorg' | 'uncle';
 
@@ -60,7 +60,7 @@ export interface Block {
   evm_root?: Array<string>;
   utxo_root?: Array<string>;
   etx_set_hash?: Array<string>;
-  parent_uncled_sub_delta_s?: string;
+  parent_uncled_sub_delta_s?: Array<string>;
   efficiency_score?: string;
   threshold_count?: string;
   expansion_number?: string;
@@ -94,6 +94,15 @@ export interface BlockTransactionsResponse {
 
 export interface BlockExternalTransactionsResponse {
   items: Array<ExternalTransaction>;
+  next_page_params: {
+    block_number: number;
+    items_count: number;
+    index: number;
+  } | null;
+}
+
+export interface BlockUtxoTransactionsResponse {
+  items: Array<UtxoTransaction>;
   next_page_params: {
     block_number: number;
     items_count: number;
