@@ -87,6 +87,19 @@ export type Transaction = {
   max_fee_per_blob_gas?: string;
   // Shard ID
   shard_id?: string;
+  // UTXO fields
+  inputs?: Array<{
+    PreviousOutPoint: {
+      Index: number;
+      TxHash: string;
+    };
+    PubKey: string;
+  }>;
+  outputs?: Array<{
+    Address: string;
+    Denomination: number;
+    Lock: number;
+  }>;
 }
 
 export type ExternalTransaction = {

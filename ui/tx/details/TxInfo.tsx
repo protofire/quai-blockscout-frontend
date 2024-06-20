@@ -38,6 +38,7 @@ import BlockEntity from 'ui/shared/entities/block/BlockEntity';
 import HashStringShortenDynamic from 'ui/shared/HashStringShortenDynamic';
 import IconSvg from 'ui/shared/IconSvg';
 import LogDecodedInputData from 'ui/shared/logs/LogDecodedInputData';
+import RawDataSnippet from 'ui/shared/RawDataSnippet';
 import RawInputData from 'ui/shared/RawInputData';
 import TxStatus from 'ui/shared/statusTag/TxStatus';
 import TextSeparator from 'ui/shared/TextSeparator';
@@ -371,7 +372,7 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
           />
         </DetailsInfoItem>
       ) }
-      { !config.UI.views.tx.hiddenFields?.tx_fee && (
+      { data.type !== 2 && !config.UI.views.tx.hiddenFields?.tx_fee && (
         <DetailsInfoItem
           title="Transaction fee"
           hint={ data.blob_gas_used ? 'Transaction fee without blob fee' : 'Total transaction fee' }
@@ -391,55 +392,63 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
         </DetailsInfoItem>
       ) }
 
-      <TxDetailsGasPrice gasPrice={ data.gas_price } isLoading={ isLoading }/>
+      {
+        data.type !== 2 && (
+          <>
+            <TxDetailsGasPrice gasPrice={ data.gas_price } isLoading={ isLoading }/>
 
-      <TxDetailsFeePerGas txFee={ data.fee.value } gasUsed={ data.gas_used } isLoading={ isLoading }/>
+            <TxDetailsFeePerGas txFee={ data.fee.value } gasUsed={ data.gas_used } isLoading={ isLoading }/>
 
-      <DetailsInfoItem
-        title="Gas usage & limit by txn"
-        hint="Actual gas amount used by the transaction"
-        isLoading={ isLoading }
-      >
-        <Skeleton isLoaded={ !isLoading }>{ BigNumber(data.gas_used || 0).toFormat() }</Skeleton>
-        <TextSeparator/>
-        <Skeleton isLoaded={ !isLoading }>{ BigNumber(data.gas_limit).toFormat() }</Skeleton>
-        <Utilization ml={ 4 } value={ BigNumber(data.gas_used || 0).dividedBy(BigNumber(data.gas_limit)).toNumber() } isLoading={ isLoading }/>
-      </DetailsInfoItem>
-      { !config.UI.views.tx.hiddenFields?.gas_fees &&
+            <DetailsInfoItem
+              title="Gas usage & limit by txn"
+              hint="Actual gas amount used by the transaction"
+              isLoading={ isLoading }
+            >
+              <Skeleton isLoaded={ !isLoading }>{ BigNumber(data.gas_used || 0).toFormat() }</Skeleton>
+              <TextSeparator/>
+              <Skeleton isLoaded={ !isLoading }>{ BigNumber(data.gas_limit).toFormat() }</Skeleton>
+              <Utilization ml={ 4 } value={ BigNumber(data.gas_used || 0).dividedBy(BigNumber(data.gas_limit)).toNumber() } isLoading={ isLoading }/>
+            </DetailsInfoItem>
+
+            { !config.UI.views.tx.hiddenFields?.gas_fees &&
             (data.base_fee_per_gas || data.max_fee_per_gas || data.max_priority_fee_per_gas) && (
-        <DetailsInfoItem
-          title={ `Gas fees (${ currencyUnits.gwei })` }
-          // eslint-disable-next-line max-len
-          hint={ `
+              <DetailsInfoItem
+                title={ `Gas fees (${ currencyUnits.gwei })` }
+                // eslint-disable-next-line max-len
+                hint={ `
                 Base Fee refers to the network Base Fee at the time of the block, 
                 while Max Fee & Max Priority Fee refer to the max amount a user is willing to pay 
                 for their tx & to give to the ${ getNetworkValidatorTitle() } respectively
               ` }
-          isLoading={ isLoading }
-        >
-          { data.base_fee_per_gas && (
-            <Skeleton isLoaded={ !isLoading }>
-              <Text as="span" fontWeight="500">Base: </Text>
-              <Text fontWeight="600" as="span">{ BigNumber(data.base_fee_per_gas).dividedBy(WEI_IN_GWEI).toFixed() }</Text>
-              { (data.max_fee_per_gas || data.max_priority_fee_per_gas) && <TextSeparator/> }
-            </Skeleton>
-          ) }
-          { data.max_fee_per_gas && (
-            <Skeleton isLoaded={ !isLoading }>
-              <Text as="span" fontWeight="500">Max: </Text>
-              <Text fontWeight="600" as="span">{ BigNumber(data.max_fee_per_gas).dividedBy(WEI_IN_GWEI).toFixed() }</Text>
-              { data.max_priority_fee_per_gas && <TextSeparator/> }
-            </Skeleton>
-          ) }
-          { data.max_priority_fee_per_gas && (
-            <Skeleton isLoaded={ !isLoading }>
-              <Text as="span" fontWeight="500">Max priority: </Text>
-              <Text fontWeight="600" as="span">{ BigNumber(data.max_priority_fee_per_gas).dividedBy(WEI_IN_GWEI).toFixed() }</Text>
-            </Skeleton>
-          ) }
-        </DetailsInfoItem>
-      ) }
-      <TxDetailsBurntFees data={ data } isLoading={ isLoading }/>
+                isLoading={ isLoading }
+              >
+                { data.base_fee_per_gas && (
+                  <Skeleton isLoaded={ !isLoading }>
+                    <Text as="span" fontWeight="500">Base: </Text>
+                    <Text fontWeight="600" as="span">{ BigNumber(data.base_fee_per_gas).dividedBy(WEI_IN_GWEI).toFixed() }</Text>
+                    { (data.max_fee_per_gas || data.max_priority_fee_per_gas) && <TextSeparator/> }
+                  </Skeleton>
+                ) }
+                { data.max_fee_per_gas && (
+                  <Skeleton isLoaded={ !isLoading }>
+                    <Text as="span" fontWeight="500">Max: </Text>
+                    <Text fontWeight="600" as="span">{ BigNumber(data.max_fee_per_gas).dividedBy(WEI_IN_GWEI).toFixed() }</Text>
+                    { data.max_priority_fee_per_gas && <TextSeparator/> }
+                  </Skeleton>
+                ) }
+                { data.max_priority_fee_per_gas && (
+                  <Skeleton isLoaded={ !isLoading }>
+                    <Text as="span" fontWeight="500">Max priority: </Text>
+                    <Text fontWeight="600" as="span">{ BigNumber(data.max_priority_fee_per_gas).dividedBy(WEI_IN_GWEI).toFixed() }</Text>
+                  </Skeleton>
+                ) }
+              </DetailsInfoItem>
+            ) }
+          </>
+        )
+
+      }
+
       { rollupFeature.isEnabled && rollupFeature.type === 'optimistic' && (
         <>
           { data.l1_gas_used && (
@@ -487,22 +496,52 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
           ) }
         </>
       ) }
-      <GridItem colSpan={{ base: undefined, lg: 2 }}>
-        <Element name="TxInfo__cutLink">
-          <Skeleton isLoaded={ !isLoading } mt={ 6 } display="inline-block">
-            <Link
-              display="inline-block"
-              fontSize="sm"
-              textDecorationLine="underline"
-              textDecorationStyle="dashed"
-              onClick={ handleCutClick }
-            >
-              { isExpanded ? 'Hide details' : 'View details' }
-            </Link>
-          </Skeleton>
-        </Element>
-      </GridItem>
-      { isExpanded && (
+      { data.type === 2 && (
+        <>
+          <GridItem colSpan={{ base: undefined, lg: 2 }} mt={{ base: 1, lg: 4 }}/>
+
+          <DetailsInfoItem
+            title="Position"
+            hint="Position of the transaction in the block"
+          >
+            <Text>{ data.position }</Text>
+          </DetailsInfoItem>
+
+          <DetailsInfoItem
+            title="Inputs"
+            hint="Inputs of the UTXO transaction"
+          >
+            <RawDataSnippet data={ JSON.stringify(data.inputs, null, 2) }/>
+          </DetailsInfoItem>
+
+          <DetailsInfoItem
+            title="Outputs"
+            hint="Outputs of the UTXO transaction"
+          >
+            <RawDataSnippet data={ JSON.stringify(data.outputs, null, 2) }/>
+          </DetailsInfoItem>
+        </>
+      ) }
+
+      <TxDetailsBurntFees data={ data } isLoading={ isLoading }/>
+      { data.type !== 2 && (
+        <GridItem colSpan={{ base: undefined, lg: 2 }}>
+          <Element name="TxInfo__cutLink">
+            <Skeleton isLoaded={ !isLoading } mt={ 6 } display="inline-block">
+              <Link
+                display="inline-block"
+                fontSize="sm"
+                textDecorationLine="underline"
+                textDecorationStyle="dashed"
+                onClick={ handleCutClick }
+              >
+                { isExpanded ? 'Hide details' : 'View details' }
+              </Link>
+            </Skeleton>
+          </Element>
+        </GridItem>
+      ) }
+      { isExpanded && data.type !== 2 && (
         <>
           <GridItem colSpan={{ base: undefined, lg: 2 }} mt={{ base: 1, lg: 4 }}/>
           { (data.blob_gas_used || data.max_fee_per_blob_gas || data.blob_gas_price) && (
