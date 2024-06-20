@@ -79,7 +79,7 @@ const AddressFromTo = ({ from, to, current, mode: modeProp, className, isLoading
     );
   }
 
-  const isOutgoing = current === from.hash;
+  const isOutgoing = from && (current === from.hash);
   const iconSize = 20;
 
   return (
