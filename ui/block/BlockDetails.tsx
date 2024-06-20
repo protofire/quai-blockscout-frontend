@@ -20,6 +20,7 @@ import DetailsInfoItemDivider from 'ui/shared/DetailsInfoItemDivider';
 import DetailsTimestamp from 'ui/shared/DetailsTimestamp';
 import AddressEntity from 'ui/shared/entities/address/AddressEntity';
 import GasUsedToTargetRatio from 'ui/shared/GasUsedToTargetRatio';
+import HashStringShorten from 'ui/shared/HashStringShorten';
 import HashStringShortenDynamic from 'ui/shared/HashStringShortenDynamic';
 import IconSvg from 'ui/shared/IconSvg';
 import LinkInternal from 'ui/shared/LinkInternal';
@@ -200,9 +201,13 @@ const BlockDetails = ({ query }: Props) => {
           isLoading={ isPlaceholderData }
         />
       </DetailsInfoItem>
-      <DetailsInfoItem title="Location" hint="Location at which block was produced" isLoading={ isPlaceholderData }>
-        <Skeleton isLoaded={ !isPlaceholderData }>{ data.location }</Skeleton>
-      </DetailsInfoItem>
+
+      { data.wo_header && (
+        <DetailsInfoItem title="Location" hint="Location at which block was produced" isLoading={ isPlaceholderData }>
+          <Skeleton isLoaded={ !isPlaceholderData }>{ data.wo_header.location }</Skeleton>
+        </DetailsInfoItem>
+      ) }
+
       <DetailsInfoItem title="Size" hint="Size of the block in bytes" isLoading={ isPlaceholderData }>
         <Skeleton isLoaded={ !isPlaceholderData }>{ data.size.toLocaleString() }</Skeleton>
       </DetailsInfoItem>
@@ -408,14 +413,100 @@ const BlockDetails = ({ query }: Props) => {
 
           { !isPlaceholderData && <BlockDetailsBlobInfo data={ data }/> }
 
-          <DetailsInfoItem
-            title="Difficulty"
-            hint={ `Block difficulty for ${ validatorTitle }, used to calibrate block generation time` }
-          >
-            <Box whiteSpace="nowrap" overflow="hidden">
-              <HashStringShortenDynamic hash={ BigNumber(data.difficulty).toFormat() }/>
-            </Box>
-          </DetailsInfoItem>
+          { data.wo_header && (
+            <>
+
+              <DetailsInfoItem
+                title="Difficulty"
+                note="Work object header"
+                noteAlign="left"
+                hint={ `Block difficulty for ${ validatorTitle }, used to calibrate block generation time` }
+              >
+                <Box whiteSpace="nowrap" overflow="hidden">
+                  <HashStringShortenDynamic hash={ BigNumber(data.wo_header!.difficulty).toFormat() }/>
+                </Box>
+              </DetailsInfoItem>
+
+              <DetailsInfoItem
+                title="Location"
+                note="Work object header"
+                noteAlign="left"
+                hint="Block location"
+              >
+                <Box whiteSpace="nowrap" overflow="hidden">
+                  <HashStringShorten hash={ data.wo_header!.location }/>
+                </Box>
+                <CopyToClipboard text={ data.wo_header!.location }/>
+              </DetailsInfoItem>
+
+              <DetailsInfoItem
+                title="MixHash"
+                note="Work object header"
+                noteAlign="left"
+                hint="Block mixHash"
+              >
+                <Box whiteSpace="nowrap" overflow="hidden">
+                  <HashStringShortenDynamic hash={ data.wo_header!.mixHash }/>
+                </Box>
+                <CopyToClipboard text={ data.wo_header!.mixHash }/>
+              </DetailsInfoItem>
+
+              <DetailsInfoItem
+                title="Nonce"
+                note="Work object header"
+                noteAlign="left"
+                hint="Block nonce is a value used during mining to demonstrate proof of work for a block"
+              >
+                <Box whiteSpace="nowrap" overflow="hidden">
+                  <HashStringShortenDynamic hash={ data.wo_header!.nonce.toString() }/>
+                </Box>
+              </DetailsInfoItem>
+              <DetailsInfoItem
+                title="Block number"
+                note="Work object header"
+                noteAlign="left"
+                hint="Block number"
+              >
+                <Box whiteSpace="nowrap" overflow="hidden">
+                  <HashStringShortenDynamic hash={ data.wo_header!.number.toString() }/>
+                </Box>
+                <CopyToClipboard text={ data.wo_header!.number }/>
+              </DetailsInfoItem>
+
+              <DetailsInfoItem
+                title="Parent Hash"
+                note="Work object header"
+                noteAlign="left"
+                hint="The hash of the block from which this block was generated"
+              >
+                <Box whiteSpace="nowrap" overflow="hidden">
+                  <LinkInternal
+                    href={ route({
+                      pathname: '/block/[height_or_hash]',
+                      query: { height_or_hash: String(data.height - 1) },
+                    }) }
+                    overflow="hidden"
+                    whiteSpace="nowrap"
+                  >
+                    <HashStringShortenDynamic hash={ data.wo_header!.parentHash }/>
+                  </LinkInternal>
+                  <CopyToClipboard text={ data.wo_header!.parentHash }/>
+                </Box>
+              </DetailsInfoItem>
+
+              <DetailsInfoItem
+                title="Time"
+                note="Work object header"
+                noteAlign="left"
+                hint="Block time"
+              >
+                <Box whiteSpace="nowrap" overflow="hidden">
+                  <HashStringShortenDynamic hash={ data.wo_header!.time }/>
+                </Box>
+                <CopyToClipboard text={ data.wo_header!.time }/>
+              </DetailsInfoItem>
+            </>
+          ) }
 
           { data.total_difficulty && (
             <DetailsInfoItem title="Total difficulty" hint="Total difficulty of the chain until this block">
@@ -431,35 +522,6 @@ const BlockDetails = ({ query }: Props) => {
             </Box>
             <CopyToClipboard text={ data.hash }/>
           </DetailsInfoItem>
-
-          { data.height > 0 && (
-            <DetailsInfoItem
-              title="Parent hash"
-              hint="The hash of the block from which this block was generated"
-              flexWrap="nowrap"
-            >
-              <LinkInternal
-                href={ route({
-                  pathname: '/block/[height_or_hash]',
-                  query: { height_or_hash: String(data.height - 1) },
-                }) }
-                overflow="hidden"
-                whiteSpace="nowrap"
-              >
-                <HashStringShortenDynamic hash={ data.parent_hash }/>
-              </LinkInternal>
-              <CopyToClipboard text={ data.parent_hash }/>
-            </DetailsInfoItem>
-          ) }
-
-          { !config.UI.views.block.hiddenFields?.nonce && (
-            <DetailsInfoItem
-              title="Nonce"
-              hint="Block nonce is a value used during mining to demonstrate proof of work for a block"
-            >
-              { data?.wo_header?.nonce }
-            </DetailsInfoItem>
-          ) }
 
           { !config.UI.views.block.hiddenFields?.totalEntropy && (
             <DetailsInfoItem title="Total Entropy" hint="Total entropy reduced by the chain until this block">
@@ -497,8 +559,8 @@ const BlockDetails = ({ query }: Props) => {
           ) }
 
           { !config.UI.views.block.hiddenFields?.etxSetHash && (
-            <DetailsInfoItem title="Etx Set Hash" hint="Etx Set Hash when block was produced">
-              { data.etx_set_hash }
+            <DetailsInfoItem title="Etx Set Root" hint="Etx Set Root when block was produced">
+              { data.etx_set_root }
             </DetailsInfoItem>
           ) }
 
@@ -560,20 +622,6 @@ const BlockDetails = ({ query }: Props) => {
               { data.uncled_s }
             </DetailsInfoItem>
           ) }
-          { /*
-          <DetailsInfoItem
-            title="Work object header"
-            hint="Work object header included with the block."
-          >
-            <RawDataSnippet data={ JSON.stringify(data.wo_header, null, 2) }/>
-          </DetailsInfoItem>
-
-          <DetailsInfoItem
-            title="Work object body"
-            hint="Work object body included with the block."
-          >
-            <RawDataSnippet data={ JSON.stringify(data.wo, null, 2) }/>
-          </DetailsInfoItem> */ }
         </>
       ) }
     </Grid>

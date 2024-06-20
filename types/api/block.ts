@@ -59,7 +59,7 @@ export interface Block {
   ext_tx_count?: number;
   evm_root?: Array<string>;
   utxo_root?: Array<string>;
-  etx_set_hash?: Array<string>;
+  etx_set_root?: Array<string>;
   parent_uncled_sub_delta_s?: Array<string>;
   efficiency_score?: string;
   threshold_count?: string;
