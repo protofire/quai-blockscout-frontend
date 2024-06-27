@@ -87,6 +87,16 @@ const BlockPageContent = () => {
         </>
       ),
     },
+    {
+      id: 'uncles',
+      title: 'Uncles',
+      component: (
+        <>
+          { blockTxsQuery.isDegradedData && <ServiceDegradationWarning isLoading={ blockTxsQuery.isPlaceholderData } mb={ 6 }/> }
+          <ExtTxsWithFrontendSorting query={ blockExtTxsQuery } showBlockInfo={ false } showSocketInfo={ false }/>
+        </>
+      ),
+    },
     config.features.beaconChain.isEnabled && Boolean(blockQuery.data?.withdrawals_count) ?
       {
         id: 'withdrawals',
