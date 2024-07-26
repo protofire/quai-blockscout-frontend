@@ -22,21 +22,24 @@ const ColorModeSwitch = () => {
 
   const [ activeHex, setActiveHex ] = React.useState<string>();
 
-  const setTheme = React.useCallback((hex: string) => {
-    const nextTheme = COLOR_THEMES.find((theme) => theme.colors.some((color) => color.hex === hex));
+  const setTheme = React.useCallback(
+    (hex: string) => {
+      const nextTheme = COLOR_THEMES.find((theme) => theme.colors.some((color) => color.hex === hex));
 
-    if (!nextTheme) {
-      return;
-    }
+      if (!nextTheme) {
+        return;
+      }
 
-    setColorMode(nextTheme.colorMode);
+      setColorMode(nextTheme.colorMode);
 
-    const varName = nextTheme.colorMode === 'light' ? '--chakra-colors-white' : '--chakra-colors-black';
-    window.document.documentElement.style.setProperty(varName, hex);
+      const varName = nextTheme.colorMode === 'light' ? '--chakra-colors-white' : '--chakra-colors-black';
+      window.document.documentElement.style.setProperty(varName, hex);
 
-    cookies.set(cookies.NAMES.COLOR_MODE_HEX, hex);
-    window.localStorage.setItem(cookies.NAMES.COLOR_MODE, nextTheme.colorMode);
-  }, [ setColorMode ]);
+      cookies.set(cookies.NAMES.COLOR_MODE_HEX, hex);
+      window.localStorage.setItem(cookies.NAMES.COLOR_MODE, nextTheme.colorMode);
+    },
+    [ setColorMode ],
+  );
 
   React.useEffect(() => {
     const cookieColorMode = cookies.get(cookies.NAMES.COLOR_MODE);
@@ -49,26 +52,31 @@ const ColorModeSwitch = () => {
       return colorMode;
     })();
 
-    const fallbackHex = (COLOR_THEMES.find(theme => theme.colorMode === nextColorMode && theme.colors.length === 1) ?? COLOR_THEMES[0]).colors[0].hex;
+    const fallbackHex = (
+      COLOR_THEMES.find((theme) => theme.colorMode === nextColorMode && theme.colors.length === 1) ?? COLOR_THEMES[0]
+    ).colors[0].hex;
     const cookieHex = cookies.get(cookies.NAMES.COLOR_MODE_HEX) ?? fallbackHex;
     setTheme(cookieHex);
     setActiveHex(cookieHex);
-  // should run only on mount
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ ]);
+    // should run only on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const handleSelect = React.useCallback((event: React.MouseEvent<HTMLDivElement>) => {
-    event.stopPropagation();
+  const handleSelect = React.useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      event.stopPropagation();
 
-    const hex = event.currentTarget.getAttribute('data-hex');
+      const hex = event.currentTarget.getAttribute('data-hex');
 
-    if (!hex) {
-      return;
-    }
+      if (!hex) {
+        return;
+      }
 
-    setTheme(hex);
-    setActiveHex(hex);
-  }, [ setTheme ]);
+      setTheme(hex);
+      setActiveHex(hex);
+    },
+    [ setTheme ],
+  );
 
   const activeTheme = COLOR_THEMES.find((theme) => theme.colors.some((color) => color.hex === activeHex));
 
@@ -78,17 +86,21 @@ const ColorModeSwitch = () => {
         { activeTheme ? (
           <IconButton
             variant="simple"
-            colorScheme="blue"
+            colorScheme="red"
             aria-label="color mode switch"
             icon={ <IconSvg name={ activeTheme.icon } boxSize={ 5 }/> }
             boxSize={ 5 }
             onClick={ onToggle }
           />
-        ) : <Skeleton boxSize={ 5 } borderRadius="sm"/> }
+        ) : (
+          <Skeleton boxSize={ 5 } borderRadius="sm"/>
+        ) }
       </PopoverTrigger>
       <PopoverContent overflowY="hidden" w="164px" fontSize="sm">
         <PopoverBody boxShadow="2xl" p={ 3 }>
-          { COLOR_THEMES.map((theme) => <ColorModeSwitchTheme key={ theme.name } { ...theme } onClick={ handleSelect } activeHex={ activeHex }/>) }
+          { COLOR_THEMES.map((theme) => (
+            <ColorModeSwitchTheme key={ theme.name } { ...theme } onClick={ handleSelect } activeHex={ activeHex }/>
+          )) }
         </PopoverBody>
       </PopoverContent>
     </Popover>

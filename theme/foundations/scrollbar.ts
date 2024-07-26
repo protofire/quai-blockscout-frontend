@@ -3,7 +3,7 @@ import { mode } from '@chakra-ui/theme-tools';
 import type { StyleFunctionProps } from '@chakra-ui/theme-tools';
 
 const scrollbar = (props: StyleFunctionProps) => {
-  const bgColor = mode('blackAlpha.300', 'whiteAlpha.300')(props);
+  const bgColor = mode('red.300', 'whiteAlpha.300')(props);
   const resizerUrl = mode('url(/static/resizer_light.png)', 'url(/static/resizer_dark.png)')(props);
 
   return {
