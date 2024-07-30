@@ -20,7 +20,7 @@ export const COLOR_THEMES = [
     name: 'Dark',
     colorMode: 'dark',
     icon: 'moon' as IconName,
-    colors: [ { hex: '#101112', sampleBg: 'linear-gradient(161deg, #000 9.37%, #383838 92.52%)' } ],
+    colors: [ { hex: '#131313', sampleBg: 'linear-gradient(161deg, #000 9.37%, #383838 92.52%)' } ],
   },
 ];
 

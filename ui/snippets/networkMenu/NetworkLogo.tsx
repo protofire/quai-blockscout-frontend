@@ -13,19 +13,29 @@ interface Props {
   imageProps?: StyleProps;
 }
 
-const LogoFallback = ({ isCollapsed, isSmall, imageProps }: { isCollapsed?: boolean; isSmall?: boolean; imageProps?: StyleProps }) => {
+const LogoFallback = ({
+  isCollapsed,
+  isSmall,
+  imageProps,
+}: {
+  isCollapsed?: boolean;
+  isSmall?: boolean;
+  imageProps?: StyleProps;
+}) => {
   const field = isSmall ? 'icon' : 'logo';
   const logoColor = useColorModeValue('blue.600', 'white');
 
-  const display = isSmall ? {
-    base: 'none',
-    lg: isCollapsed === false ? 'none' : 'block',
-    xl: isCollapsed ? 'block' : 'none',
-  } : {
-    base: 'block',
-    lg: isCollapsed === false ? 'block' : 'none',
-    xl: isCollapsed ? 'none' : 'block',
-  };
+  const display = isSmall ?
+    {
+      base: 'none',
+      lg: isCollapsed === false ? 'none' : 'block',
+      xl: isCollapsed ? 'block' : 'none',
+    } :
+    {
+      base: 'block',
+      lg: isCollapsed === false ? 'block' : 'none',
+      xl: isCollapsed ? 'none' : 'block',
+    };
 
   if (config.UI.sidebar[field].default) {
     return <Skeleton w="100%" borderRadius="sm" display={ display }/>;
@@ -44,9 +54,14 @@ const LogoFallback = ({ isCollapsed, isSmall, imageProps }: { isCollapsed?: bool
 };
 
 const NetworkLogo = ({ isCollapsed, onClick, imageProps }: Props) => {
-
-  const logoSrc = useColorModeValue(config.UI.sidebar.logo.default, config.UI.sidebar.logo.dark || config.UI.sidebar.logo.default);
-  const iconSrc = useColorModeValue(config.UI.sidebar.icon.default, config.UI.sidebar.icon.dark || config.UI.sidebar.icon.default);
+  const logoSrc = useColorModeValue(
+    config.UI.sidebar.logo.default,
+    config.UI.sidebar.logo.dark || config.UI.sidebar.logo.default,
+  );
+  const iconSrc = useColorModeValue(
+    config.UI.sidebar.icon.default,
+    config.UI.sidebar.icon.dark || config.UI.sidebar.icon.default,
+  );
   const darkModeFilter = { filter: 'brightness(0) invert(1)' };
   const logoStyle = useColorModeValue({}, !config.UI.sidebar.logo.dark ? darkModeFilter : {});
   const iconStyle = useColorModeValue({}, !config.UI.sidebar.icon.dark ? darkModeFilter : {});
@@ -55,9 +70,8 @@ const NetworkLogo = ({ isCollapsed, onClick, imageProps }: Props) => {
     <Box
       as="a"
       href={ route({ pathname: '/' }) }
-      width={{ base: '120px', lg: isCollapsed === false ? '120px' : '30px', xl: isCollapsed ? '30px' : '120px' }}
-      height={{ base: '24px', lg: isCollapsed === false ? '24px' : '30px', xl: isCollapsed ? '30px' : '24px' }}
-      display="inline-flex"
+      width="100%"
+      display="block"
       overflow="hidden"
       onClick={ onClick }
       flexShrink={ 0 }
@@ -65,8 +79,6 @@ const NetworkLogo = ({ isCollapsed, onClick, imageProps }: Props) => {
     >
       { /* big logo */ }
       <Image
-        w="140px"
-        h="22px"
         src={ logoSrc }
         alt={ `${ config.chain.name } network logo` }
         fallback={ <LogoFallback isCollapsed={ isCollapsed } imageProps={ imageProps }/> }
@@ -76,8 +88,6 @@ const NetworkLogo = ({ isCollapsed, onClick, imageProps }: Props) => {
       />
       { /* small logo */ }
       <Image
-        w="auto"
-        h="100%"
         src={ iconSrc }
         alt={ `${ config.chain.name } network logo` }
         fallback={ <LogoFallback isCollapsed={ isCollapsed } imageProps={ imageProps } isSmall/> }
