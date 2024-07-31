@@ -9,17 +9,14 @@ export const pelagusWallet = (): Wallet => ({
   iconUrl: 'https://pelaguswallet.io/docs/img/PelagusLogoSquare.png',
   iconBackground: '#125ce8',
   downloadUrls: {
-    chrome:
-      'https://chromewebstore.google.com/detail/pelagus/gaegollnpijhedifeeeepdoffkgfcmbc',
+    chrome: 'https://chromewebstore.google.com/detail/pelagus/nhccebmfjcbhghphpclcfdkkekheegop',
   },
   extension: {
     instructions: {
-      learnMoreUrl:
-        'https://chromewebstore.google.com/detail/pelagus/gaegollnpijhedifeeeepdoffkgfcmbc',
+      learnMoreUrl: 'https://chromewebstore.google.com/detail/pelagus/nhccebmfjcbhghphpclcfdkkekheegop',
       steps: [
         {
-          description:
-            'We recommend using the Chrome browser. Click below to install the Pelagus Wallet extension.',
+          description: 'We recommend using the Chrome browser. Click below to install the Pelagus Wallet extension.',
           step: 'install',
           title: 'Install the Pelagus Wallet Extension',
         },
@@ -30,8 +27,7 @@ export const pelagusWallet = (): Wallet => ({
           title: 'Create or Import a Wallet',
         },
         {
-          description:
-            'Once you set up your wallet, click below to refresh the browser and load up the extension.',
+          description: 'Once you set up your wallet, click below to refresh the browser and load up the extension.',
           step: 'refresh',
           title: 'Refresh your browser',
         },
@@ -46,11 +42,7 @@ export const pelagusWallet = (): Wallet => ({
             id: walletDetails.rkDetails.id,
             name: walletDetails.rkDetails.name,
             provider: (window) => {
-              return (
-                window?.ethereum?.providers?.find(
-                  (p) => 'isPelagus' in p && p.isPelagus,
-                ) || window?.ethereum
-              );
+              return window?.ethereum?.providers?.find((p) => 'isPelagus' in p && p.isPelagus) || window?.ethereum;
             },
           }),
         })(config),

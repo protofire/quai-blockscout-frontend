@@ -36,10 +36,7 @@ export default function useShards(): UseShardsResult {
   const queryStringParams = useSearchParams();
   const router = useRouter();
   const shardsConfig = getFeaturePayload(config.features.shards);
-  const shards = React.useMemo(
-    () => shardsConfig?.shards || {},
-    [ shardsConfig ],
-  );
+  const shards = React.useMemo(() => shardsConfig?.shards || {}, [ shardsConfig ]);
   const defaultShardId = Object.keys(shards)[0];
 
   const shardId = (queryStringParams.get('shard') as ShardId) || defaultShardId;
@@ -62,8 +59,7 @@ export default function useShards(): UseShardsResult {
   const getUrlWithShardId = useCallback(
     (url: string) => {
       const shardablePages = getFeaturePayload(config.features.shards)?.pages;
-      const isShardable =
-        shardablePages?.find((page) => url.startsWith(page)) !== undefined;
+      const isShardable = shardablePages?.find((page) => url.startsWith(page)) !== undefined;
 
       if (isShardable && shardId) {
         const baseUrl = [
@@ -77,10 +73,7 @@ export default function useShards(): UseShardsResult {
         const newUrl = new URL(url as string, baseUrl);
 
         // Add shardId to query params for tabs
-        if (
-          !newUrl.searchParams.has('shard') ||
-          !newUrl.searchParams.get('shard')
-        ) {
+        if (!newUrl.searchParams.has('shard') || !newUrl.searchParams.get('shard')) {
           newUrl.searchParams.append('shard', shardId);
         }
 
@@ -99,10 +92,10 @@ export default function useShards(): UseShardsResult {
         address = address.slice(2);
       }
 
-      const byteArray = new Uint8Array(address.match(/.{1,2}/g)?.map(byte => parseInt(byte, 16)) || []);
+      const byteArray = new Uint8Array(address.match(/.{1,2}/g)?.map((byte) => parseInt(byte, 16)) || []);
 
-      const region = (byteArray[0] & 0xF0) >> 4; // bits[0..3]
-      const zone = byteArray[0] & 0x0F; // bits[4..7]
+      const region = (byteArray[0] & 0xf0) >> 4; // bits[0..3]
+      const zone = byteArray[0] & 0x0f; // bits[4..7]
 
       // We need to get name of zone
       const regionName = shardsConfig?.regions[region] || 'unknown';
@@ -115,24 +108,19 @@ export default function useShards(): UseShardsResult {
   const subscribeOnTopicMessage = useCallback(
     ({ channelTopic, event, params, onMessage }: SubscriptionParams) => {
       // Init sockets if they are not initialized
-      if (!sockets.length) {
-        const sockets: Array<Socket> = Object.keys(shards).map(
-          (shardId: ShardId) => {
-            const wsUrl = new URL(
-              `${ config.api.socket }${ config.api.basePath }/socket/v2`,
-            );
-            const shard = shards[shardId];
-            const shardHost = shard?.apiHost;
-            if (shardHost) {
-              // Replace host
-              wsUrl.host = shardHost;
-            }
+      if (!sockets.length && Object.keys(shards).length > 0) {
+        const sockets: Array<Socket> = Object.keys(shards).map((shardId: ShardId) => {
+          const wsUrl = new URL(`${ config.api.socket }${ config.api.basePath }/socket/v2`);
+          const shard = shards[shardId];
+          const shardHost = shard?.apiHost;
+          if (shardHost) {
+            // Replace host
+            wsUrl.host = shardHost;
+          }
 
-            const socketInstance = new Socket(wsUrl.toString());
-            return socketInstance;
-          },
-          [],
-        );
+          const socketInstance = new Socket(wsUrl.toString());
+          return socketInstance;
+        }, []);
 
         setSockets(sockets);
       }
@@ -143,12 +131,10 @@ export default function useShards(): UseShardsResult {
         socket.connect();
         const channel = socket.channel(channelTopic, params);
         // eslint-disable-next-line no-console
-        channel
-          .join()
-          .receive('ok', () => {
-            // eslint-disable-next-line no-console
-            console.log(`Joined to ${ channelTopic } channel on shard ${ index }`);
-          });
+        channel.join().receive('ok', () => {
+          // eslint-disable-next-line no-console
+          console.log(`Joined to ${ channelTopic } channel on shard ${ index }`);
+        });
         channel.on(event, (msg) => {
           const shardId = Object.keys(shards)[index];
           onMessage(shardId, msg);

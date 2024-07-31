@@ -26,13 +26,8 @@ export default function useProvider() {
       }
 
       if (!('ethereum' in window && window.ethereum)) {
-        if (
-          feature.wallets.includes('metamask') &&
-          window.navigator.userAgent.includes('Firefox')
-        ) {
-          const { WindowPostMessageStream } = await import(
-            '@metamask/post-message-stream'
-          );
+        if (feature.wallets.includes('metamask') && window.navigator.userAgent.includes('Firefox')) {
+          const { WindowPostMessageStream } = await import('@metamask/post-message-stream');
           const { initializeProvider } = await import('@metamask/providers');
 
           // workaround for MetaMask in Firefox
@@ -62,9 +57,7 @@ export default function useProvider() {
 
       // if user has multiple wallets installed, they all are injected in the window.ethereum.providers array
       // if user has only one wallet, the provider is injected in the window.ethereum directly
-      const providers = Array.isArray(window.ethereum.providers) ?
-        window.ethereum.providers :
-        [ window.ethereum ];
+      const providers = Array.isArray(window.ethereum.providers) ? window.ethereum.providers : [ window.ethereum ];
 
       for (const wallet of feature.wallets) {
         const provider = providers.find((provider: WalletProvider) => {
@@ -75,9 +68,7 @@ export default function useProvider() {
             // https://github.com/wagmi-dev/wagmi/blob/399b9eab8cfd698b49bfaa8456598dad9b597e0e/packages/connectors/src/types.ts#L65
             // for now it's the only way to distinguish them
             (wallet === 'pelagus' && provider.isPelagus) ||
-            (wallet === 'metamask' &&
-              provider.isMetaMask &&
-              Boolean(provider._events)) ||
+            (wallet === 'metamask' && provider.isMetaMask && Boolean(provider._events)) ||
             (wallet === 'coinbase' && provider.isCoinbaseWallet) ||
             (wallet === 'token_pocket' && provider.isTokenPocket)
           );

@@ -9,9 +9,7 @@ import { pelagusWallet } from 'lib/web3/connectors/pelagus-connector';
 import chain from '../chain';
 import { getEnvValue } from '../utils';
 
-const walletConnectProjectId = getEnvValue(
-  'NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID',
-);
+const walletConnectProjectId = getEnvValue('NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID');
 
 const title = 'Blockchain interaction (writing to contract, etc.)';
 
