@@ -16,8 +16,8 @@ const TxStatus = ({ status, errorText, isLoading }: Props) => {
     return null;
   }
 
-  let text;
-  let type: StatusTagType;
+  let text = '';
+  let type: StatusTagType = null;
 
   switch (status) {
     case 'ok':

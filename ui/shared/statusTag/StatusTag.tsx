@@ -5,10 +5,10 @@ import Tag from 'ui/shared/chakra/Tag';
 import type { IconName } from 'ui/shared/IconSvg';
 import IconSvg from 'ui/shared/IconSvg';
 
-export type StatusTagType = 'ok' | 'error' | 'pending';
+export type StatusTagType = 'ok' | 'error' | 'pending' | null;
 
 export interface Props {
-  type: 'ok' | 'error' | 'pending';
+  type: 'ok' | 'error' | 'pending' | null;
   text: string;
   errorText?: string | null;
   isLoading?: boolean;
@@ -29,15 +29,17 @@ const StatusTag = ({ type, text, errorText, isLoading }: Props) => {
       break;
     case 'pending':
       icon = 'status/pending';
-      // FIXME: it's not gray on mockups
-      // need to implement new color scheme or redefine colors here
+      colorScheme = 'gray';
+      break;
+    case null:
+      icon = 'status/pending';
       colorScheme = 'gray';
       break;
   }
 
   return (
     <Tooltip label={ errorText }>
-      <Tag colorScheme={ colorScheme } display="flex" isLoading={ isLoading } >
+      <Tag colorScheme={ colorScheme } display="flex" isLoading={ isLoading }>
         <IconSvg boxSize={ 2.5 } name={ icon } mr={ 2 } flexShrink={ 0 }/>
         <TagLabel display="block">{ text }</TagLabel>
       </Tag>
