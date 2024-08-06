@@ -150,23 +150,6 @@ const BlockDetails = ({ query }: Props) => {
     );
   })();
 
-  const extTxsNum = (() => {
-    const blockExtTxsNum = (
-      <LinkInternal
-        href={ route({ pathname: '/block/[height_or_hash]', query: { height_or_hash: heightOrHash, tab: 'ext_txs' } }) }
-      >
-        { data.ext_tx_count } txn{ data.ext_tx_count === 1 ? '' : 's' }
-      </LinkInternal>
-    );
-
-    return (
-      <>
-        { blockExtTxsNum }
-        <span> in this block</span>
-      </>
-    );
-  })();
-
   const blockTypeLabel = (() => {
     switch (data.type) {
       case 'reorg':
@@ -221,13 +204,13 @@ const BlockDetails = ({ query }: Props) => {
       >
         <Skeleton isLoaded={ !isPlaceholderData }>{ txsNum }</Skeleton>
       </DetailsInfoItem>
-      <DetailsInfoItem
+      { /* <DetailsInfoItem
         title="External Transactions"
         hint="The number of external transactions in the block"
         isLoading={ isPlaceholderData }
       >
         <Skeleton isLoaded={ !isPlaceholderData }>{ extTxsNum }</Skeleton>
-      </DetailsInfoItem>
+      </DetailsInfoItem> */ }
       { config.features.beaconChain.isEnabled && Boolean(data.withdrawals_count) && (
         <DetailsInfoItem
           title="Withdrawals"
@@ -415,7 +398,6 @@ const BlockDetails = ({ query }: Props) => {
 
           { data.wo_header && (
             <>
-
               <DetailsInfoItem
                 title="Difficulty"
                 note="Work object header"
@@ -427,24 +409,14 @@ const BlockDetails = ({ query }: Props) => {
                 </Box>
               </DetailsInfoItem>
 
-              <DetailsInfoItem
-                title="Location"
-                note="Work object header"
-                noteAlign="left"
-                hint="Block location"
-              >
+              <DetailsInfoItem title="Location" note="Work object header" noteAlign="left" hint="Block location">
                 <Box whiteSpace="nowrap" overflow="hidden">
                   <HashStringShorten hash={ data.wo_header!.location }/>
                 </Box>
                 <CopyToClipboard text={ data.wo_header!.location }/>
               </DetailsInfoItem>
 
-              <DetailsInfoItem
-                title="MixHash"
-                note="Work object header"
-                noteAlign="left"
-                hint="Block mixHash"
-              >
+              <DetailsInfoItem title="MixHash" note="Work object header" noteAlign="left" hint="Block mixHash">
                 <Box whiteSpace="nowrap" overflow="hidden">
                   <HashStringShortenDynamic hash={ data.wo_header!.mixHash }/>
                 </Box>
@@ -461,12 +433,7 @@ const BlockDetails = ({ query }: Props) => {
                   <HashStringShortenDynamic hash={ data.wo_header!.nonce.toString() }/>
                 </Box>
               </DetailsInfoItem>
-              <DetailsInfoItem
-                title="Block number"
-                note="Work object header"
-                noteAlign="left"
-                hint="Block number"
-              >
+              <DetailsInfoItem title="Block number" note="Work object header" noteAlign="left" hint="Block number">
                 <Box whiteSpace="nowrap" overflow="hidden">
                   <HashStringShortenDynamic hash={ data.wo_header!.number.toString() }/>
                 </Box>
@@ -494,12 +461,7 @@ const BlockDetails = ({ query }: Props) => {
                 </Box>
               </DetailsInfoItem>
 
-              <DetailsInfoItem
-                title="Time"
-                note="Work object header"
-                noteAlign="left"
-                hint="Block time"
-              >
+              <DetailsInfoItem title="Time" note="Work object header" noteAlign="left" hint="Block time">
                 <Box whiteSpace="nowrap" overflow="hidden">
                   <HashStringShortenDynamic hash={ data.wo_header!.time }/>
                 </Box>

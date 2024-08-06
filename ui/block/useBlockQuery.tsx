@@ -54,7 +54,9 @@ export default function useBlockQuery({ heightOrHash }: Params): BlockQuery {
         return null;
       }
 
-      const blockParams = heightOrHash.startsWith('0x') ? { blockHash: heightOrHash as `0x${ string }` } : { blockNumber: BigInt(heightOrHash) };
+      const blockParams = heightOrHash.startsWith('0x') ?
+        { blockHash: heightOrHash as `0x${ string }` } :
+        { blockNumber: BigInt(heightOrHash) };
       return publicClient.getBlock(blockParams).catch(() => null);
     },
     select: (block) => {
@@ -113,8 +115,10 @@ export default function useBlockQuery({ heightOrHash }: Params): BlockQuery {
     }
   }, [ rpcQuery.data, rpcQuery.isPlaceholderData ]);
 
-  const isRpcQuery = Boolean(publicClient && (apiQuery.isError || apiQuery.isPlaceholderData) && apiQuery.errorUpdateCount > 0 && rpcQuery.data);
-  const query = isRpcQuery ? rpcQuery as UseQueryResult<Block, ResourceError<{ status: number }>> : apiQuery;
+  const isRpcQuery = Boolean(
+    publicClient && (apiQuery.isError || apiQuery.isPlaceholderData) && apiQuery.errorUpdateCount > 0 && rpcQuery.data,
+  );
+  const query = isRpcQuery ? (rpcQuery as UseQueryResult<Block, ResourceError<{ status: number }>>) : apiQuery;
 
   return {
     ...query,

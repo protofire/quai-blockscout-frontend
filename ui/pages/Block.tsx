@@ -48,75 +48,130 @@ const BlockPageContent = () => {
   const blockWithdrawalsQuery = useBlockWithdrawalsQuery({ heightOrHash, blockQuery, tab });
   const blockBlobTxsQuery = useBlockBlobTxsQuery({ heightOrHash, blockQuery, tab });
 
-  const tabs: Array<RoutedTab> = React.useMemo(() => ([
-    {
-      id: 'index',
-      title: 'Details',
-      component: (
-        <>
-          { blockQuery.isDegradedData && <ServiceDegradationWarning isLoading={ blockQuery.isPlaceholderData } mb={ 6 }/> }
-          <BlockDetails query={ blockQuery }/>
-        </>
-      ),
-    },
-    {
-      id: 'txs',
-      title: 'Transactions',
-      component: (
-        <>
-          { blockTxsQuery.isDegradedData && <ServiceDegradationWarning isLoading={ blockTxsQuery.isPlaceholderData } mb={ 6 }/> }
-          <TxsWithFrontendSorting query={ blockTxsQuery } showBlockInfo={ false } showSocketInfo={ false }/>
-        </>
-      ),
-    },
-    blockQuery.data?.blob_tx_count ?
-      {
-        id: 'blob_txs',
-        title: 'Blob txns',
-        component: (
-          <TxsWithFrontendSorting query={ blockBlobTxsQuery } showBlockInfo={ false } showSocketInfo={ false }/>
-        ),
-      } : null,
-    {
-      id: 'ext_txs',
-      title: 'External Transactions',
-      component: (
-        <>
-          { blockTxsQuery.isDegradedData && <ServiceDegradationWarning isLoading={ blockTxsQuery.isPlaceholderData } mb={ 6 }/> }
-          <ExtTxsWithFrontendSorting query={ blockExtTxsQuery } showBlockInfo={ false } showSocketInfo={ false }/>
-        </>
-      ),
-    },
-    {
-      id: 'uncles',
-      title: 'Uncles',
-      component: (
-        <>
-          { blockTxsQuery.isDegradedData && <ServiceDegradationWarning isLoading={ blockTxsQuery.isPlaceholderData } mb={ 6 }/> }
-          <ExtTxsWithFrontendSorting query={ blockExtTxsQuery } showBlockInfo={ false } showSocketInfo={ false }/>
-        </>
-      ),
-    },
-    config.features.beaconChain.isEnabled && Boolean(blockQuery.data?.withdrawals_count) ?
-      {
-        id: 'withdrawals',
-        title: 'Withdrawals',
-        component: (
-          <>
-            { blockWithdrawalsQuery.isDegradedData && <ServiceDegradationWarning isLoading={ blockWithdrawalsQuery.isPlaceholderData } mb={ 6 }/> }
-            <BlockWithdrawals blockWithdrawalsQuery={ blockWithdrawalsQuery }/>
-          </>
-        ),
-      } : null,
-  ].filter(Boolean)), [ blockBlobTxsQuery, blockExtTxsQuery, blockQuery, blockTxsQuery, blockWithdrawalsQuery ]);
-
-  const hasPagination = !isMobile && (
-    (tab === 'txs' && blockTxsQuery.pagination.isVisible) ||
-    (tab === 'withdrawals' && blockWithdrawalsQuery.pagination.isVisible)
+  const tabs: Array<RoutedTab> = React.useMemo(
+    () =>
+      [
+        {
+          id: 'index',
+          title: 'Details',
+          component: (
+            <>
+              { blockQuery.isDegradedData && (
+                <ServiceDegradationWarning isLoading={ blockQuery.isPlaceholderData } mb={ 6 }/>
+              ) }
+              <BlockDetails query={ blockQuery }/>
+            </>
+          ),
+        },
+        {
+          id: 'txs',
+          title: 'Transactions',
+          component: (
+            <>
+              { blockTxsQuery.isDegradedData && (
+                <ServiceDegradationWarning isLoading={ blockTxsQuery.isPlaceholderData } mb={ 6 }/>
+              ) }
+              <TxsWithFrontendSorting query={ blockTxsQuery } showBlockInfo={ false } showSocketInfo={ false }/>
+            </>
+          ),
+        },
+        {
+          id: 'coinbases',
+          title: 'Coinbases',
+          component: (
+            <>
+              { blockTxsQuery.isDegradedData && (
+                <ServiceDegradationWarning isLoading={ blockTxsQuery.isPlaceholderData } mb={ 6 }/>
+              ) }
+              <TxsWithFrontendSorting
+                query={ blockTxsQuery }
+                showBlockInfo={ false }
+                showSocketInfo={ false }
+                etxType="coinbase"
+              />
+            </>
+          ),
+        },
+        {
+          id: 'externals',
+          title: 'Externals',
+          component: (
+            <>
+              { blockTxsQuery.isDegradedData && (
+                <ServiceDegradationWarning isLoading={ blockTxsQuery.isPlaceholderData } mb={ 6 }/>
+              ) }
+              <TxsWithFrontendSorting
+                query={ blockTxsQuery }
+                showBlockInfo={ false }
+                showSocketInfo={ false }
+                etxType="external"
+              />
+            </>
+          ),
+        },
+        {
+          id: 'conversions',
+          title: 'Conversions',
+          component: (
+            <>
+              { blockTxsQuery.isDegradedData && (
+                <ServiceDegradationWarning isLoading={ blockTxsQuery.isPlaceholderData } mb={ 6 }/>
+              ) }
+              <TxsWithFrontendSorting
+                query={ blockTxsQuery }
+                showBlockInfo={ false }
+                showSocketInfo={ false }
+                etxType="conversion"
+              />
+            </>
+          ),
+        },
+        blockQuery.data?.blob_tx_count ?
+          {
+            id: 'blob_txs',
+            title: 'Blob txns',
+            component: (
+              <TxsWithFrontendSorting query={ blockBlobTxsQuery } showBlockInfo={ false } showSocketInfo={ false }/>
+            ),
+          } :
+          null,
+        {
+          id: 'uncles',
+          title: 'Uncles',
+          component: (
+            <>
+              { blockTxsQuery.isDegradedData && (
+                <ServiceDegradationWarning isLoading={ blockTxsQuery.isPlaceholderData } mb={ 6 }/>
+              ) }
+              <ExtTxsWithFrontendSorting query={ blockExtTxsQuery } showBlockInfo={ false } showSocketInfo={ false }/>
+            </>
+          ),
+        },
+        config.features.beaconChain.isEnabled && Boolean(blockQuery.data?.withdrawals_count) ?
+          {
+            id: 'withdrawals',
+            title: 'Withdrawals',
+            component: (
+              <>
+                { blockWithdrawalsQuery.isDegradedData && (
+                  <ServiceDegradationWarning isLoading={ blockWithdrawalsQuery.isPlaceholderData } mb={ 6 }/>
+                ) }
+                <BlockWithdrawals blockWithdrawalsQuery={ blockWithdrawalsQuery }/>
+              </>
+            ),
+          } :
+          null,
+      ].filter(Boolean),
+    [ blockBlobTxsQuery, blockExtTxsQuery, blockQuery, blockTxsQuery, blockWithdrawalsQuery ],
   );
 
+  const hasPagination =
+    !isMobile &&
+    (([ 'txs', 'coinbases', 'externals', 'conversions' ].includes(tab) && blockTxsQuery.pagination.isVisible) ||
+      (tab === 'withdrawals' && blockWithdrawalsQuery.pagination.isVisible));
+
   let pagination;
-  if (tab === 'txs') {
+  if ([ 'txs' ].includes(tab)) {
     pagination = blockTxsQuery.pagination;
   } else if (tab === 'withdrawals') {
     pagination = blockWithdrawalsQuery.pagination;
@@ -167,7 +222,11 @@ const BlockPageContent = () => {
           <AddressEntity address={ blockQuery.data?.miner }/>
         </Skeleton>
       ) }
-      <NetworkExplorers type="block" pathParam={ heightOrHash } ml={{ base: config.UI.views.block.hiddenFields?.miner ? 0 : 3, lg: 'auto' }}/>
+      <NetworkExplorers
+        type="block"
+        pathParam={ heightOrHash }
+        ml={{ base: config.UI.views.block.hiddenFields?.miner ? 0 : 3, lg: 'auto' }}
+      />
     </>
   );
 
@@ -180,7 +239,9 @@ const BlockPageContent = () => {
         secondRow={ titleSecondRow }
         isLoading={ blockQuery.isPlaceholderData }
       />
-      { blockQuery.isPlaceholderData ? <TabsSkeleton tabs={ tabs }/> : (
+      { blockQuery.isPlaceholderData ? (
+        <TabsSkeleton tabs={ tabs }/>
+      ) : (
         <RoutedTabs
           tabs={ tabs }
           tabListProps={ isMobile ? undefined : TAB_LIST_PROPS }
