@@ -7,12 +7,26 @@ import type { TokenInfo } from './token';
 import type { TokenTransfer } from './tokenTransfer';
 import type { TxAction } from './txAction';
 
-export type TransactionRevertReason = {
-  raw: string;
-} | DecodedInput;
+export type TransactionRevertReason =
+  | {
+    raw: string;
+  }
+  | DecodedInput;
 
-type WrappedTransactionFields = 'decoded_input' | 'fee' | 'gas_limit' | 'gas_price' | 'hash' | 'max_fee_per_gas' |
-'max_priority_fee_per_gas' | 'method' | 'nonce' | 'raw_input' | 'to' | 'type' | 'value';
+type WrappedTransactionFields =
+  | 'decoded_input'
+  | 'fee'
+  | 'gas_limit'
+  | 'gas_price'
+  | 'hash'
+  | 'max_fee_per_gas'
+  | 'max_priority_fee_per_gas'
+  | 'method'
+  | 'nonce'
+  | 'raw_input'
+  | 'to'
+  | 'type'
+  | 'value';
 
 export interface OpWithdrawal {
   l1_transaction_hash: string;
@@ -77,7 +91,7 @@ export type Transaction = {
   // zkEvm fields
   zkevm_verify_hash?: string;
   zkevm_batch_number?: number;
-  zkevm_status?: typeof ZKEVM_L2_TX_STATUSES[number];
+  zkevm_status?: (typeof ZKEVM_L2_TX_STATUSES)[number];
   zkevm_sequence_hash?: string;
   // blob tx fields
   blob_versioned_hashes?: Array<string>;
@@ -100,7 +114,9 @@ export type Transaction = {
     Denomination: number;
     Lock: number;
   }>;
-}
+  is_etx?: boolean;
+  etx_type?: 'coinbase' | 'conversion' | 'external';
+};
 
 export type ExternalTransaction = {
   to: AddressParam | null;
@@ -158,7 +174,7 @@ export type ExternalTransaction = {
   // zkEvm fields
   zkevm_verify_hash?: string;
   zkevm_batch_number?: number;
-  zkevm_status?: typeof ZKEVM_L2_TX_STATUSES[number];
+  zkevm_status?: (typeof ZKEVM_L2_TX_STATUSES)[number];
   zkevm_sequence_hash?: string;
   // blob tx fields
   blob_versioned_hashes?: Array<string>;
@@ -166,7 +182,7 @@ export type ExternalTransaction = {
   blob_gas_price?: string;
   burnt_blob_fee?: string;
   max_fee_per_blob_gas?: string;
-}
+};
 
 export type UtxoTransaction = {
   hash: string;
@@ -190,7 +206,7 @@ export type UtxoTransaction = {
     Denomination: number;
     Lock: number;
   }>;
-}
+};
 
 export const ZKEVM_L2_TX_STATUSES = [ 'Confirmed by Sequencer', 'L1 Confirmed' ];
 
@@ -242,16 +258,19 @@ export interface TransactionsResponseWatchlist {
   } | null;
 }
 
-export type TransactionType = 'rootstock_remasc' |
-'rootstock_bridge' |
-'token_transfer' |
-'contract_creation' |
-'contract_call' |
-'token_creation' |
-'coin_transfer' |
-'blob_transaction' |
-'internal_to_external_transaction' |
-'utxo_transaction';
+export type TransactionType =
+  | 'rootstock_remasc'
+  | 'rootstock_bridge'
+  | 'token_transfer'
+  | 'contract_creation'
+  | 'contract_call'
+  | 'token_creation'
+  | 'coin_transfer'
+  | 'blob_transaction'
+  | 'coinbase'
+  | 'conversion'
+  | 'external'
+  | 'utxo_transaction';
 
 export type TxsResponse = TransactionsResponseValidated | TransactionsResponsePending | BlockTransactionsResponse;
 export type ExtTxsResponse = ExternalTransactionsResponse | BlockExternalTransactionsResponse;

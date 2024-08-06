@@ -1,9 +1,4 @@
-import {
-  Tr,
-  Td,
-  VStack,
-  Skeleton,
-} from '@chakra-ui/react';
+import { Tr, Td, VStack, Skeleton } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React from 'react';
 
@@ -29,7 +24,7 @@ type Props = {
   currentAddress?: string;
   enableTimeIncrement?: boolean;
   isLoading?: boolean;
-}
+};
 
 const TxsTableItem = ({ tx, showBlockInfo, currentAddress, enableTimeIncrement, isLoading }: Props) => {
   const dataTo = tx.to ? tx.to : tx.created_contract;
@@ -57,13 +52,21 @@ const TxsTableItem = ({ tx, showBlockInfo, currentAddress, enableTimeIncrement, 
             maxW="100%"
             truncation="constant_long"
           />
-          { tx.timestamp && <Skeleton color="text_secondary" fontWeight="400" isLoaded={ !isLoading }><span>{ timeAgo }</span></Skeleton> }
+          { tx.timestamp && (
+            <Skeleton color="text_secondary" fontWeight="400" isLoaded={ !isLoading }>
+              <span>{ timeAgo }</span>
+            </Skeleton>
+          ) }
         </VStack>
       </Td>
       <Td>
         <VStack alignItems="start">
           <TxType types={ tx.tx_types } isLoading={ isLoading }/>
-          <TxStatus status={ tx.status } errorText={ tx.status === 'error' ? tx.result : undefined } isLoading={ isLoading }/>
+          <TxStatus
+            status={ tx.is_etx ? tx.result : tx.status }
+            errorText={ tx.status === 'error' ? tx.result : undefined }
+            isLoading={ isLoading }
+          />
           <TxWatchListTags tx={ tx } isLoading={ isLoading }/>
         </VStack>
       </Td>
@@ -77,14 +80,7 @@ const TxsTableItem = ({ tx, showBlockInfo, currentAddress, enableTimeIncrement, 
       { showBlockInfo && (
         <Td>
           { tx.block && (
-            <BlockEntity
-              isLoading={ isLoading }
-              number={ tx.block }
-              noIcon
-              fontSize="sm"
-              lineHeight={ 6 }
-              fontWeight={ 500 }
-            />
+            <BlockEntity isLoading={ isLoading } number={ tx.block } noIcon fontSize="sm" lineHeight={ 6 } fontWeight={ 500 }/>
           ) }
         </Td>
       ) }
@@ -108,8 +104,10 @@ const TxsTableItem = ({ tx, showBlockInfo, currentAddress, enableTimeIncrement, 
           { /* eslint-disable-next-line no-nested-ternary */ }
           { tx.stability_fee ? (
             <TxFeeStability data={ tx.stability_fee } isLoading={ isLoading } accuracy={ 8 } justifyContent="end" hideUsd/>
+          ) : tx.fee.value ? (
+            <CurrencyValue value={ tx.fee.value } accuracy={ 8 } isLoading={ isLoading }/>
           ) : (
-            tx.fee.value ? <CurrencyValue value={ tx.fee.value } accuracy={ 8 } isLoading={ isLoading }/> : '-'
+            '-'
           ) }
         </Td>
       ) }

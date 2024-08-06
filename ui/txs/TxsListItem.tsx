@@ -1,8 +1,4 @@
-import {
-  HStack,
-  Flex,
-  Skeleton,
-} from '@chakra-ui/react';
+import { HStack, Flex, Skeleton } from '@chakra-ui/react';
 import React from 'react';
 
 import type { Transaction } from 'types/api/transaction';
@@ -28,7 +24,7 @@ type Props = {
   currentAddress?: string;
   enableTimeIncrement?: boolean;
   isLoading?: boolean;
-}
+};
 
 const TxsListItem = ({ tx, isLoading, showBlockInfo, currentAddress, enableTimeIncrement }: Props) => {
   const dataTo = tx.to ? tx.to : tx.created_contract;
@@ -40,18 +36,17 @@ const TxsListItem = ({ tx, isLoading, showBlockInfo, currentAddress, enableTimeI
       <Flex justifyContent="space-between" mt={ 4 }>
         <HStack flexWrap="wrap">
           <TxType types={ tx.tx_types } isLoading={ isLoading }/>
-          <TxStatus status={ tx.status } errorText={ tx.status === 'error' ? tx.result : undefined } isLoading={ isLoading }/>
+          <TxStatus
+            status={ tx.is_etx ? tx.result : tx.status }
+            errorText={ tx.status === 'error' ? tx.result : undefined }
+            isLoading={ isLoading }
+          />
           <TxWatchListTags tx={ tx } isLoading={ isLoading }/>
         </HStack>
         <TxAdditionalInfo tx={ tx } isMobile isLoading={ isLoading }/>
       </Flex>
       <Flex justifyContent="space-between" lineHeight="24px" mt={ 3 } alignItems="center">
-        <TxEntity
-          isLoading={ isLoading }
-          hash={ tx.hash }
-          truncation="constant_long"
-          fontWeight="700"
-        />
+        <TxEntity isLoading={ isLoading } hash={ tx.hash } truncation="constant_long" fontWeight="700"/>
         { tx.timestamp && (
           <Skeleton isLoaded={ !isLoading } color="text_secondary" fontWeight="400" fontSize="sm">
             <span>{ timeAgo }</span>
@@ -60,7 +55,9 @@ const TxsListItem = ({ tx, isLoading, showBlockInfo, currentAddress, enableTimeI
       </Flex>
       { tx.method && (
         <Flex mt={ 3 }>
-          <Skeleton isLoaded={ !isLoading } display="inline-block" whiteSpace="pre">Method </Skeleton>
+          <Skeleton isLoaded={ !isLoading } display="inline-block" whiteSpace="pre">
+            Method{ ' ' }
+          </Skeleton>
           <Skeleton
             isLoaded={ !isLoading }
             color="text_secondary"
@@ -74,15 +71,14 @@ const TxsListItem = ({ tx, isLoading, showBlockInfo, currentAddress, enableTimeI
       ) }
       { showBlockInfo && tx.block !== null && (
         <Flex mt={ 2 }>
-          <Skeleton isLoaded={ !isLoading } display="inline-block" whiteSpace="pre">Block </Skeleton>
-          <BlockEntity
-            isLoading={ isLoading }
-            number={ tx.block }
-            noIcon
-          />
+          <Skeleton isLoaded={ !isLoading } display="inline-block" whiteSpace="pre">
+            Block{ ' ' }
+          </Skeleton>
+          <BlockEntity isLoading={ isLoading } number={ tx.block } noIcon/>
         </Flex>
       ) }
-      { (tx.from && dataTo) && ( // For UTXO transactions we cannot determine the direction of the transaction
+      { tx.from &&
+        dataTo && ( // For UTXO transactions we cannot determine the direction of the transaction
         <AddressFromTo
           from={ tx.from }
           to={ dataTo }
@@ -94,7 +90,9 @@ const TxsListItem = ({ tx, isLoading, showBlockInfo, currentAddress, enableTimeI
       ) }
       { !config.UI.views.tx.hiddenFields?.value && (
         <Flex mt={ 2 } columnGap={ 2 }>
-          <Skeleton isLoaded={ !isLoading } display="inline-block" whiteSpace="pre">Value</Skeleton>
+          <Skeleton isLoaded={ !isLoading } display="inline-block" whiteSpace="pre">
+            Value
+          </Skeleton>
           <Skeleton isLoaded={ !isLoading } display="inline-block" variant="text_secondary" whiteSpace="pre">
             { getValueWithUnit(tx.value).toFormat() }
             { space }
@@ -106,7 +104,9 @@ const TxsListItem = ({ tx, isLoading, showBlockInfo, currentAddress, enableTimeI
         <Flex mt={ 2 } mb={ 3 } columnGap={ 2 }>
           { (tx.stability_fee !== undefined || tx.fee.value !== null) && (
             <>
-              <Skeleton isLoaded={ !isLoading } display="inline-block" whiteSpace="pre">Fee</Skeleton>
+              <Skeleton isLoaded={ !isLoading } display="inline-block" whiteSpace="pre">
+                Fee
+              </Skeleton>
               { tx.stability_fee ? (
                 <TxFeeStability data={ tx.stability_fee } isLoading={ isLoading } hideUsd/>
               ) : (

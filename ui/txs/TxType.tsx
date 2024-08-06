@@ -17,7 +17,9 @@ const TYPES_ORDER: Array<TransactionType> = [
   'token_creation',
   'contract_creation',
   'token_transfer',
-  'internal_to_external_transaction',
+  'coinbase',
+  'conversion',
+  'external',
   'contract_call',
   'coin_transfer',
 ];
@@ -65,9 +67,17 @@ const TxType = ({ types, isLoading }: Props) => {
       label = 'UTXO transaction';
       colorScheme = 'red';
       break;
-    case 'internal_to_external_transaction':
-      label = 'Internal to external transaction';
-      colorScheme = 'red';
+    case 'coinbase':
+      label = 'Coinbase';
+      colorScheme = 'gray';
+      break;
+    case 'conversion':
+      label = 'Conversion transaction';
+      colorScheme = 'gray';
+      break;
+    case 'external':
+      label = 'External transaction';
+      colorScheme = 'gray';
       break;
     default:
       label = 'Transaction';

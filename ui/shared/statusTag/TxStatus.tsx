@@ -6,7 +6,7 @@ import type { StatusTagType } from './StatusTag';
 import StatusTag from './StatusTag';
 
 export interface Props {
-  status: Transaction['status'];
+  status: Transaction['status'] | string;
   errorText?: string | null;
   isLoading?: boolean;
 }
@@ -27,6 +27,10 @@ const TxStatus = ({ status, errorText, isLoading }: Props) => {
     case 'error':
       text = 'Failed';
       type = 'error';
+      break;
+    case 'pending':
+      text = 'Pending';
+      type = 'pending';
       break;
     case null:
       text = 'Pending';

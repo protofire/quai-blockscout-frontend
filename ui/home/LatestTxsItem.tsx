@@ -1,11 +1,4 @@
-import {
-  Box,
-  Flex,
-  HStack,
-  Text,
-  Grid,
-  Skeleton,
-} from '@chakra-ui/react';
+import { Box, Flex, HStack, Text, Grid, Skeleton } from '@chakra-ui/react';
 import React from 'react';
 
 import type { Transaction } from 'types/api/transaction';
@@ -26,7 +19,7 @@ import TxType from 'ui/txs/TxType';
 type Props = {
   tx: Transaction;
   isLoading?: boolean;
-}
+};
 
 const LatestTxsItem = ({ tx, isLoading }: Props) => {
   const { shards } = useShards();
@@ -55,20 +48,15 @@ const LatestTxsItem = ({ tx, isLoading }: Props) => {
         <Box ml={ 3 } w="calc(100% - 40px)">
           <HStack flexWrap="wrap" my="3px">
             <TxType types={ tx.tx_types } isLoading={ isLoading }/>
-            <TxStatus status={ tx.status } errorText={ tx.status === 'error' ? tx.result : undefined } isLoading={ isLoading }/>
+            <TxStatus
+              status={ tx.is_etx ? tx.result : tx.status }
+              errorText={ tx.status === 'error' ? tx.result : undefined }
+              isLoading={ isLoading }
+            />
             <TxWatchListTags tx={ tx } isLoading={ isLoading }/>
           </HStack>
-          <Flex
-            alignItems="center"
-            mt="7px"
-            mb="3px"
-          >
-            <TxEntity
-              isLoading={ isLoading }
-              hash={ tx.hash }
-              shard={ tx.shard_id }
-              fontWeight="700"
-            />
+          <Flex alignItems="center" mt="7px" mb="3px">
+            <TxEntity isLoading={ isLoading } hash={ tx.hash } shard={ tx.shard_id } fontWeight="700"/>
             { tx.timestamp && (
               <Skeleton
                 isLoaded={ !isLoading }
@@ -84,17 +72,16 @@ const LatestTxsItem = ({ tx, isLoading }: Props) => {
           </Flex>
         </Box>
       </Flex>
-      <AddressFromTo
-        from={ tx.from }
-        to={ dataTo }
-        isLoading={ isLoading }
-        mode="compact"
-      />
+      <AddressFromTo from={ tx.from } to={ dataTo } isLoading={ isLoading } mode="compact"/>
       <Flex flexDir="column">
         { !config.UI.views.tx.hiddenFields?.value && (
           <Skeleton isLoaded={ !isLoading } my="3px">
-            <Text as="span" whiteSpace="pre">{ currencyUnits.ether } </Text>
-            <Text as="span" variant="secondary">{ getValueWithUnit(tx.value).dp(5).toFormat() }</Text>
+            <Text as="span" whiteSpace="pre">
+              { currencyUnits.ether }{ ' ' }
+            </Text>
+            <Text as="span" variant="secondary">
+              { getValueWithUnit(tx.value).dp(5).toFormat() }
+            </Text>
           </Skeleton>
         ) }
         { !config.UI.views.tx.hiddenFields?.tx_fee && (
@@ -103,7 +90,9 @@ const LatestTxsItem = ({ tx, isLoading }: Props) => {
             { tx.stability_fee ? (
               <TxFeeStability data={ tx.stability_fee } accuracy={ 5 } color="text_secondary" hideUsd/>
             ) : (
-              <Text as="span" variant="secondary">{ tx.fee.value ? getValueWithUnit(tx.fee.value).dp(5).toFormat() : '-' }</Text>
+              <Text as="span" variant="secondary">
+                { tx.fee.value ? getValueWithUnit(tx.fee.value).dp(5).toFormat() : '-' }
+              </Text>
             ) }
           </Skeleton>
         ) }
@@ -111,7 +100,9 @@ const LatestTxsItem = ({ tx, isLoading }: Props) => {
         { config.features.shards.isEnabled && (
           <Skeleton isLoaded={ !isLoading } display="flex" whiteSpace="pre" my="3px">
             <Text as="span">Shard </Text>
-            <Text as="span" variant="secondary">{ tx.shard_id ? shards[tx.shard_id].title : 'unknown' }</Text>
+            <Text as="span" variant="secondary">
+              { tx.shard_id ? shards[tx.shard_id].title : 'unknown' }
+            </Text>
           </Skeleton>
         ) }
       </Flex>

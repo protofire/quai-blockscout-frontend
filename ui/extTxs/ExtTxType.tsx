@@ -17,6 +17,9 @@ const TYPES_ORDER: Array<TransactionType> = [
   'contract_creation',
   'token_transfer',
   'contract_call',
+  'coinbase',
+  'conversion',
+  'external',
   'coin_transfer',
 ];
 
@@ -62,7 +65,6 @@ const ExtTxType = ({ types, isLoading }: Props) => {
     default:
       label = 'External Transaction';
       colorScheme = 'purple';
-
   }
 
   return (
