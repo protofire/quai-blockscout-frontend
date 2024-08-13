@@ -16,6 +16,7 @@ export const withName: AddressParam = {
   watchlist_names: [],
   public_tags: [],
   ens_domain_name: null,
+  currency: '0',
 };
 
 export const withEns: AddressParam = {
@@ -28,6 +29,7 @@ export const withEns: AddressParam = {
   watchlist_names: [],
   public_tags: [],
   ens_domain_name: 'kitty.kitty.kitty.cat.eth',
+  currency: '0',
 };
 
 export const withoutName: AddressParam = {
@@ -40,6 +42,7 @@ export const withoutName: AddressParam = {
   watchlist_names: [],
   public_tags: [],
   ens_domain_name: null,
+  currency: '0',
 };
 
 export const token: Address = {
@@ -71,6 +74,7 @@ export const token: Address = {
   has_tokens: true,
   has_validated_blocks: false,
   ens_domain_name: null,
+  currency: '0',
 };
 
 export const contract: Address = {
@@ -96,12 +100,13 @@ export const contract: Address = {
   is_contract: true,
   is_verified: true,
   name: 'EternalStorageProxy',
-  private_tags: [ publicTag ],
-  public_tags: [ privateTag ],
+  private_tags: [publicTag],
+  public_tags: [privateTag],
   token: null,
-  watchlist_names: [ watchlistName ],
+  watchlist_names: [watchlistName],
   watchlist_address_id: 42,
   ens_domain_name: null,
+  currency: '0',
 };
 
 export const validator: Address = {
@@ -133,4 +138,5 @@ export const validator: Address = {
   watchlist_names: [],
   watchlist_address_id: null,
   ens_domain_name: null,
+  currency: '0',
 };

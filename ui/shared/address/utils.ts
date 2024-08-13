@@ -31,4 +31,5 @@ export const unknownAddress: Omit<AddressParam, 'hash'> = {
   public_tags: [],
   watchlist_names: [],
   ens_domain_name: null,
+  currency: null,
 };

@@ -11,6 +11,7 @@ export const mintToken: TxStateChange = {
     public_tags: [],
     watchlist_names: [],
     ens_domain_name: null,
+    currency: null,
   },
   balance_after: null,
   balance_before: null,
@@ -49,6 +50,7 @@ export const receiveMintedToken: TxStateChange = {
     public_tags: [],
     watchlist_names: [],
     ens_domain_name: null,
+    currency: null,
   },
   balance_after: '1',
   balance_before: '0',
@@ -87,6 +89,7 @@ export const transfer1155Token: TxStateChange = {
     public_tags: [],
     watchlist_names: [],
     ens_domain_name: null,
+    currency: null,
   },
   balance_after: '1',
   balance_before: '0',
@@ -119,6 +122,7 @@ export const receiveCoin: TxStateChange = {
     public_tags: [],
     watchlist_names: [],
     ens_domain_name: null,
+    currency: null,
   },
   balance_after: '443787514723917012805',
   balance_before: '443787484997510408745',
@@ -139,6 +143,7 @@ export const sendCoin: TxStateChange = {
     public_tags: [],
     watchlist_names: [],
     ens_domain_name: null,
+    currency: null,
   },
   balance_after: '828282622733717191',
   balance_before: '832127467556437753',
@@ -180,14 +185,7 @@ export const sendERC20Token = {
 };
 
 export const baseResponse = {
-  items: [
-    mintToken,
-    receiveMintedToken,
-    sendCoin,
-    receiveCoin,
-    transfer1155Token,
-    sendERC20Token,
-  ],
+  items: [mintToken, receiveMintedToken, sendCoin, receiveCoin, transfer1155Token, sendERC20Token],
   next_page_params: {
     items_count: 50,
     state_changes: null,

@@ -11,6 +11,7 @@ export const contract1: VerifiedContract = {
     public_tags: [],
     watchlist_names: [],
     ens_domain_name: null,
+    currency: null,
   },
   coin_balance: '2346534676900000008',
   compiler_version: 'v0.8.17+commit.8df45f5f',
@@ -34,6 +35,7 @@ export const contract2: VerifiedContract = {
     public_tags: [],
     watchlist_names: [],
     ens_domain_name: null,
+    currency: null,
   },
   coin_balance: '9078234570352343999',
   compiler_version: 'v0.3.1+commit.0463ea4c',
@@ -47,10 +49,7 @@ export const contract2: VerifiedContract = {
 };
 
 export const baseResponse: VerifiedContractsResponse = {
-  items: [
-    contract1,
-    contract2,
-  ],
+  items: [contract1, contract2],
   next_page_params: {
     items_count: '50',
     smart_contract_id: '172',

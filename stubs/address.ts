@@ -42,6 +42,7 @@ export const ADDRESS_INFO: Address = {
   watchlist_names: [],
   watchlist_address_id: null,
   ens_domain_name: null,
+  currency: null,
 };
 
 export const ADDRESS_COUNTERS: AddressCounters = {
@@ -70,9 +71,10 @@ export const TOP_ADDRESS: AddressesItem = {
   is_verified: null,
   name: null,
   private_tags: [],
-  public_tags: [ ],
+  public_tags: [],
   watchlist_names: [],
   ens_domain_name: null,
+  currency: null,
 };
 
 export const ADDRESS_COIN_BALANCE: AddressCoinBalanceHistoryItem = {

@@ -14,6 +14,7 @@ export const base: InternalTransaction = {
     public_tags: [],
     watchlist_names: [],
     ens_domain_name: null,
+    currency: null,
   },
   gas_limit: '757586',
   index: 1,
@@ -29,6 +30,7 @@ export const base: InternalTransaction = {
     public_tags: [],
     watchlist_names: [],
     ens_domain_name: null,
+    currency: null,
   },
   transaction_hash: '0xe9e27dfeb183066e26cfe556f74b7219b08df6951e25d14003d4fc7af8bbff61',
   type: 'call',
@@ -64,6 +66,7 @@ export const withContractCreated: InternalTransaction = {
     public_tags: [],
     watchlist_names: [],
     ens_domain_name: null,
+    currency: null,
   },
   value: '1420000000000000000',
   gas_limit: '5433',
@@ -71,10 +74,6 @@ export const withContractCreated: InternalTransaction = {
 };
 
 export const baseResponse: InternalTransactionsResponse = {
-  items: [
-    base,
-    typeStaticCall,
-    withContractCreated,
-  ],
+  items: [base, typeStaticCall, withContractCreated],
   next_page_params: null,
 };

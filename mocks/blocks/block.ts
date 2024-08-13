@@ -23,6 +23,7 @@ export const base: Block = {
     public_tags: [],
     watchlist_names: [],
     ens_domain_name: null,
+    currency: '0',
   },
   nonce: '0x0000000000000000',
   parent_hash: '0x44125f0eb36a9d942e0c23bb4e8117f7ba86a9537a69b59c0025986ed2b7500f',
@@ -84,6 +85,7 @@ export const genesis: Block = {
     public_tags: [],
     watchlist_names: [],
     ens_domain_name: 'kitty.kitty.cat.eth',
+    currency: '0',
   },
   nonce: '0x0000000000000000',
   parent_hash: '0x0000000000000000000000000000000000000000000000000000000000000000',
@@ -124,6 +126,7 @@ export const base2: Block = {
     public_tags: [],
     watchlist_names: [],
     ens_domain_name: null,
+    currency: '0',
   },
   timestamp: '2022-11-11T11:46:05Z',
   tx_count: 253,
@@ -170,6 +173,6 @@ export const withBlobTxs: Block = {
 };
 
 export const baseListResponse: BlocksResponse = {
-  items: [ base, base2 ],
+  items: [base, base2],
   next_page_params: null,
 };
