@@ -42,23 +42,27 @@ const AddressDetails = ({ addressQuery, scrollRef }: Props) => {
     }, 500);
   }, [ scrollRef ]);
 
-  const error404Data = React.useMemo(() => ({
-    hash: addressHash || '',
-    is_contract: false,
-    implementation_name: null,
-    implementation_address: null,
-    token: null,
-    watchlist_address_id: null,
-    watchlist_names: null,
-    creation_tx_hash: null,
-    block_number_balance_updated_at: null,
-    name: null,
-    exchange_rate: null,
-    coin_balance: null,
-    has_tokens: true,
-    has_token_transfers: true,
-    has_validated_blocks: false,
-  }), [ addressHash ]);
+  const error404Data = React.useMemo(
+    () => ({
+      hash: addressHash || '',
+      is_contract: false,
+      implementation_name: null,
+      implementation_address: null,
+      token: null,
+      watchlist_address_id: null,
+      watchlist_names: null,
+      creation_tx_hash: null,
+      block_number_balance_updated_at: null,
+      name: null,
+      exchange_rate: null,
+      coin_balance: null,
+      has_tokens: true,
+      has_token_transfers: true,
+      has_validated_blocks: false,
+      currency: null,
+    }),
+    [ addressHash ],
+  );
 
   // error handling (except 404 codes)
   if (addressQuery.isError) {
@@ -84,7 +88,8 @@ const AddressDetails = ({ addressQuery, scrollRef }: Props) => {
       <Grid
         columnGap={ 8 }
         rowGap={{ base: 1, lg: 3 }}
-        templateColumns={{ base: 'minmax(0, 1fr)', lg: 'auto minmax(0, 1fr)' }} overflow="hidden"
+        templateColumns={{ base: 'minmax(0, 1fr)', lg: 'auto minmax(0, 1fr)' }}
+        overflow="hidden"
       >
         <AddressNameInfo data={ data } isLoading={ addressQuery.isPlaceholderData }/>
         { data.is_contract && data.creation_tx_hash && data.creator_address_hash && (
@@ -93,21 +98,13 @@ const AddressDetails = ({ addressQuery, scrollRef }: Props) => {
             hint="Transaction and address of creation"
             isLoading={ addressQuery.isPlaceholderData }
           >
-            <AddressEntity
-              address={{ hash: data.creator_address_hash }}
-              truncation="constant"
-              noIcon
-            />
+            <AddressEntity address={{ hash: data.creator_address_hash }} truncation="constant" noIcon/>
             <Text whiteSpace="pre"> at txn </Text>
             <TxEntity hash={ data.creation_tx_hash } truncation="constant" noIcon noCopy={ false }/>
           </DetailsInfoItem>
         ) }
         { data.is_contract && data.implementation_address && (
-          <DetailsInfoItem
-            title="Implementation"
-            hint="Implementation address of the proxy contract"
-            columnGap={ 1 }
-          >
+          <DetailsInfoItem title="Implementation" hint="Implementation address of the proxy contract" columnGap={ 1 }>
             <AddressEntity
               address={{ hash: data.implementation_address, name: data.implementation_name, is_contract: true }}
               isLoading={ addressQuery.isPlaceholderData }
@@ -117,12 +114,7 @@ const AddressDetails = ({ addressQuery, scrollRef }: Props) => {
         ) }
         <AddressBalance data={ data } isLoading={ addressQuery.isPlaceholderData }/>
         { data.has_tokens && (
-          <DetailsInfoItem
-            title="Tokens"
-            hint="All tokens in the account and total value"
-            alignSelf="center"
-            py={ 0 }
-          >
+          <DetailsInfoItem title="Tokens" hint="All tokens in the account and total value" alignSelf="center" py={ 0 }>
             { addressQuery.data ? <TokenSelect onClick={ handleCounterItemClick }/> : <Box py="6px">0</Box> }
           </DetailsInfoItem>
         ) }
@@ -140,8 +132,9 @@ const AddressDetails = ({ addressQuery, scrollRef }: Props) => {
               isAddressQueryLoading={ addressQuery.isPlaceholderData }
               isDegradedData={ addressQuery.isDegradedData }
             />
-          ) :
-            0 }
+          ) : (
+            0
+          ) }
         </DetailsInfoItem>
         { data.has_token_transfers && (
           <DetailsInfoItem
@@ -158,8 +151,9 @@ const AddressDetails = ({ addressQuery, scrollRef }: Props) => {
                 isAddressQueryLoading={ addressQuery.isPlaceholderData }
                 isDegradedData={ addressQuery.isDegradedData }
               />
-            ) :
-              0 }
+            ) : (
+              0
+            ) }
           </DetailsInfoItem>
         ) }
         { countersQuery.data?.gas_usage_count && (
@@ -177,8 +171,9 @@ const AddressDetails = ({ addressQuery, scrollRef }: Props) => {
                 isAddressQueryLoading={ addressQuery.isPlaceholderData }
                 isDegradedData={ addressQuery.isDegradedData }
               />
-            ) :
-              0 }
+            ) : (
+              0
+            ) }
           </DetailsInfoItem>
         ) }
         { data.has_validated_blocks && (
@@ -196,8 +191,9 @@ const AddressDetails = ({ addressQuery, scrollRef }: Props) => {
                 isAddressQueryLoading={ addressQuery.isPlaceholderData }
                 isDegradedData={ addressQuery.isDegradedData }
               />
-            ) :
-              0 }
+            ) : (
+              0
+            ) }
           </DetailsInfoItem>
         ) }
         { data.block_number_balance_updated_at && (
@@ -208,10 +204,7 @@ const AddressDetails = ({ addressQuery, scrollRef }: Props) => {
             py={{ base: '2px', lg: 1 }}
             isLoading={ addressQuery.isPlaceholderData }
           >
-            <BlockEntity
-              number={ data.block_number_balance_updated_at }
-              isLoading={ addressQuery.isPlaceholderData }
-            />
+            <BlockEntity number={ data.block_number_balance_updated_at } isLoading={ addressQuery.isPlaceholderData }/>
           </DetailsInfoItem>
         ) }
         <DetailsSponsoredItem isLoading={ addressQuery.isPlaceholderData }/>

@@ -60,24 +60,25 @@ const BlocksListItem = ({ data, isLoading, enableTimeIncrement }: Props) => {
       { !config.UI.views.block.hiddenFields?.miner && (
         <Flex columnGap={ 2 } w="100%">
           <Text fontWeight={ 500 }>{ capitalize(getNetworkValidatorTitle()) }</Text>
-          <AddressEntity
-            address={ data.miner }
-            isLoading={ isLoading }
-            truncation="constant"
-          />
+          <AddressEntity address={ data.miner } isLoading={ isLoading } truncation="constant"/>
         </Flex>
       ) }
       <Flex columnGap={ 2 }>
         <Text fontWeight={ 500 }>Txn</Text>
         { data.tx_count > 0 ? (
           <Skeleton isLoaded={ !isLoading } display="inline-block">
-            <LinkInternal href={ route({ pathname: '/block/[height_or_hash]', query: { height_or_hash: String(data.height), tab: 'txs' } }) }>
+            <LinkInternal
+              href={ route({
+                pathname: '/block/[height_or_hash]',
+                query: { height_or_hash: String(data.height), tab: 'txs' },
+              }) }
+            >
               { data.tx_count }
             </LinkInternal>
           </Skeleton>
-        ) :
+        ) : (
           <Text variant="secondary">{ data.tx_count }</Text>
-        }
+        ) }
       </Flex>
       <Box>
         <Text fontWeight={ 500 }>Gas used</Text>
@@ -85,7 +86,13 @@ const BlocksListItem = ({ data, isLoading, enableTimeIncrement }: Props) => {
           <Skeleton isLoaded={ !isLoading } display="inline-block" color="text_secondary" mr={ 4 }>
             <span>{ BigNumber(data.gas_used || 0).toFormat() }</span>
           </Skeleton>
-          <Utilization colorScheme="gray" value={ BigNumber(data.gas_used || 0).div(BigNumber(data.gas_limit)).toNumber() } isLoading={ isLoading }/>
+          <Utilization
+            colorScheme="gray"
+            value={ BigNumber(data.gas_used || 0)
+              .div(BigNumber(data.gas_limit))
+              .toNumber() }
+            isLoading={ isLoading }
+          />
           { data.gas_target_percentage && (
             <>
               <TextSeparator color={ separatorColor } mx={ 1 }/>

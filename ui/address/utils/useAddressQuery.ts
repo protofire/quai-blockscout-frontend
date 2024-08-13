@@ -12,9 +12,7 @@ import { publicClient } from 'lib/web3/client';
 import { ADDRESS_INFO } from 'stubs/address';
 import { GET_BALANCE } from 'stubs/RPC';
 
-type RpcResponseType = [
-    bigint | null,
-];
+type RpcResponseType = [bigint | null];
 
 export type AddressQuery = UseQueryResult<Address, ResourceError<{ status: number }>> & {
   isDegradedData: boolean;
@@ -55,9 +53,7 @@ export default function useAddressQuery({ hash }: Params): AddressQuery {
 
       const balance = publicClient.getBalance({ address: hash as `0x${ string }` }).catch(() => null);
 
-      return Promise.all([
-        balance,
-      ]);
+      return Promise.all([ balance ]);
     },
     select: (response) => {
       const [ balance ] = response;
@@ -95,6 +91,7 @@ export default function useAddressQuery({ hash }: Params): AddressQuery {
         private_tags: null,
         public_tags: null,
         watchlist_names: null,
+        currency: null,
       };
     },
     placeholderData: [ GET_BALANCE ],
@@ -121,8 +118,10 @@ export default function useAddressQuery({ hash }: Params): AddressQuery {
     }
   }, [ rpcQuery.data, rpcQuery.isPlaceholderData ]);
 
-  const isRpcQuery = Boolean((apiQuery.isError || apiQuery.isPlaceholderData) && apiQuery.errorUpdateCount > 0 && rpcQuery.data && publicClient);
-  const query = isRpcQuery ? rpcQuery as UseQueryResult<Address, ResourceError<{ status: number }>> : apiQuery;
+  const isRpcQuery = Boolean(
+    (apiQuery.isError || apiQuery.isPlaceholderData) && apiQuery.errorUpdateCount > 0 && rpcQuery.data && publicClient,
+  );
+  const query = isRpcQuery ? (rpcQuery as UseQueryResult<Address, ResourceError<{ status: number }>>) : apiQuery;
 
   return {
     ...query,

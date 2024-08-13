@@ -27,6 +27,7 @@ const LatestTxsItem = ({ tx, isLoading }: Props) => {
   const dataTo = tx.to ? tx.to : tx.created_contract;
   const timeAgo = useTimeAgoIncrement(tx.timestamp || '0', true);
   const columnNum = config.UI.views.tx.hiddenFields?.value && config.UI.views.tx.hiddenFields?.tx_fee ? 2 : 3;
+  const fromCurrency = `${ tx.from.currency?.charAt(0).toUpperCase() }${ tx.from.currency?.slice(1) }`;
 
   return (
     <Grid
@@ -77,7 +78,7 @@ const LatestTxsItem = ({ tx, isLoading }: Props) => {
         { !config.UI.views.tx.hiddenFields?.value && (
           <Skeleton isLoaded={ !isLoading } my="3px">
             <Text as="span" whiteSpace="pre">
-              { currencyUnits.ether }{ ' ' }
+              { fromCurrency ? fromCurrency : currencyUnits.ether }{ ' ' }
             </Text>
             <Text as="span" variant="secondary">
               { getValueWithUnit(tx.value).dp(5).toFormat() }

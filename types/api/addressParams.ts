@@ -22,6 +22,7 @@ export type AddressParamBasic = {
   is_contract: boolean;
   is_verified: boolean | null;
   ens_domain_name: string | null;
-}
+  currency: string | null;
+};
 
 export type AddressParam = UserTags & AddressParamBasic;

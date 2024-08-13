@@ -14,10 +14,21 @@ interface Props {
   isLoading?: boolean;
 }
 
-const CurrencyValue = ({ value, currency = '', decimals, exchangeRate, className, accuracy, accuracyUsd, isLoading }: Props) => {
+const CurrencyValue = ({
+  value,
+  currency = '',
+  decimals,
+  exchangeRate,
+  className,
+  accuracy,
+  accuracyUsd,
+  isLoading,
+}: Props) => {
   if (isLoading) {
     return (
-      <Skeleton className={ className } display="inline-block">0.00 ($0.00)</Skeleton>
+      <Skeleton className={ className } display="inline-block">
+        0.00 ($0.00)
+      </Skeleton>
     );
   }
 
@@ -28,14 +39,25 @@ const CurrencyValue = ({ value, currency = '', decimals, exchangeRate, className
       </Box>
     );
   }
-  const { valueStr: valueResult, usd: usdResult } = getCurrencyValue({ value, accuracy, accuracyUsd, exchangeRate, decimals });
+  const { valueStr: valueResult, usd: usdResult } = getCurrencyValue({
+    value,
+    accuracy,
+    accuracyUsd,
+    exchangeRate,
+    decimals,
+  });
+  currency = currency ? `${ currency?.charAt(0).toUpperCase() }${ currency?.slice(1) }` : '';
 
   return (
     <Box as="span" className={ className } display="inline-flex" rowGap={ 3 } columnGap={ 1 }>
       <Text display="inline-block">
-        { valueResult }{ currency ? ` ${ currency }` : '' }
+        { valueResult } { currency }
       </Text>
-      { usdResult && <Text as="span" variant="secondary" fontWeight={ 400 }>(${ usdResult })</Text> }
+      { usdResult && (
+        <Text as="span" variant="secondary" fontWeight={ 400 }>
+          (${ usdResult })
+        </Text>
+      ) }
     </Box>
   );
 };

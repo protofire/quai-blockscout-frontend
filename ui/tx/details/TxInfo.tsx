@@ -323,7 +323,7 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
         >
           <CurrencyValue
             value={ data.value }
-            currency={ currencyUnits.ether }
+            currency={ data.from.currency ? data.from.currency : currencyUnits.ether }
             exchangeRate={ data.exchange_rate }
             isLoading={ isLoading }
             flexWrap="wrap"
@@ -341,7 +341,7 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
           ) : (
             <CurrencyValue
               value={ data.fee.value }
-              currency={ config.UI.views.tx.hiddenFields?.fee_currency ? '' : currencyUnits.ether }
+              currency={ data.from.currency ? data.from.currency : currencyUnits.ether }
               exchangeRate={ data.exchange_rate }
               flexWrap="wrap"
               isLoading={ isLoading }
@@ -352,7 +352,11 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
 
       { data.type !== 2 && (
         <>
-          <TxDetailsGasPrice gasPrice={ data.gas_price } isLoading={ isLoading }/>
+          <TxDetailsGasPrice
+            gasPrice={ data.gas_price }
+            gasCurrency={ data.from.currency as string }
+            isLoading={ isLoading }
+          />
 
           <TxDetailsFeePerGas txFee={ data.fee.value } gasUsed={ data.gas_used } isLoading={ isLoading }/>
 

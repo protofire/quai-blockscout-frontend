@@ -29,6 +29,7 @@ const isRollup = config.features.rollup.isEnabled;
 
 const BlocksTableItem = ({ data, isLoading, enableTimeIncrement }: Props) => {
   const totalReward = getBlockTotalReward(data);
+  const rewardCurrency = data.miner.currency as string;
   const burntFees = BigNumber(data.burnt_fees || 0);
   const txFees = BigNumber(data.tx_fees || 0);
 
@@ -67,34 +68,38 @@ const BlocksTableItem = ({ data, isLoading, enableTimeIncrement }: Props) => {
       </Td>
       { !config.UI.views.block.hiddenFields?.miner && (
         <Td fontSize="sm">
-          <AddressEntity
-            address={ data.miner }
-            isLoading={ isLoading }
-            truncation="constant"
-          />
+          <AddressEntity address={ data.miner } isLoading={ isLoading } truncation="constant"/>
         </Td>
       ) }
       <Td isNumeric fontSize="sm">
         { data.tx_count > 0 ? (
           <Skeleton isLoaded={ !isLoading } display="inline-block">
-            <LinkInternal href={ route({
-              pathname: '/block/[height_or_hash]',
-              query: { height_or_hash: String(data.height), tab: 'txs' },
-            }) }>
+            <LinkInternal
+              href={ route({
+                pathname: '/block/[height_or_hash]',
+                query: { height_or_hash: String(data.height), tab: 'txs' },
+              }) }
+            >
               { data.tx_count }
             </LinkInternal>
           </Skeleton>
-        ) : data.tx_count }
+        ) : (
+          data.tx_count
+        ) }
       </Td>
       { !isRollup && !config.UI.views.block.hiddenFields?.total_reward && (
         <Td fontSize="sm">
-          <Skeleton isLoaded={ !isLoading } display="inline-block">{ BigNumber(data.gas_used || 0).toFormat() }</Skeleton>
+          <Skeleton isLoaded={ !isLoading } display="inline-block">
+            { BigNumber(data.gas_used || 0).toFormat() }
+          </Skeleton>
           <Flex mt={ 2 }>
             <Tooltip label={ isLoading ? undefined : 'Gas Used %' }>
               <Box>
                 <Utilization
                   colorScheme="gray"
-                  value={ BigNumber(data.gas_used || 0).dividedBy(BigNumber(data.gas_limit)).toNumber() }
+                  value={ BigNumber(data.gas_used || 0)
+                    .dividedBy(BigNumber(data.gas_limit))
+                    .toNumber() }
                   isLoading={ isLoading }
                 />
               </Box>
@@ -110,7 +115,7 @@ const BlocksTableItem = ({ data, isLoading, enableTimeIncrement }: Props) => {
       ) }
       <Td fontSize="sm">
         <Skeleton isLoaded={ !isLoading } display="inline-block">
-          { totalReward.toFixed(8) }
+          { totalReward.toFixed(8) } { rewardCurrency }
         </Skeleton>
       </Td>
       { !isRollup && !config.UI.views.block.hiddenFields?.burnt_fees && (
@@ -118,7 +123,7 @@ const BlocksTableItem = ({ data, isLoading, enableTimeIncrement }: Props) => {
           <Flex alignItems="center" columnGap={ 2 }>
             <IconSvg name="flame" boxSize={ 5 } color={ burntFeesIconColor } isLoading={ isLoading }/>
             <Skeleton isLoaded={ !isLoading } display="inline-block">
-              { burntFees.dividedBy(WEI).toFixed(8) }
+              { burntFees.dividedBy(WEI).toFixed(8) } { rewardCurrency }
             </Skeleton>
           </Flex>
           <Tooltip label={ isLoading ? undefined : 'Burnt fees / Txn fees * 100%' }>

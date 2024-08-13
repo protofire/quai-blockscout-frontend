@@ -10,12 +10,14 @@ import DetailsInfoItem from 'ui/shared/DetailsInfoItem';
 interface Props {
   gasPrice: string | null;
   isLoading?: boolean;
+  gasCurrency?: string;
 }
 
-const TxDetailsGasPrice = ({ gasPrice, isLoading }: Props) => {
+const TxDetailsGasPrice = ({ gasPrice, gasCurrency = '', isLoading }: Props) => {
   if (config.UI.views.tx.hiddenFields?.gas_price || !gasPrice) {
     return null;
   }
+  gasCurrency = `${ gasCurrency?.charAt(0).toUpperCase() }${ gasCurrency?.slice(1) }`;
 
   return (
     <DetailsInfoItem
@@ -24,10 +26,12 @@ const TxDetailsGasPrice = ({ gasPrice, isLoading }: Props) => {
       isLoading={ isLoading }
     >
       <Skeleton isLoaded={ !isLoading } mr={ 1 }>
-        { BigNumber(gasPrice).dividedBy(WEI).toFixed() } { currencyUnits.ether }
+        { BigNumber(gasPrice).dividedBy(WEI).toFixed() } { gasCurrency ? gasCurrency : currencyUnits.ether }
       </Skeleton>
       <Skeleton isLoaded={ !isLoading } color="text_secondary">
-        <span>({ BigNumber(gasPrice).dividedBy(WEI_IN_GWEI).toFixed() } { currencyUnits.gwei })</span>
+        <span>
+          ({ BigNumber(gasPrice).dividedBy(WEI_IN_GWEI).toFixed() } { gasCurrency ? gasCurrency : currencyUnits.ether })
+        </span>
       </Skeleton>
     </DetailsInfoItem>
   );

@@ -28,6 +28,7 @@ type Props = {
 
 const TxsTableItem = ({ tx, showBlockInfo, currentAddress, enableTimeIncrement, isLoading }: Props) => {
   const dataTo = tx.to ? tx.to : tx.created_contract;
+  const currency = tx.from?.currency ? tx.from?.currency : '';
   const timeAgo = useTimeAgoIncrement(tx.timestamp, enableTimeIncrement);
 
   return (
@@ -96,7 +97,7 @@ const TxsTableItem = ({ tx, showBlockInfo, currentAddress, enableTimeIncrement, 
       </Td>
       { !config.UI.views.tx.hiddenFields?.value && (
         <Td isNumeric>
-          <CurrencyValue value={ tx.value } accuracy={ 8 } isLoading={ isLoading }/>
+          <CurrencyValue value={ tx.value } currency={ currency } accuracy={ 8 } isLoading={ isLoading }/>
         </Td>
       ) }
       { !config.UI.views.tx.hiddenFields?.tx_fee && (
@@ -105,7 +106,7 @@ const TxsTableItem = ({ tx, showBlockInfo, currentAddress, enableTimeIncrement, 
           { tx.stability_fee ? (
             <TxFeeStability data={ tx.stability_fee } isLoading={ isLoading } accuracy={ 8 } justifyContent="end" hideUsd/>
           ) : tx.fee.value ? (
-            <CurrencyValue value={ tx.fee.value } accuracy={ 8 } isLoading={ isLoading }/>
+            <CurrencyValue value={ tx.fee.value } currency={ currency } accuracy={ 8 } isLoading={ isLoading }/>
           ) : (
             '-'
           ) }
