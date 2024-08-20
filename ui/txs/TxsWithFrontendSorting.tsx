@@ -1,7 +1,6 @@
 import React from 'react';
 
 import type { AddressFromToFilter } from 'types/api/address';
-import type { Transaction } from 'types/api/transaction';
 
 import type { QueryWithPagesResult } from 'ui/shared/pagination/useQueryWithPages';
 
@@ -24,7 +23,6 @@ type Props = {
   filterValue?: AddressFromToFilter;
   enableTimeIncrement?: boolean;
   top?: number;
-  etxType?: string;
 };
 
 const TxsWithFrontendSorting = ({
@@ -38,13 +36,8 @@ const TxsWithFrontendSorting = ({
   currentAddress,
   enableTimeIncrement,
   top,
-  etxType,
 }: Props) => {
   const { data, isPlaceholderData, isError, setSortByValue, sorting } = useTxsSort(query);
-
-  const filteredData = data?.items.filter((tx: Transaction) => {
-    return !etxType || etxType === tx.etx_type;
-  });
 
   return (
     <TxsContent
@@ -57,7 +50,7 @@ const TxsWithFrontendSorting = ({
       currentAddress={ currentAddress }
       enableTimeIncrement={ enableTimeIncrement }
       top={ top }
-      items={ filteredData }
+      items={ data?.items }
       isPlaceholderData={ isPlaceholderData }
       isError={ isError }
       setSorting={ setSortByValue }

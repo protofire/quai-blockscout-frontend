@@ -8,7 +8,7 @@ import * as decodedInputDataMock from 'mocks/txs/decodedInputData';
 export const base: Transaction = {
   base_fee_per_gas: '10000000000',
   block: 29611750,
-  confirmation_duration: [0, 6364],
+  confirmation_duration: [ 0, 6364 ],
   confirmations: 508299,
   created_contract: null,
   decoded_input: decodedInputDataMock.withoutIndexedFields,
@@ -24,7 +24,7 @@ export const base: Transaction = {
     name: null,
     is_verified: null,
     private_tags: [],
-    public_tags: [publicTag],
+    public_tags: [ publicTag ],
     watchlist_names: [],
     ens_domain_name: 'kitty.kitty.cat.eth',
     currency: null,
@@ -51,9 +51,9 @@ export const base: Transaction = {
     is_contract: false,
     is_verified: true,
     name: null,
-    private_tags: [privateTag],
+    private_tags: [ privateTag ],
     public_tags: [],
-    watchlist_names: [watchlistName],
+    watchlist_names: [ watchlistName ],
     ens_domain_name: null,
     currency: null,
   },
@@ -61,7 +61,7 @@ export const base: Transaction = {
   token_transfers_overflow: false,
   tx_burnt_fee: '461030000000000',
   tx_tag: null,
-  tx_types: ['contract_call'],
+  tx_types: [ 'contract_call' ],
   type: 2,
   value: '42000000000000000000',
   actions: [],
@@ -80,7 +80,7 @@ export const withWatchListNames: Transaction = {
   },
   to: {
     ...base.to,
-    watchlist_names: [{ label: 'to #1', display_name: 'to utka' }],
+    watchlist_names: [ { label: 'to #1', display_name: 'to utka' } ],
   } as Transaction['to'],
 };
 
@@ -100,7 +100,7 @@ export const withContractCreation: Transaction = {
     ens_domain_name: null,
     currency: null,
   },
-  tx_types: ['contract_creation'],
+  tx_types: [ 'contract_creation' ],
 };
 
 export const withTokenTransfer: Transaction = {
@@ -112,9 +112,9 @@ export const withTokenTransfer: Transaction = {
     is_contract: true,
     is_verified: true,
     name: 'ArianeeStore',
-    private_tags: [privateTag],
+    private_tags: [ privateTag ],
     public_tags: [],
-    watchlist_names: [watchlistName],
+    watchlist_names: [ watchlistName ],
     ens_domain_name: null,
     currency: null,
   },
@@ -127,7 +127,7 @@ export const withTokenTransfer: Transaction = {
     tokenTransferMock.erc1155D,
   ],
   token_transfers_overflow: true,
-  tx_types: ['token_transfer'],
+  tx_types: [ 'token_transfer' ],
 };
 
 export const withDecodedRevertReason: Transaction = {
@@ -215,7 +215,7 @@ export const withActionsUniswap: Transaction = {
     {
       data: {
         address: '0xC36442b4a4522E871399CD717aBDD847Ab11FE88',
-        ids: ['53699', '53700123456', '42'],
+        ids: [ '53699', '53700123456', '42' ],
         name: 'Uniswap V3: Positions NFT',
         symbol: 'UNI-V3-POS',
         to: '0x6d872Fb5F5B2B1f71fA9AadE159bc3976c1946B7',
@@ -348,6 +348,6 @@ export const withBlob = {
   ],
   burnt_blob_fee: '2820464441688064',
   max_fee_per_blob_gas: '60000000000',
-  tx_types: ['blob_transaction' as const],
+  tx_types: [ 'blob_transaction' as const ],
   type: 3,
 };

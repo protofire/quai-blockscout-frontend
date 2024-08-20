@@ -173,6 +173,6 @@ export const withBlobTxs: Block = {
 };
 
 export const baseListResponse: BlocksResponse = {
-  items: [base, base2],
+  items: [ base, base2 ],
   next_page_params: null,
 };

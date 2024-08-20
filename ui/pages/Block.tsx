@@ -14,11 +14,12 @@ import getQueryParamString from 'lib/router/getQueryParamString';
 import BlockDetails from 'ui/block/BlockDetails';
 import BlockWithdrawals from 'ui/block/BlockWithdrawals';
 import useBlockBlobTxsQuery from 'ui/block/useBlockBlobTxsQuery';
-import useBlockExtTxsQuery from 'ui/block/useBlockExtTxsQuery';
+import useBlockCoinbaseTxsQuery from 'ui/block/useBlockCoinbaseTxsQuery';
+import useBlockConversionTxsQuery from 'ui/block/useBlockConversionTxsQuery';
+import useBlockExternalTxsQuery from 'ui/block/useBlockExternalTxsQuery';
 import useBlockQuery from 'ui/block/useBlockQuery';
 import useBlockTxsQuery from 'ui/block/useBlockTxsQuery';
 import useBlockWithdrawalsQuery from 'ui/block/useBlockWithdrawalsQuery';
-import ExtTxsWithFrontendSorting from 'ui/extTxs/ExtTxsWithFrontendSorting';
 import TextAd from 'ui/shared/ad/TextAd';
 import ServiceDegradationWarning from 'ui/shared/alerts/ServiceDegradationWarning';
 import AddressEntity from 'ui/shared/entities/address/AddressEntity';
@@ -44,7 +45,9 @@ const BlockPageContent = () => {
 
   const blockQuery = useBlockQuery({ heightOrHash });
   const blockTxsQuery = useBlockTxsQuery({ heightOrHash, blockQuery, tab });
-  const blockExtTxsQuery = useBlockExtTxsQuery({ heightOrHash, blockQuery, tab });
+  const blockCoinbaseTxsQuery = useBlockCoinbaseTxsQuery({ heightOrHash, blockQuery, tab });
+  const blockExternalTxsQuery = useBlockExternalTxsQuery({ heightOrHash, blockQuery, tab });
+  const blockConversionTxsQuery = useBlockConversionTxsQuery({ heightOrHash, blockQuery, tab });
   const blockWithdrawalsQuery = useBlockWithdrawalsQuery({ heightOrHash, blockQuery, tab });
   const blockBlobTxsQuery = useBlockBlobTxsQuery({ heightOrHash, blockQuery, tab });
 
@@ -76,54 +79,24 @@ const BlockPageContent = () => {
           ),
         },
         {
-          id: 'coinbases',
+          id: 'coinbase',
           title: 'Coinbases',
           component: (
-            <>
-              { blockTxsQuery.isDegradedData && (
-                <ServiceDegradationWarning isLoading={ blockTxsQuery.isPlaceholderData } mb={ 6 }/>
-              ) }
-              <TxsWithFrontendSorting
-                query={ blockTxsQuery }
-                showBlockInfo={ false }
-                showSocketInfo={ false }
-                etxType="coinbase"
-              />
-            </>
+            <TxsWithFrontendSorting query={ blockCoinbaseTxsQuery } showBlockInfo={ false } showSocketInfo={ false }/>
           ),
         },
         {
-          id: 'externals',
+          id: 'external',
           title: 'Externals',
           component: (
-            <>
-              { blockTxsQuery.isDegradedData && (
-                <ServiceDegradationWarning isLoading={ blockTxsQuery.isPlaceholderData } mb={ 6 }/>
-              ) }
-              <TxsWithFrontendSorting
-                query={ blockTxsQuery }
-                showBlockInfo={ false }
-                showSocketInfo={ false }
-                etxType="external"
-              />
-            </>
+            <TxsWithFrontendSorting query={ blockExternalTxsQuery } showBlockInfo={ false } showSocketInfo={ false }/>
           ),
         },
         {
-          id: 'conversions',
+          id: 'conversion',
           title: 'Conversions',
           component: (
-            <>
-              { blockTxsQuery.isDegradedData && (
-                <ServiceDegradationWarning isLoading={ blockTxsQuery.isPlaceholderData } mb={ 6 }/>
-              ) }
-              <TxsWithFrontendSorting
-                query={ blockTxsQuery }
-                showBlockInfo={ false }
-                showSocketInfo={ false }
-                etxType="conversion"
-              />
-            </>
+            <TxsWithFrontendSorting query={ blockConversionTxsQuery } showBlockInfo={ false } showSocketInfo={ false }/>
           ),
         },
         blockQuery.data?.blob_tx_count ?
@@ -135,18 +108,18 @@ const BlockPageContent = () => {
             ),
           } :
           null,
-        {
-          id: 'uncles',
-          title: 'Uncles',
-          component: (
-            <>
-              { blockTxsQuery.isDegradedData && (
-                <ServiceDegradationWarning isLoading={ blockTxsQuery.isPlaceholderData } mb={ 6 }/>
-              ) }
-              <ExtTxsWithFrontendSorting query={ blockExtTxsQuery } showBlockInfo={ false } showSocketInfo={ false }/>
-            </>
-          ),
-        },
+        // {
+        //   id: 'uncles',
+        //   title: 'Uncles',
+        //   component: (
+        //     <>
+        //       { blockTxsQuery.isDegradedData && (
+        //         <ServiceDegradationWarning isLoading={ blockTxsQuery.isPlaceholderData } mb={ 6 }/>
+        //       ) }
+        //       <ExtTxsWithFrontendSorting query={ blockExtTxsQuery } showBlockInfo={ false } showSocketInfo={ false }/>
+        //     </>
+        //   ),
+        // },
         config.features.beaconChain.isEnabled && Boolean(blockQuery.data?.withdrawals_count) ?
           {
             id: 'withdrawals',
@@ -162,19 +135,36 @@ const BlockPageContent = () => {
           } :
           null,
       ].filter(Boolean),
-    [ blockBlobTxsQuery, blockExtTxsQuery, blockQuery, blockTxsQuery, blockWithdrawalsQuery ],
+    [
+      blockBlobTxsQuery,
+      blockQuery,
+      blockTxsQuery,
+      blockWithdrawalsQuery,
+      blockCoinbaseTxsQuery,
+      blockExternalTxsQuery,
+      blockConversionTxsQuery,
+    ],
   );
 
   const hasPagination =
     !isMobile &&
-    (([ 'txs', 'coinbases', 'externals', 'conversions' ].includes(tab) && blockTxsQuery.pagination.isVisible) ||
-      (tab === 'withdrawals' && blockWithdrawalsQuery.pagination.isVisible));
+    ((tab === 'txs' && blockTxsQuery.pagination.isVisible) ||
+      (tab === 'withdrawals' && blockWithdrawalsQuery.pagination.isVisible) ||
+      (tab === 'coinbase' && blockCoinbaseTxsQuery.pagination.isVisible) ||
+      (tab === 'external' && blockExternalTxsQuery.pagination.isVisible) ||
+      (tab === 'conversion' && blockConversionTxsQuery.pagination.isVisible));
 
   let pagination;
-  if ([ 'txs' ].includes(tab)) {
+  if (tab === 'txs') {
     pagination = blockTxsQuery.pagination;
   } else if (tab === 'withdrawals') {
     pagination = blockWithdrawalsQuery.pagination;
+  } else if (tab === 'coinbase') {
+    pagination = blockCoinbaseTxsQuery.pagination;
+  } else if (tab === 'external') {
+    pagination = blockExternalTxsQuery.pagination;
+  } else if (tab === 'conversion') {
+    pagination = blockConversionTxsQuery.pagination;
   }
 
   const backLink = React.useMemo(() => {
