@@ -12,6 +12,7 @@ interface Props {
   accuracyUsd?: number;
   decimals?: string | null;
   isLoading?: boolean;
+  isCondensed?: boolean;
 }
 
 const CurrencyValue = ({
@@ -23,6 +24,7 @@ const CurrencyValue = ({
   accuracy,
   accuracyUsd,
   isLoading,
+  isCondensed,
 }: Props) => {
   if (isLoading) {
     return (
@@ -47,12 +49,40 @@ const CurrencyValue = ({
     decimals,
   });
   currency = currency ? `${ currency?.charAt(0).toUpperCase() }${ currency?.slice(1) }` : '';
+  const condensedValue = (value: string, currency: string) => {
+    const isDecimalValue = value.indexOf('0.', 0) === 0;
+    if (!isCondensed || !isDecimalValue) {
+      return (
+        <Text display="inline-block">
+          { value } { currency }
+        </Text>
+      );
+    }
+
+    const [ number, reminder ] = value.split('.');
+    if (reminder.length < 4) {
+      return (
+        <Text display="inline-block">
+          { value } { currency }
+        </Text>
+      );
+    }
+
+    const decimalBegin = reminder.slice(0, 2);
+    const decimalEnd = reminder.slice(-2);
+
+    return (
+      <Text display="inline-block">
+        { `${ number }.${ decimalBegin }` }
+        <Text fontSize="10px" display="inline" position="relative" top="0.5">{ `${ reminder.length }` }</Text>
+        { `${ decimalEnd }` } { currency }
+      </Text>
+    );
+  };
 
   return (
     <Box as="span" className={ className } display="inline-flex" rowGap={ 3 } columnGap={ 1 }>
-      <Text display="inline-block">
-        { valueResult } { currency }
-      </Text>
+      { condensedValue(valueResult, currency) }
       { usdResult && (
         <Text as="span" variant="secondary" fontWeight={ 400 }>
           (${ usdResult })

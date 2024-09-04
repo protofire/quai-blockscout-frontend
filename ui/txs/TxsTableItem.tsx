@@ -97,7 +97,7 @@ const TxsTableItem = ({ tx, showBlockInfo, currentAddress, enableTimeIncrement, 
       </Td>
       { !config.UI.views.tx.hiddenFields?.value && (
         <Td isNumeric>
-          <CurrencyValue value={ tx.value } currency={ currency } accuracy={ 18 } isLoading={ isLoading }/>
+          <CurrencyValue value={ tx.value } currency={ currency } accuracy={ 18 } isLoading={ isLoading } isCondensed={ true }/>
         </Td>
       ) }
       { !config.UI.views.tx.hiddenFields?.tx_fee && (
