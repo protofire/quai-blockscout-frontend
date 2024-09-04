@@ -60,7 +60,7 @@ const CurrencyValue = ({
     }
 
     const [ number, reminder ] = value.split('.');
-    if (reminder.length < 4) {
+    if (reminder.length < 6) {
       return (
         <Text display="inline-block">
           { value } { currency }
@@ -74,7 +74,7 @@ const CurrencyValue = ({
     return (
       <Text display="inline-block">
         { `${ number }.${ decimalBegin }` }
-        <Text fontSize="10px" display="inline" position="relative" top="0.5">{ `${ reminder.length }` }</Text>
+        <Text fontSize="10px" display="inline" position="relative" top="0.5">{ `${ reminder.length - 4 }` }</Text>
         { `${ decimalEnd }` } { currency }
       </Text>
     );
