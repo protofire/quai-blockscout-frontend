@@ -60,7 +60,17 @@ const CurrencyValue = ({
     }
 
     const [ number, reminder ] = value.split('.');
-    if (reminder.length < 6) {
+    const hasOnlyZeros =
+      reminder
+        // Disregarding the first and last two numbers
+        // which will be shown regardless
+        .slice(2, -2)
+        .split('')
+        .filter((n) => {
+          return n !== '0';
+        }).length === 0;
+
+    if (reminder.length < 6 || !hasOnlyZeros) {
       return (
         <Text display="inline-block">
           { value } { currency }
