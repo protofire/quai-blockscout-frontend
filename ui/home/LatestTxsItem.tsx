@@ -4,11 +4,11 @@ import React from 'react';
 import type { Transaction } from 'types/api/transaction';
 
 import config from 'configs/app';
-import getValueWithUnit from 'lib/getValueWithUnit';
 import useShards from 'lib/hooks/useShards';
 import useTimeAgoIncrement from 'lib/hooks/useTimeAgoIncrement';
 import { currencyUnits } from 'lib/units';
 import AddressFromTo from 'ui/shared/address/AddressFromTo';
+import CurrencyValue from 'ui/shared/CurrencyValue';
 import TxEntity from 'ui/shared/entities/tx/TxEntity';
 import TxStatus from 'ui/shared/statusTag/TxStatus';
 import TxFeeStability from 'ui/shared/tx/TxFeeStability';
@@ -81,7 +81,7 @@ const LatestTxsItem = ({ tx, isLoading }: Props) => {
               { fromCurrency ? fromCurrency : currencyUnits.ether }{ ' ' }
             </Text>
             <Text as="span" variant="secondary">
-              { getValueWithUnit(tx.value).dp(5).toFormat() }
+              <CurrencyValue value={ tx.value } isCondensed={ true }/>
             </Text>
           </Skeleton>
         ) }
@@ -92,7 +92,7 @@ const LatestTxsItem = ({ tx, isLoading }: Props) => {
               <TxFeeStability data={ tx.stability_fee } accuracy={ 5 } color="text_secondary" hideUsd/>
             ) : (
               <Text as="span" variant="secondary">
-                { tx.fee.value ? getValueWithUnit(tx.fee.value).dp(5).toFormat() : '-' }
+                { tx.fee.value ? <CurrencyValue value={ tx.fee.value } isCondensed={ true }/> : '-' }
               </Text>
             ) }
           </Skeleton>
