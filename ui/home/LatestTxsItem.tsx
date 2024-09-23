@@ -8,6 +8,7 @@ import useShards from 'lib/hooks/useShards';
 import useTimeAgoIncrement from 'lib/hooks/useTimeAgoIncrement';
 import { currencyUnits } from 'lib/units';
 import AddressFromTo from 'ui/shared/address/AddressFromTo';
+import { getCurrencyFromAddress } from 'ui/shared/address/utils';
 import CurrencyValue from 'ui/shared/CurrencyValue';
 import TxEntity from 'ui/shared/entities/tx/TxEntity';
 import TxStatus from 'ui/shared/statusTag/TxStatus';
@@ -27,7 +28,7 @@ const LatestTxsItem = ({ tx, isLoading }: Props) => {
   const dataTo = tx.to ? tx.to : tx.created_contract;
   const timeAgo = useTimeAgoIncrement(tx.timestamp || '0', true);
   const columnNum = config.UI.views.tx.hiddenFields?.value && config.UI.views.tx.hiddenFields?.tx_fee ? 2 : 3;
-  const fromCurrency = `${ tx.from.currency?.charAt(0).toUpperCase() }${ tx.from.currency?.slice(1) }`;
+  const fromCurrency = getCurrencyFromAddress(tx.from);
 
   return (
     <Grid
